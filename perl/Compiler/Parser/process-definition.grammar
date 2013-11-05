@@ -1,0 +1,4 @@
+process_definition: operation(s) eof | <error>
+operation: operation_type
+operation_type: /[A-Za-z][A-Za-z0-9_:]*/
+eof: /^\Z/
