@@ -39,7 +39,9 @@ sub _get_children {
 
         if ($imported_stuff->{type} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
-                operation_type => $op->{operation_type});
+                operation_type => $op->{operation_type},
+                input_entry => _build_io_entries($imported_stuff->{inputs}),
+            );
             # imported stuff will contain inputs, etc.
 
         } elsif ($imported_stuff->{type} eq 'process') {
@@ -56,6 +58,18 @@ sub _get_children {
         }
     }
     return @children;
+}
+
+
+sub _build_io_entries {
+    my $maybe_entries = shift;
+
+    unless (scalar(@$maybe_entries)) {
+        return [];
+    }
+
+    return [map {Compiler::AST::IOEntry->create(%{$_})}
+        @{$maybe_entries->[0]}];
 }
 
 

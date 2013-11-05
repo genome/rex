@@ -23,6 +23,8 @@ class Compiler::AST::Process {
 sub inputs {
     my $self = shift;
 
+    return {omg => "I'm a process!"};
+
     my @results;
     for my $child ($self->children) {
         push @results, $child->inputs;

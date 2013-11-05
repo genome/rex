@@ -36,6 +36,8 @@ sub execute {
 
     my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
     printf("AST: %s\n", Data::Dumper::Dumper($ast));
+
+    map {print Data::Dumper::Dumper($_->inputs)} $ast->children;
 }
 
 sub search_path {

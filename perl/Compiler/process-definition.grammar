@@ -15,10 +15,10 @@ tool_definition: tool_header tool_inputs(?) tool_outputs(?)
 tool_header: "tool"
 
 tool_inputs: "inputs" tool_io_entry(s)
-        { $return = { inputs => $item[2] }; }
+        { $return = $item[2] }
 
 tool_outputs: "outputs" tool_io_entry(s)
-        { $return = { outputs => $item[2] }; }
+        { $return = $item[2] }
 
 tool_io_entry: data_type name
         { $return = { data_type => $item[1], name => $item[2] }; }
