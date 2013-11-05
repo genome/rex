@@ -65,8 +65,7 @@ sub grammar {
 sub _grammar_path {
     my $self = shift;
 
-    return File::Spec->join($self->_base_path, 'Parser',
-        'process-definition.grammar');
+    return File::Spec->join($self->_base_path, 'process-definition.grammar');
 }
 
 sub _base_path {
