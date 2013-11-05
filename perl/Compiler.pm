@@ -59,8 +59,9 @@ sub get_children {
 
     my @children;
     for my $op (@$operation_definitions) {
-
         my $imported_stuff = $importer->import_file($op->{operation_type});
+        # TODO Make sure we don't infinitely recurse.
+
         if ($imported_stuff->{type} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
                 operation_type => $op->{operation_type});
