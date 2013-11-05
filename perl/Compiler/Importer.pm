@@ -9,6 +9,8 @@ use Carp qw(confess);
 use Data::Dumper;
 use File::Spec qw();
 
+use Compiler::Parser;
+
 use constant EXTENSION => '.def';
 
 
@@ -25,10 +27,7 @@ class Compiler::Importer {
 sub import_file {
     my ($self, $name) = @_;
 
-    my $absolute_path = $self->resolve_path($name);
-
-    my $parser = Compiler::Parser->create($absolute_path);
-    return $parser->parse_tree;
+    return Compiler::Parser::parse_tree($self->resolve_path($name));
 }
 
 

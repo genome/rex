@@ -24,8 +24,7 @@ class Compiler {
 
 sub execute {
     my $self = shift;
-    my $parser = Compiler::Parser->create();
-    my $parse_tree = $parser->parse_tree($self->input_file);
+    my $parse_tree = Compiler::Parser::parse_tree($self->input_file);
     print Data::Dumper::Dumper($parse_tree);
 
     my $importer = Compiler::Importer->create(
