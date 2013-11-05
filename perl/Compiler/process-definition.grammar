@@ -1,6 +1,15 @@
-process_definition: operation(s /\n/) eof
-        { $return = { operations => $item[1] }; }
+start: (process_definition | tool_definition) eof
+        { $return = $item[1]; }
     | <error>
+
+process_definition: process_header operation(s /\n/)
+        { $return = { operations => $item[2],
+            type => 'process' }; }
+process_header: "process"
+
+tool_definition: tool_header
+tool_header: "tool"
+
 operation: operation_type
         { $return = { operation_type => $item[1] }; }
 operation_type: /[A-Za-z][A-Za-z0-9_:]*/

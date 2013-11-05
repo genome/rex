@@ -39,7 +39,7 @@ sub parse_tree {
 
     my $parse_tree_generator = new Parse::RecDescent($self->grammar)
         or confess "Illegal grammar";
-    return $parse_tree_generator->process_definition($self->input)
+    return $parse_tree_generator->start($self->input)
         or confess "Syntax error";
 }
 
