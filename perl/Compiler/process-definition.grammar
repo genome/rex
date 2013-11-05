@@ -12,6 +12,6 @@ tool_header: "tool"
 
 operation: operation_type
         { $return = { operation_type => $item[1] }; }
-operation_type: /[A-Za-z][A-Za-z0-9_:]*/
+operation_type: /[A-Z][A-Za-z0-9_:]*/
         { $return = $item[1]; }
 eof: /^\Z/
