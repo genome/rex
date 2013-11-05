@@ -8,6 +8,7 @@ process_definition: process_header operation(s)
 process_header: "process"
 
 tool_definition: tool_header
+        { $return = { type => 'tool' }; }
 tool_header: "tool"
 
 operation: operation_type
