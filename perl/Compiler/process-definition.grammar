@@ -2,7 +2,7 @@ start: (process_definition | tool_definition) eof
         { $return = $item[1]; }
     | <error>
 
-process_definition: process_header operation(s /\n/)
+process_definition: process_header operation(s)
         { $return = { operations => $item[2],
             type => 'process' }; }
 process_header: "process"
