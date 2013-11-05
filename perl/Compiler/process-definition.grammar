@@ -4,15 +4,34 @@ start: (process_definition | tool_definition) eof
 
 process_definition: process_header operation(s)
         { $return = { operations => $item[2],
+            operation_type => 'root',
             type => 'process' }; }
 process_header: "process"
 
-tool_definition: tool_header
-        { $return = { type => 'tool' }; }
+tool_definition: tool_header tool_inputs(?) tool_outputs(?)
+        { $return = { type => 'tool',
+                inputs => $item[2],
+                outputs => $item[3] }; }
 tool_header: "tool"
+
+tool_inputs: "inputs" tool_io_entry(s)
+        { $return = { inputs => $item[2] }; }
+
+tool_outputs: "outputs" tool_io_entry(s)
+        { $return = { outputs => $item[2] }; }
+
+tool_io_entry: data_type name
+        { $return = { data_type => $item[1], name => $item[2] }; }
+
+data_type: /[A-Z][A-Za-z0-9_:]*/
+        { $return = $item[1]; }
+
+name: /[a-z][A-Za-z0-9_:]*/
+        { $return = $item[1]; }
 
 operation: operation_type
         { $return = { operation_type => $item[1] }; }
 operation_type: /[A-Z][A-Za-z0-9_:]*/
         { $return = $item[1]; }
+
 eof: /^\Z/
