@@ -37,7 +37,7 @@ sub execute {
 sub parse_tree {
     my $self = shift;
 
-    my $parse_tree_generator = new Parse::RecDescent($self->_autotree_grammar)
+    my $parse_tree_generator = new Parse::RecDescent($self->grammar)
         or confess "Illegal grammar";
     return $parse_tree_generator->process_definition($self->input)
         or confess "Syntax error";
@@ -48,11 +48,6 @@ sub input {
 
     my $force_scalar = File::Slurp::read_file($self->input_file);
     return $force_scalar;
-}
-
-sub _autotree_grammar {
-    my $self = shift;
-    return sprintf("<autotree>\n\n%s", $self->grammar);
 }
 
 sub grammar {

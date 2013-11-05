@@ -1,4 +1,8 @@
-process_definition: operation(s /\n/) eof | <error>
+process_definition: operation(s /\n/) eof
+        { $return = { operations => $item[1] }; }
+    | <error>
 operation: operation_type
+        { $return = { operation_type => $item[1] }; }
 operation_type: /[A-Za-z][A-Za-z0-9_:]*/
+        { $return = $item[1]; }
 eof: /^\Z/
