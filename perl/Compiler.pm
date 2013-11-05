@@ -25,16 +25,16 @@ class Compiler {
 sub execute {
     my $self = shift;
     my $parse_tree = Compiler::Parser::parse_tree($self->input_file);
+    die 'Syntax error' unless $parse_tree;
     print Data::Dumper::Dumper($parse_tree);
 
     my $importer = Compiler::Importer->create(
         search_path => $self->search_path);
-    printf("resolved path: %s\n", $importer->resolve_path("Foo/Bar"));
 }
 
 
 sub search_path {
-    return ['tool-definitions'];
+    return ['tool-definitions', 'process-definitions'];
 }
 
 1;
