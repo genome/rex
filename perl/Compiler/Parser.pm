@@ -12,65 +12,45 @@ use File::Slurp qw();
 
 use Parse::RecDescent qw();
 
-class Compiler::Parser {
-    is => 'Command::V2',
+use Memoize qw();
 
-    has_input => [
-        input_file => {
-            is => 'Path',
-            shell_args_position => 1,
-        },
-    ],
-};
+class Compiler::Parser {};
 
-
-sub execute {
-    my $self = shift;
-
-    my $tree = $self->parse_tree;
-    use Data::Dumper;
-    print Data::Dumper::Dumper($tree);
-
-    1;
-}
 
 sub parse_tree {
-    my $self = shift;
+    my ($self, $input_path) = @_;
 
-    my $parse_tree_generator = new Parse::RecDescent($self->grammar)
-        or confess "Illegal grammar";
-    return $parse_tree_generator->start($self->input)
+    return parse_tree_generator()->start(input($input_path))
         or confess "Syntax error";
 }
 
 sub input {
-    my $self = shift;
+    my $input_path = shift;
 
-    my $force_scalar = File::Slurp::read_file($self->input_file);
+    my $force_scalar = File::Slurp::read_file($input_path);
     return $force_scalar;
 }
 
-sub grammar {
-    my $self = shift;
+sub parse_tree_generator {
+    return new Parse::RecDescent(grammar())
+        or confess "Illegal grammar";
+}
+Memoize::memoize('parse_tree_generator');
 
-    my $force_scalar = File::Slurp::read_file($self->_grammar_path);
+sub grammar {
+    my $force_scalar = File::Slurp::read_file(_grammar_path());
     return $force_scalar;
 }
 
 sub _grammar_path {
-    my $self = shift;
-
-    return File::Spec->join($self->_base_path, 'process-definition.grammar');
+    return File::Spec->join(_base_path(), 'process-definition.grammar');
 }
 
 sub _base_path {
-    my $self = shift;
-    return File::Basename::dirname(File::Spec->rel2abs($self->_module_path));
+    return File::Basename::dirname(File::Spec->rel2abs(_module_path()));
 }
 
 sub _module_path {
-    my $self = shift;
-
     my $module_path = sprintf("%s.pm", __PACKAGE__);
     $module_path =~ s|::|/|g;
 
