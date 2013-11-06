@@ -17,6 +17,10 @@ class Compiler::AST::Tool {
             is => 'Compiler::AST::IOEntry',
             is_many => 1,
         },
+        output_entry => {
+            is => 'Compiler::AST::IOEntry',
+            is_many => 1,
+        },
     ],
 };
 
@@ -24,11 +28,24 @@ class Compiler::AST::Tool {
 sub inputs {
     my $self = shift;
 
+    return $self->_collect_by_name($self->input_entry);
+}
+
+sub outputs {
+    my $self = shift;
+
+    return $self->_collect_by_name($self->output_entry);
+}
+
+
+sub _collect_by_name {
+    my $self = shift;
+
     my %result;
-    for my $entry ($self->input_entry) {
+    for my $entry (@_) {
         if (exists $result{$entry->name}) {
             confess sprintf(
-                "Repeated input name (%s) in Tool definition %s",
+                "Repeated entry name (%s) in Tool definition %s",
                 $entry->name, $self->operation_type);
         }
 
@@ -36,9 +53,6 @@ sub inputs {
     }
 
     return \%result;
-}
-
-sub outputs {
 }
 
 
