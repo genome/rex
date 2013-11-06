@@ -9,7 +9,9 @@ process_definition: process_header operation(s)
 process_header: "process"
 
 operation: type with_statements(?)
-        { $return = { type => $item[1] }; }
+        { $return = { type => $item[1] };
+          $return->{inputs} = $item[2][0] || [];
+        }
 
 with_statements: "with" with_statement(s /,/)
         { $return = $item[2]; }
@@ -50,7 +52,11 @@ constant: /'.+'/
         { $return = $item[1]; }
     | <error>
 
-identifier: name | type | <error>
+identifier: name
+        { $return = { name => $item[1] }; }
+    | type
+        { $return = { type => $item[1] }; }
+    | <error>
 
 name: /[a-z][A-Za-z0-9_]*/
         { $return = $item[1]; }
