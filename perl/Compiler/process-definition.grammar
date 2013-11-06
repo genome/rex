@@ -11,7 +11,7 @@ process_header: "process"
 operation: alias(?) type with_statements(?)
         { $return = { type => $item[2] };
           $return->{inputs} = $item[3][0] || [];
-          $return->{alias} = $item[1] || $item[2];
+          $return->{alias} = $item[1][0] || $item[2];
         }
 
 alias: name "is"
