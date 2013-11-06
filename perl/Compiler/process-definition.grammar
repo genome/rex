@@ -8,17 +8,21 @@ process_definition: process_header operation(s)
             type => 'process' }; }
 process_header: "process"
 
-tool_definition: tool_header tool_inputs(?) tool_outputs(?)
+tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
         { $return = { type => 'tool',
-                inputs => $item[2],
-                outputs => $item[3] }; }
+                command => $item[2],
+                inputs => $item[3],
+                outputs => $item[4] }; }
 tool_header: "tool"
 
+tool_command: /[A-Z][A-Za-z0-9_:]*/
+        { $return = $item[1]; }
+
 tool_inputs: "inputs" tool_io_entry(s)
-        { $return = $item[2] }
+        { $return = $item[2]; }
 
 tool_outputs: "outputs" tool_io_entry(s)
-        { $return = $item[2] }
+        { $return = $item[2]; }
 
 tool_io_entry: data_type name
         { $return = { data_type => $item[1], name => $item[2] }; }

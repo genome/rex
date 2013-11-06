@@ -8,6 +8,9 @@ use UR;
 use Carp qw(confess);
 use Compiler::AST::Node;
 
+use Genome::WorkflowBuilder::DAG;
+use Genome::WorkflowBuilder::Link;
+
 
 class Compiler::AST::Process {
     is => 'Compiler::AST::Node',
@@ -31,7 +34,7 @@ sub inputs {
     my %result;
     for my $data_type (keys %$consumers) {
         if (!$producers->{$data_type}) {
-            $result{$data_type} = $data_type;
+            $result{$self->_data_name($data_type)} = $data_type;
         }
     }
 
@@ -48,11 +51,16 @@ sub outputs {
     my %result;
     for my $data_type (keys %$producers) {
         if (!$consumers->{$data_type}) {
-            $result{$data_type} = $data_type;
+            $result{$self->_data_name($data_type)} = $data_type;
         }
     }
 
     return \%result;
+}
+
+sub workflow_builder {
+    my $self = shift;
+
 }
 
 
@@ -68,6 +76,11 @@ sub _validate_unique_children {
         }
         $child_lookup{$child->name} = $child;
     }
+}
+
+sub _data_name {
+    my ($self, $data_type) = @_;
+    return sprintf("%s->%s", $self->id, $data_type);
 }
 
 sub _get_producers {

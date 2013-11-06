@@ -40,6 +40,7 @@ sub _get_children {
         if ($imported_stuff->{type} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
                 operation_type => $op->{operation_type},
+                command => $imported_stuff->{command},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
                 output_entry => _build_io_entries($imported_stuff->{outputs}),
             );

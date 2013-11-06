@@ -35,7 +35,7 @@ sub execute {
         search_path => $self->search_path);
 
     my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
-#    printf("AST: %s\n", Data::Dumper::Dumper($ast));
+    printf("AST: %s\n", Data::Dumper::Dumper($ast));
 
     print "Inputs:\n";
     print Data::Dumper::Dumper($ast->inputs);
@@ -46,5 +46,6 @@ sub execute {
 sub search_path {
     return ['tool-definitions', 'process-definitions'];
 }
+
 
 1;

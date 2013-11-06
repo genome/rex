@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use Carp qw(confess);
 
 
 class Compiler::AST::Node {
@@ -24,11 +25,9 @@ sub name {
     return $self->operation_type;
 }
 
-sub inputs {
-}
-
-sub outputs {
-}
+sub inputs { confess "Abstract method"; }
+sub outputs { confess "Abstract method"; }
+sub workflow_builder { confess "Abstract method"; }
 
 
 1;
