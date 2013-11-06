@@ -8,6 +8,10 @@ process_definition: process_header operation(s)
             type => 'process' }; }
 process_header: "process"
 
+operation: type
+        { $return = { type => $item[1] }; }
+
+
 tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
         { $return = { type => 'tool',
                 command => $item[2],
@@ -27,8 +31,6 @@ tool_outputs: "outputs" tool_io_entry(s)
 tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
 
-operation: type
-        { $return = { type => $item[1] }; }
 
 name: /[a-z][A-Za-z0-9_:]*/
         { $return = $item[1]; }
