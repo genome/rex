@@ -8,8 +8,20 @@ process_definition: process_header operation(s)
             type => 'process' }; }
 process_header: "process"
 
-operation: type
+operation: type with_statements(?)
         { $return = { type => $item[1] }; }
+
+with_statements: "with" with_statement(s /,/)
+        { $return = $item[2]; }
+
+with_statement: name "from" identifier
+        { $return = { property_name => $item[1],
+                type => "link", source => $item[3] }; }
+    | name "=" constant
+        { $return = { property_name => $item[1],
+                type => "constant", value => $item[3] }; }
+    | <error>
+
 
 
 tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
@@ -31,6 +43,14 @@ tool_outputs: "outputs" tool_io_entry(s)
 tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
 
+
+constant: /'.+'/
+        { $return = $item[1]; }
+    | /[0-9]+(.[0-9]+)?/
+        { $return = $item[1]; }
+    | <error>
+
+identifier: name | type | <error>
 
 name: /[a-z][A-Za-z0-9_]*/
         { $return = $item[1]; }
