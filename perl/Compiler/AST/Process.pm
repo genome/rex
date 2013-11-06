@@ -5,6 +5,7 @@ use warnings FATAL => 'all';
 
 use UR;
 
+use Carp qw(confess);
 use Compiler::AST::Node;
 
 
@@ -23,26 +24,78 @@ class Compiler::AST::Process {
 sub inputs {
     my $self = shift;
 
-    return {omg => "I'm a process!"};
+    $self->_validate_unique_children;
+    my $producers = $self->_get_producers;
+    my $consumers = $self->_get_consumers;
 
-    my @results;
-    for my $child ($self->children) {
-        push @results, $child->inputs;
+    my %result;
+    for my $data_type (keys %$consumers) {
+        if (!$producers->{$data_type}) {
+            $result{$data_type} = $data_type;
+        }
     }
 
-    return @results;
+    return \%result;
 }
-
 
 sub outputs {
     my $self = shift;
 
-    my @results;
-    for my $child ($self->children) {
-        push @results, $child->outputs;
+    $self->_validate_unique_children;
+    my $producers = $self->_get_producers;
+    my $consumers = $self->_get_consumers;
+
+    my %result;
+    for my $data_type (keys %$producers) {
+        if (!$consumers->{$data_type}) {
+            $result{$data_type} = $data_type;
+        }
     }
 
-    return @results;
+    return \%result;
+}
+
+
+sub _validate_unique_children {
+    my $self = shift;
+
+    my %child_lookup;
+    for my $child ($self->children) {
+        if (exists $child_lookup{$child->name}) {
+            confess sprintf(
+                "Multiple children with same name (%s) in process %s",
+                $child->name, $self->name);
+        }
+        $child_lookup{$child->name} = $child;
+    }
+}
+
+sub _get_producers {
+    my $self = shift;
+
+    my %result;
+    for my $child ($self->children) {
+        my $child_outputs = $child->outputs;
+        for my $name (keys %$child_outputs) {
+            my $data_type = $child_outputs->{$name};
+            push @{$result{$data_type}}, $child;
+        }
+    }
+    return \%result;
+}
+
+sub _get_consumers {
+    my $self = shift;
+
+    my %result;
+    for my $child ($self->children) {
+        my $child_inputs = $child->inputs;
+        for my $name (keys %$child_inputs) {
+            my $data_type = $child_inputs->{$name};
+            push @{$result{$data_type}}, $child;
+        }
+    }
+    return \%result;
 }
 
 

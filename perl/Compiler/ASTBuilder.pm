@@ -41,8 +41,8 @@ sub _get_children {
             push @children, Compiler::AST::Tool->create(
                 operation_type => $op->{operation_type},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
+                output_entry => _build_io_entries($imported_stuff->{outputs}),
             );
-            # imported stuff will contain inputs, etc.
 
         } elsif ($imported_stuff->{type} eq 'process') {
              my @grand_children = _get_children($importer,

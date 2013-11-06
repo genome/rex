@@ -19,6 +19,11 @@ class Compiler::AST::Node {
 };
 
 
+sub name {
+    my $self = shift;
+    return $self->operation_type;
+}
+
 sub inputs {
 }
 

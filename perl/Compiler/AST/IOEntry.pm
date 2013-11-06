@@ -7,6 +7,8 @@ use UR;
 
 
 class Compiler::AST::IOEntry {
+    id_generator => '-uuid',
+
     has => [
         name => {
             is => 'Text',

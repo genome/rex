@@ -29,15 +29,18 @@ sub execute {
 
     my $parse_tree = Compiler::Parser::parse_tree($self->input_file);
     die 'Syntax error' unless $parse_tree;
-    printf("Root parse tree: %s\n", Data::Dumper::Dumper($parse_tree));
+#    printf("Root parse tree: %s\n", Data::Dumper::Dumper($parse_tree));
 
     my $importer = Compiler::Importer->create(
         search_path => $self->search_path);
 
     my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
-    printf("AST: %s\n", Data::Dumper::Dumper($ast));
+#    printf("AST: %s\n", Data::Dumper::Dumper($ast));
 
-    map {print Data::Dumper::Dumper($_->inputs)} $ast->children;
+    print "Inputs:\n";
+    print Data::Dumper::Dumper($ast->inputs);
+    print "Outputs:\n";
+    print Data::Dumper::Dumper($ast->outputs);
 }
 
 sub search_path {
