@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use Tool::Base;
 
 class Tool::A {
     is => 'Tool::Base',

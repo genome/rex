@@ -37,10 +37,15 @@ sub execute {
     my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
     printf("AST: %s\n", Data::Dumper::Dumper($ast));
 
-    print "Inputs:\n";
-    print Data::Dumper::Dumper($ast->inputs);
-    print "Outputs:\n";
-    print Data::Dumper::Dumper($ast->outputs);
+    printf("Inputs: %s\n", Data::Dumper::Dumper($ast->inputs));
+    printf("Outputs: %s\n", Data::Dumper::Dumper($ast->outputs));
+
+    printf("XML:\n%s\n", $ast->workflow_builder->get_xml);
+    my $outputs = $ast->workflow_builder->execute(
+        'input:T1' => 'foo1',
+        'input:T2' => 'foo2',
+        'input:T3' => 'foo3');
+    print Data::Dumper::Dumper($outputs);
 }
 
 sub search_path {

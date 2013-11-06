@@ -10,6 +10,7 @@ use Compiler::AST::Node;
 use Compiler::AST::IOEntry;
 
 use Genome::WorkflowBuilder::Command;
+use Memoize;
 
 
 class Compiler::AST::Tool {
@@ -46,9 +47,9 @@ sub outputs {
 sub workflow_builder {
     my $self = shift;
     return Genome::WorkflowBuilder::Command->create(
-        name => $self->command,
-        command => $self->command);
+        name => $self->command, command => $self->command);
 }
+Memoize::memoize('workflow_builder');
 
 
 
