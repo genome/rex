@@ -19,7 +19,7 @@ tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
                 outputs => $item[4] }; }
 tool_header: "tool"
 
-tool_command: /[A-Z][A-Za-z0-9_:]*/
+tool_command: type
         { $return = $item[1]; }
 
 tool_inputs: "inputs" tool_io_entry(s)
