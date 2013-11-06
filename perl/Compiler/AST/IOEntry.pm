@@ -13,7 +13,7 @@ class Compiler::AST::IOEntry {
         name => {
             is => 'Text',
         },
-        data_type => {
+        type => {
             is => 'Text',
         },
     ],

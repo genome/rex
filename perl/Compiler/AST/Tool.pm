@@ -64,7 +64,7 @@ sub _collect_by_name {
                 $entry->name, $self->operation_type);
         }
 
-        $result{$entry->name} = $entry->data_type;
+        $result{$entry->name} = $entry->type;
     }
 
     return \%result;

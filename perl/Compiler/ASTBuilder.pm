@@ -25,7 +25,7 @@ sub _get_process_object {
         $process->{operations});
 
     return Compiler::AST::Process->create(
-        operation_type => $process->{operation_type},
+        operation_type => $process->{type},
         children => \@children);
 }
 
@@ -34,12 +34,12 @@ sub _get_children {
 
     my @children;
     for my $op (@$operation_definitions) {
-        my $imported_stuff = $importer->import_file($op->{operation_type});
+        my $imported_stuff = $importer->import_file($op->{type});
         # TODO Make sure we don't infinitely recurse.
 
         if ($imported_stuff->{type} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
-                operation_type => $op->{operation_type},
+                operation_type => $op->{type},
                 command => $imported_stuff->{command},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
                 output_entry => _build_io_entries($imported_stuff->{outputs}),
@@ -50,7 +50,7 @@ sub _get_children {
                  $imported_stuff->{operations});
 
              push @children, Compiler::AST::Process->create(
-                 operation_type => $op->{operation_type},
+                 operation_type => $op->{type},
                  children => \@grand_children);
 
         } else {
