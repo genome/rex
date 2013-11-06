@@ -32,7 +32,7 @@ tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
 
 
-name: /[a-z][A-Za-z0-9_:]*/
+name: /[a-z][A-Za-z0-9_]*/
         { $return = $item[1]; }
 type: /[A-Z][A-Za-z0-9_:]*/
         { $return = $item[1]; }
