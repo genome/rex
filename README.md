@@ -14,3 +14,4 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 ## TODO
 - sugar for addressing "A::B::C" with "B::C" or "C"
 - forbid recursive imports
+- improve parsing error messages (probably with <reject> and <error>)
