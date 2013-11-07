@@ -50,9 +50,9 @@ tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
 
 
-constant: /'.+'/
-        { $return = $item[1]; }
-    | /[0-9]+(.[0-9]+)?/
+constant: /'(\\'|.)*'/
+        { $return = substr $item[1], 1, -1; }
+    | /-?[0-9]+(.[0-9]+)?/
         { $return = $item[1]; }
     | <error>
 
