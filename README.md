@@ -16,3 +16,4 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - forbid recursive imports
 - improve parsing error messages (probably with <reject> and <error>)
 - fix string escaping regular expressions (grammar and syntax)
+- improve syntax hilighting of errors

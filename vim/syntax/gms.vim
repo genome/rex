@@ -21,7 +21,7 @@ syn match dsl_pair_link /=/
 syn match dsl_separator /,/
 
 syn match dsl_string /'\(\\'\|[^']\)*'/
-syn match dsl_number /-\?[0-9_]\+\.\?[0-9]*/
+syn match dsl_number /-\?[0-9][0-9_]*\(\.[0-9_]*\)\?/
 
 
 hi link dsl_alias Statement
