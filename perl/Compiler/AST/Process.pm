@@ -122,15 +122,17 @@ sub _add_links_to {
     my $producers = $self->_get_producers;
     my $consumers = $self->_get_consumers;
 
+    my %links;
     for my $data_type (keys %$consumers) {
         if (!$producers->{$data_type}) {
             for my $dest_spec (@{$consumers->{$data_type}}) {
                 my $child = $dest_spec->{child};
                 my $name = $dest_spec->{property_name};
-                $dag->connect_input(
+                push @{$links{'inputs'}}, {
                     input_property => $self->_data_name($data_type),
                     destination => $child->workflow_builder,
-                    destination_property => $name);
+                    destination_property => $name,
+                };
             }
 
         } elsif (scalar(@{$producers->{$data_type}}) == 1) {
@@ -141,11 +143,12 @@ sub _add_links_to {
                 my $dest_child = $dest_spec->{child};
                 my $dest_name = $dest_spec->{property_name};
 
-                $dag->create_link(
+                push @{$links{'internal'}}, {
                     source => $prod_child->workflow_builder,
                     source_property => $prod_name,
                     destination => $dest_child->workflow_builder,
-                    destination_property => $dest_name);
+                    destination_property => $dest_name,
+                };
             }
 
         } else {
@@ -160,15 +163,25 @@ sub _add_links_to {
         if (scalar(@{$producers->{$data_type}}) == 1) {
             my $prod_child = $producers->{$data_type}[0]{child};
             my $prod_name = $producers->{$data_type}[0]{property_name};
-            $dag->connect_output(
+            push @{$links{'outputs'}}, {
                 source => $prod_child->workflow_builder,
                 source_property => $prod_name,
                 output_property => $self->_data_name($data_type),
-            );
+            };
         } else {
             confess sprintf("Found multiple producers for data type (%s) in %s",
                 $data_type, $self->name);
         }
+    }
+
+    for my $link (@{$links{'inputs'}}) {
+        $dag->connect_input(%{$link});
+    }
+    for my $link (@{$links{'internal'}}) {
+        $dag->create_link(%{$link});
+    }
+    for my $link (@{$links{'outputs'}}) {
+        $dag->connect_output(%{$link});
     }
 
     return;
