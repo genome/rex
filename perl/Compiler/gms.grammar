@@ -61,9 +61,9 @@ constant: /'(\\'|.)*'/
     | <error>
 
 identifier: name
-        { $return = { name => $item[1] }; }
+        { $return = $item[1]; }
     | type
-        { $return = { type => $item[1] }; }
+        { $return = $item[1]; }
     | <error>
 
 name: /[a-z][A-Za-z0-9_]*/
