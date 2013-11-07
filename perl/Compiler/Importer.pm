@@ -37,7 +37,7 @@ sub resolve_path {
 
     for my $base_path ($self->search_path) {
         my $absolute_path = File::Spec->rel2abs(File::Spec->join(
-                $base_path, $relative_path));
+                $base_path, split(/::/, $relative_path)));
         if (-f $absolute_path) {
             return $absolute_path;
         }
