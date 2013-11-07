@@ -23,11 +23,12 @@ sub _get_process_object {
 
     my @children = _get_children($importer,
         $process->{operations});
+    my %children = _get_children_hash($operation_type, @children);
 
     return Compiler::AST::Process->create(
         alias => $operation_type,
         operation_type => $operation_type,
-        children => \@children);
+        children => \%children);
 }
 
 sub _get_children {
@@ -49,11 +50,12 @@ sub _get_children {
         } elsif ($imported_stuff->{kind} eq 'process') {
             my @grand_children = _get_children($importer,
                 $imported_stuff->{operations});
+            my %grand_children = _get_children_hash($op->{alias}, @grand_children);
 
             push @children, Compiler::AST::Process->create(
                 alias => $op->{alias},
                 operation_type => $op->{type},
-                children => \@grand_children);
+                children => \%grand_children);
 
         } else {
             confess sprintf("Unknown type: %s",
@@ -63,6 +65,20 @@ sub _get_children {
     return @children;
 }
 
+sub _get_children_hash {
+    my ($alias, @children) = @_;
+
+    my %child_lookup;
+    for my $child (@children) {
+        if (exists $child_lookup{$child->alias}) {
+            confess sprintf(
+                "multiple children with same alias (%s) in process %s",
+                $child->alias, $alias);
+        }
+        $child_lookup{$child->alias} = $child;
+    }
+    return %child_lookup;
+}
 
 sub _build_io_entries {
     my $maybe_entries = shift;

@@ -18,8 +18,7 @@ class Compiler::AST::Process {
 
     has => [
         children => {
-            is => 'Compiler::AST::Node',
-            is_many => 1,
+            is => 'HASH',
         },
     ],
 };
@@ -28,7 +27,6 @@ class Compiler::AST::Process {
 sub inputs {
     my $self = shift;
 
-    $self->_validate_unique_children;
     my $producers = $self->_get_producers;
     my $consumers = $self->_get_consumers;
 
@@ -45,7 +43,6 @@ sub inputs {
 sub outputs {
     my $self = shift;
 
-    $self->_validate_unique_children;
     my $producers = $self->_get_producers;
     my $consumers = $self->_get_consumers;
 
@@ -72,20 +69,6 @@ sub workflow_builder {
 Memoize::memoize('workflow_builder');
 
 
-sub _validate_unique_children {
-    my $self = shift;
-
-    my %child_lookup;
-    for my $child ($self->children) {
-        if (exists $child_lookup{$child->alias}) {
-            confess sprintf(
-                "Multiple children with same alias (%s) in process %s",
-                $child->alias, $self->alias);
-        }
-        $child_lookup{$child->alias} = $child;
-    }
-}
-
 sub _data_name {
     my ($self, $data_type) = @_;
     return sprintf("%s:%s", "input", $data_type);
@@ -95,7 +78,7 @@ sub _get_producers {
     my $self = shift;
 
     my %result;
-    for my $child ($self->children) {
+    for my $child (values %{$self->children}) {
         my $child_outputs = $child->outputs;
         for my $name (keys %$child_outputs) {
             my $data_type = $child_outputs->{$name};
@@ -111,7 +94,7 @@ sub _get_consumers {
     my $self = shift;
 
     my %result;
-    for my $child ($self->children) {
+    for my $child (values %{$self->children}) {
         my $child_inputs = $child->inputs;
         for my $name (keys %$child_inputs) {
             my $data_type = $child_inputs->{$name};
@@ -127,7 +110,7 @@ sub _get_consumers {
 sub _add_operations_to {
     my ($self, $dag) = @_;
 
-    for my $child ($self->children) {
+    for my $child (values %{$self->children}) {
         $dag->add_operation($child->workflow_builder);
     }
     return;
@@ -136,7 +119,6 @@ sub _add_operations_to {
 sub _add_links_to {
     my ($self, $dag) = @_;
 
-    $self->_validate_unique_children;
     my $producers = $self->_get_producers;
     my $consumers = $self->_get_consumers;
 
