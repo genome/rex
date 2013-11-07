@@ -12,18 +12,15 @@ syn keyword dsl_keyword parallel
 " syn keyword dsl_keyword inputs
 " syn keyword dsl_keyword outputs
 
+syn match dsl_comma /,/
 syn match dsl_type /[A-Z][A-Za-z0-9_]*\(::[A-Z][A-Za-z0-9_]*\)*/
-
 syn match dsl_single_quoted_string /'\(\\'\|[^']\)*'/
 " syn match dsl_double_quoted_string /"\(\\"\|[^"]\)*"/
 syn match dsl_number /-\?[0-9_]\+\.\?[0-9]*/
 
-" Now make them appear:
-" Def means default colour - colourschemes can override
-hi def dsl_keyword ctermfg=4
-
-hi def dsl_type ctermfg=5
-
-hi def dsl_single_quoted_string ctermfg=1
+hi link dsl_keyword Statement
+hi link dsl_type Function
+hi link dsl_single_quoted_string String
 "hi def dsl_double_quoted_string ctermfg=1
-hi def dsl_number ctermfg=1
+hi link dsl_number Number
+hi link dsl_comma Operator
