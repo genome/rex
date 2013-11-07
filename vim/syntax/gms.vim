@@ -7,6 +7,8 @@ syntax sync minlines=1 maxlines=1
 syn keyword dsl_file_type process
 syn keyword dsl_file_type tool
 
+syn keyword dsl_section inputs outputs
+
 syn keyword dsl_alias is
 syn match dsl_type /[A-Z][A-Za-z0-9_]*\(::[A-Z][A-Za-z0-9_]*\)*/
 syn match dsl_name /[a-z][A-Za-z0-9_]*/
@@ -28,6 +30,7 @@ hi link dsl_modifier Operator
 hi link dsl_name Identifier
 hi link dsl_number Number
 hi link dsl_pair_link Statement
+hi link dsl_section Define
 hi link dsl_separator Delimiter
 hi link dsl_string String
 hi link dsl_type Type
