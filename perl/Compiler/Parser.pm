@@ -28,7 +28,7 @@ sub _parse_tree_generator {
 Memoize::memoize('_parse_tree_generator');
 
 sub _grammar_path {
-    return File::Spec->join(_base_path(), 'process-definition.grammar');
+    return File::Spec->join(_base_path(), 'gms.grammar');
 }
 
 sub _base_path {
