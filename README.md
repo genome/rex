@@ -15,3 +15,4 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - sugar for addressing "A::B::C" with "B::C" or "C"
 - forbid recursive imports
 - improve parsing error messages (probably with <reject> and <error>)
+- fix string escaping regular expressions (grammar and syntax)
