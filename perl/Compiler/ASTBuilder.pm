@@ -35,7 +35,6 @@ sub _get_children {
     my @children;
     for my $op (@$operation_definitions) {
         my $imported_stuff = $importer->import_file($op->{type});
-        # TODO Make sure we don't infinitely recurse.
 
         if ($imported_stuff->{kind} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
