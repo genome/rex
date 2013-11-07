@@ -25,5 +25,5 @@ hi def dsl_keyword ctermfg=4
 hi def dsl_type ctermfg=5
 
 hi def dsl_single_quoted_string ctermfg=1
-hi def dsl_double_quoted_string ctermfg=1
+"hi def dsl_double_quoted_string ctermfg=1
 hi def dsl_number ctermfg=1
