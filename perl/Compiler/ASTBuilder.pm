@@ -25,6 +25,7 @@ sub _get_process_object {
         $process->{operations});
 
     return Compiler::AST::Process->create(
+        alias => $operation_type,
         operation_type => $operation_type,
         children => \@children);
 }
@@ -38,6 +39,7 @@ sub _get_children {
 
         if ($imported_stuff->{kind} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
+                alias => $op->{alias},
                 operation_type => $op->{type},
                 command => $imported_stuff->{command},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
@@ -45,12 +47,13 @@ sub _get_children {
             );
 
         } elsif ($imported_stuff->{kind} eq 'process') {
-             my @grand_children = _get_children($importer,
-                 $imported_stuff->{operations});
+            my @grand_children = _get_children($importer,
+                $imported_stuff->{operations});
 
-             push @children, Compiler::AST::Process->create(
-                 operation_type => $op->{type},
-                 children => \@grand_children);
+            push @children, Compiler::AST::Process->create(
+                alias => $op->{alias},
+                operation_type => $op->{type},
+                children => \@grand_children);
 
         } else {
             confess sprintf("Unknown type: %s",

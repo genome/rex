@@ -16,6 +16,9 @@ class Compiler::AST::Node {
         operation_type => {
             is => 'Text',
         },
+        alias => {
+            is => 'Text',
+        },
     ],
 };
 
