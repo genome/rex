@@ -77,12 +77,12 @@ sub _validate_unique_children {
 
     my %child_lookup;
     for my $child ($self->children) {
-        if (exists $child_lookup{$child->name}) {
+        if (exists $child_lookup{$child->alias}) {
             confess sprintf(
-                "Multiple children with same name (%s) in process %s",
-                $child->name, $self->name);
+                "Multiple children with same alias (%s) in process %s",
+                $child->alias, $self->alias);
         }
-        $child_lookup{$child->name} = $child;
+        $child_lookup{$child->alias} = $child;
     }
 }
 
