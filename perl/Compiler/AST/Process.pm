@@ -62,7 +62,11 @@ sub workflow_builder {
     my $dag = Genome::WorkflowBuilder::DAG->create(name => $self->name);
 
     $self->_add_operations_to($dag);
-    my $links = $self->_auto_generate_links;
+
+    my $producers = $self->_get_producers;
+    my $consumers = $self->_get_consumers;
+    my $links = $self->_auto_generate_links($producers, $consumers);
+
     $self->_add_links_to($dag, $links);
 
     return $dag;
@@ -118,10 +122,7 @@ sub _add_operations_to {
 }
 
 sub _auto_generate_links {
-    my $self = shift;
-
-    my $producers = $self->_get_producers;
-    my $consumers = $self->_get_consumers;
+    my ($self, $producers, $consumers) = @_;
 
     my %links;
     for my $data_type (keys %$consumers) {
