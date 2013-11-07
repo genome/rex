@@ -11,7 +11,7 @@ use File::Spec qw();
 
 use Compiler::Parser;
 
-use constant EXTENSION => '.def';
+use constant EXTENSION => '.gms';
 
 
 class Compiler::Importer {
