@@ -16,6 +16,7 @@ operation: alias(?) type parallel_statement(?) with_statements(?)
 
 alias: name "is"
         { $return = $item[1]; }
+    | <error>
 
 parallel_statement: "parallel" name
         { $return = $item[2]; }
