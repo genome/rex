@@ -63,16 +63,40 @@ sub workflow_builder {
 
     $self->_add_operations_to($dag);
 
-    my $producers = $self->_get_producers;
-    my $consumers = $self->_get_consumers;
-    my $links = $self->_auto_generate_links($producers, $consumers);
-
-    $self->_add_links_to($dag, $links);
+    $self->_add_explicit_links_to($dag);
+    $self->_add_implicit_links_to($dag);
 
     return $dag;
 }
 Memoize::memoize('workflow_builder');
 
+sub _add_explicit_links_to {
+    my $self = shift;
+
+    return;
+}
+
+sub _add_implicit_links_to {
+    my ($self, $dag) = @_;
+
+    my $links = $self->_auto_generate_links();
+    $self->_add_links_to($dag, $links);
+}
+
+sub _get_remaining_producers_and_consumers {
+    my $self = shift;
+    my $producers = $self->_get_producers;
+    my $consumers = $self->_get_consumers;
+    $self->_remove_explicitly_linked_producers_and_consumers($producers, $consumers);
+
+    return $producers, $consumers;
+}
+
+sub _remove_explicitly_linked_producers_and_consumers {
+    my ($self, $producers, $consumers) = @_;
+
+    return;
+}
 
 sub _data_name {
     my ($self, $data_type) = @_;
@@ -122,8 +146,9 @@ sub _add_operations_to {
 }
 
 sub _auto_generate_links {
-    my ($self, $producers, $consumers) = @_;
+    my $self = shift;
 
+    my ($producers, $consumers) = $self->_get_remaining_producers_and_consumers();
     my %links;
     for my $data_type (keys %$consumers) {
         if (!$producers->{$data_type}) {
