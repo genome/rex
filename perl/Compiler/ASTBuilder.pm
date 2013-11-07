@@ -11,21 +11,21 @@ use Compiler::AST::Process;
 sub build_AST {
     my ($importer, $parse_tree) = @_;
 
-    return _get_process_object($importer, $parse_tree);
+    return _get_process_object($importer, $parse_tree, 'root');
 }
 
 
 sub _get_process_object {
-    my ($importer, $process) = @_;
+    my ($importer, $process, $operation_type) = @_;
 
     die 'not an actual process object'
-        unless $process->{type} eq 'process';
+        unless $process->{kind} eq 'process';
 
     my @children = _get_children($importer,
         $process->{operations});
 
     return Compiler::AST::Process->create(
-        operation_type => $process->{type},
+        operation_type => $operation_type,
         children => \@children);
 }
 
@@ -37,7 +37,7 @@ sub _get_children {
         my $imported_stuff = $importer->import_file($op->{type});
         # TODO Make sure we don't infinitely recurse.
 
-        if ($imported_stuff->{type} eq 'tool') {
+        if ($imported_stuff->{kind} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
                 operation_type => $op->{type},
                 command => $imported_stuff->{command},
@@ -45,7 +45,7 @@ sub _get_children {
                 output_entry => _build_io_entries($imported_stuff->{outputs}),
             );
 
-        } elsif ($imported_stuff->{type} eq 'process') {
+        } elsif ($imported_stuff->{kind} eq 'process') {
              my @grand_children = _get_children($importer,
                  $imported_stuff->{operations});
 

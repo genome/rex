@@ -4,8 +4,7 @@ start: (process_definition | tool_definition) eof
 
 process_definition: process_header operation(s)
         { $return = { operations => $item[2],
-            type => 'root',
-            type => 'process' }; }
+            kind => 'process' }; }
 process_header: "process"
 
 operation: alias(?) type parallel_statement(?) with_statements(?)
@@ -35,7 +34,7 @@ with_statement: name "from" identifier
 
 
 tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
-        { $return = { type => 'tool',
+        { $return = { kind => 'tool',
                 command => $item[2],
                 inputs => $item[3],
                 outputs => $item[4] }; }
