@@ -9,13 +9,13 @@ syn keyword dsl_keyword from
 syn keyword dsl_keyword process
 syn keyword dsl_keyword tool
 syn keyword dsl_keyword parallel
-syn keyword dsl_keyword inputs
-syn keyword dsl_keyword outputs
+" syn keyword dsl_keyword inputs
+" syn keyword dsl_keyword outputs
 
 syn match dsl_type /[A-Z][A-Za-z0-9_]*\(::[A-Z][A-Za-z0-9_]*\)*/
 
 syn match dsl_single_quoted_string /'\(\\'\|[^']\)*'/
-syn match dsl_double_quoted_string /"\(\\"\|[^"]\)*"/
+" syn match dsl_double_quoted_string /"\(\\"\|[^"]\)*"/
 syn match dsl_number /-\?[0-9_]\+\.\?[0-9]*/
 
 " Now make them appear:
