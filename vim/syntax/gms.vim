@@ -26,6 +26,6 @@ hi link dsl_file_type Include
 hi link dsl_modifier Operator
 hi link dsl_number Number
 hi link dsl_pair_link Statement
-hi link dsl_separator Operator
+hi link dsl_separator Normal
 hi link dsl_string String
 hi link dsl_type Function
