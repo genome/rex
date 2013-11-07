@@ -8,14 +8,18 @@ process_definition: process_header operation(s)
             type => 'process' }; }
 process_header: "process"
 
-operation: alias(?) type with_statements(?)
+operation: alias(?) type parallel_statement(?) with_statements(?)
         { $return = { type => $item[2] };
-          $return->{inputs} = $item[3][0] || [];
+          $return->{parallel} = $item[3][0] || undef;
+          $return->{inputs} = $item[4][0] || [];
           $return->{alias} = $item[1][0] || $item[2];
         }
 
 alias: name "is"
         { $return = $item[1]; }
+
+parallel_statement: "parallel" name
+        { $return = $item[2]; }
 
 with_statements: "with" with_statement(s /,/)
         { $return = $item[2]; }
