@@ -32,15 +32,16 @@ sub _get_children {
     my %children;
     for my $op (@$operation_definitions) {
         my $imported_stuff = $importer->import_file($op->{type});
+        if (exists $children{$op->{alias}}) {
+            confess sprintf(
+                "Multiple children with same alias (%s) in process '%s'",
+                $op->{alias}, $imported_stuff->{type});
+        }
+
         my $explicit_link_info = _get_explicit_link_info(
             $op->{inputs}, $op->{alias});
 
         if ($imported_stuff->{kind} eq 'tool') {
-            if (exists $children{$op->{alias}}) {
-                confess sprintf(
-                    "Multiple children with same alias (%s) in process '%s'",
-                    $op->{alias}, $imported_stuff->{type});
-            }
             $children{$op->{alias}} = Compiler::AST::Tool->create(
                 operation_type => $op->{type},
                 command => $imported_stuff->{command},
@@ -50,11 +51,6 @@ sub _get_children {
             );
 
         } elsif ($imported_stuff->{kind} eq 'process') {
-            if (exists $children{$op->{alias}}) {
-                confess sprintf(
-                    "Multiple children with same alias (%s) in process '%s'",
-                    $op->{alias}, $imported_stuff->{type});
-            }
             $children{$op->{alias}} =Compiler::AST::Process->create(
                 operation_type => $op->{type},
                 explicit_link_info => $explicit_link_info,
