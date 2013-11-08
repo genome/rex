@@ -5,8 +5,16 @@ use warnings FATAL => 'all';
 
 use UR;
 
+use Carp qw(confess);
+use File::Basename qw();
+use File::Spec qw();
+use File::Temp qw();
+use IPC::Run qw();
+
+
 class Tool::Aligner::Bwa::Aln {
     is => 'Command::V2',
+
     has_input => [
         input_bam => {
             is => "File",
@@ -18,6 +26,7 @@ class Tool::Aligner::Bwa::Aln {
             is => "Number",
             valid_values => [0,1,2],
         },
+
         threads => {
             is => "Number",
         },
@@ -25,26 +34,64 @@ class Tool::Aligner::Bwa::Aln {
             is => "Number",
         },
     ],
+
     has_output => [
         output_file => {
             is => "File",
         },
     ],
+
+    has_transient => [
+        tempdir => {
+            is => 'Path',
+        },
+    ],
 };
+
 
 sub execute {
     my $self = shift;
 
-    printf("Running aln with params:\nread_mode:%s\n", $self->read_mode);
-    $self->set_outputs();
+    $self->output_file($self->_create_output_filename);
+    IPC::Run::run($self->command_line, '>', $self->output_file);
 
     return 1;
 }
 
-sub set_outputs {
+
+sub _create_output_filename {
     my $self = shift;
 
-    $self->output_file('Foo');
+    my $fh = File::Temp->new(UNLINK => 0, SUFFIX => '.sai');
+
+    return $fh->filename;
 }
+
+sub command_line {
+    my $self = shift;
+
+    return ['bwa', 'aln', '-b',
+        $self->_read_mode_param,
+        $self->_threads_param,
+        $self->_trimming_quality_threshold_param,
+        $self->alignment_index,
+        $self->input_bam];
+}
+
+sub _read_mode_param {
+    my $self = shift;
+    return sprintf("-%d", $self->read_mode);
+}
+
+sub _threads_param {
+    my $self = shift;
+    return ('-t', $self->threads);
+}
+
+sub _trimming_quality_threshold_param {
+    my $self = shift;
+    return ('-q', $self->trimming_quality_threshold);
+}
+
 
 1;
