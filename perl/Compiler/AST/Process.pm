@@ -84,7 +84,7 @@ sub _add_explicit_links_to {
 sub _add_implicit_links_to {
     my ($self, $dag) = @_;
 
-    my $links = $self->_auto_generate_links();
+    my $links = $self->_generate_implicit_links();
     $self->_add_links_to($dag, $links);
 }
 
@@ -150,7 +150,7 @@ sub _add_operations_to {
     return;
 }
 
-sub _auto_generate_links {
+sub _generate_implicit_links {
     my $self = shift;
 
     my ($producers, $consumers) = $self->_get_remaining_producers_and_consumers();
