@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<operation name="root">
+  <operationtype typeClass="Workflow::OperationType::Model">
+    <inputproperty>input:T1</inputproperty>
+    <inputproperty>input:T3</inputproperty>
+    <inputproperty>input:T2</inputproperty>
+    <outputproperty>input:T7</outputproperty>
+  </operationtype>
+  <operation name="Tool::A">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Tool::A">
+      <inputproperty>ai1</inputproperty>
+      <outputproperty>ao1</outputproperty>
+      <outputproperty>result</outputproperty>
+    </operationtype>
+  </operation>
+  <operation name="C">
+    <operationtype typeClass="Workflow::OperationType::Model">
+      <inputproperty>input:T3</inputproperty>
+      <inputproperty>input:T2</inputproperty>
+      <outputproperty>input:T4</outputproperty>
+      <outputproperty>input:T5</outputproperty>
+    </operationtype>
+    <operation name="Tool::D">
+      <operationtype typeClass="Workflow::OperationType::Command" commandClass="Tool::D">
+        <inputproperty>di1</inputproperty>
+        <outputproperty>do1</outputproperty>
+        <outputproperty>result</outputproperty>
+      </operationtype>
+    </operation>
+    <operation name="E">
+      <operationtype typeClass="Workflow::OperationType::Model">
+        <inputproperty>input:T3</inputproperty>
+        <outputproperty>input:T5</outputproperty>
+      </operationtype>
+      <operation name="Tool::F">
+        <operationtype typeClass="Workflow::OperationType::Command" commandClass="Tool::F">
+          <inputproperty>fi1</inputproperty>
+          <outputproperty>fo1</outputproperty>
+          <outputproperty>result</outputproperty>
+        </operationtype>
+      </operation>
+      <link fromOperation="input connector" fromProperty="input:T3" toOperation="Tool::F" toProperty="fi1" />
+      <link fromOperation="Tool::F" fromProperty="fo1" toOperation="output connector" toProperty="input:T5" />
+    </operation>
+    <link fromOperation="input connector" fromProperty="input:T3" toOperation="E" toProperty="input:T3" />
+    <link fromOperation="input connector" fromProperty="input:T2" toOperation="Tool::D" toProperty="di1" />
+    <link fromOperation="Tool::D" fromProperty="do1" toOperation="output connector" toProperty="input:T4" />
+    <link fromOperation="E" fromProperty="input:T5" toOperation="output connector" toProperty="input:T5" />
+  </operation>
+  <operation name="Tool::B">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Tool::B">
+      <inputproperty>bi1</inputproperty>
+      <inputproperty>bi2</inputproperty>
+      <inputproperty>bi3</inputproperty>
+      <outputproperty>bo1</outputproperty>
+      <outputproperty>result</outputproperty>
+    </operationtype>
+  </operation>
+  <link fromOperation="C" fromProperty="input:T4" toOperation="Tool::B" toProperty="bi1" />
+  <link fromOperation="Tool::A" fromProperty="ao1" toOperation="Tool::B" toProperty="bi3" />
+  <link fromOperation="input connector" fromProperty="input:T1" toOperation="Tool::A" toProperty="ai1" />
+  <link fromOperation="C" fromProperty="input:T5" toOperation="Tool::B" toProperty="bi2" />
+  <link fromOperation="input connector" fromProperty="input:T2" toOperation="C" toProperty="input:T2" />
+  <link fromOperation="input connector" fromProperty="input:T3" toOperation="C" toProperty="input:T3" />
+  <link fromOperation="Tool::B" fromProperty="bo1" toOperation="output connector" toProperty="input:T7" />
+</operation>

@@ -1,0 +1,90 @@
+$VAR1 = bless( {
+                 '__get_serial' => 1413,
+                 '_change_count' => 1,
+                 'operation_type' => 'root',
+                 'children' => [
+                                 bless( {
+                                          '__get_serial' => 1356,
+                                          '_change_count' => 1,
+                                          'input_entry' => [
+                                                             bless( {
+                                                                      '__get_serial' => 1330,
+                                                                      '_change_count' => 1,
+                                                                      'name' => 'x_in_1',
+                                                                      'id' => 'f02322570e6942deb5cfce40f3501d44',
+                                                                      'type' => 'X::Input1'
+                                                                    }, 'Compiler::AST::IOEntry' )
+                                                           ],
+                                          'operation_type' => 'Tools::X',
+                                          'output_entry' => [
+                                                              bless( {
+                                                                       '__get_serial' => 1331,
+                                                                       '_change_count' => 1,
+                                                                       'name' => 'x_out_1',
+                                                                       'id' => '1bf6ce5df48b4000a4b69467348acb27',
+                                                                       'type' => 'X::Output1'
+                                                                     }, 'Compiler::AST::IOEntry' )
+                                                            ],
+                                          'id' => '3310b3aae2d64232a382fe0a67d47621',
+                                          'command' => 'Tools::X'
+                                        }, 'Compiler::AST::Tool' ),
+                                 bless( {
+                                          '__get_serial' => 1368,
+                                          '_change_count' => 1,
+                                          'input_entry' => [
+                                                             bless( {
+                                                                      '__get_serial' => 1358,
+                                                                      '_change_count' => 1,
+                                                                      'name' => 'x_in_1',
+                                                                      'id' => '69473b620b9c4a538b7f5133d923996c',
+                                                                      'type' => 'X::Input1'
+                                                                    }, 'Compiler::AST::IOEntry' )
+                                                           ],
+                                          'operation_type' => 'Tools::X',
+                                          'output_entry' => [
+                                                              bless( {
+                                                                       '__get_serial' => 1359,
+                                                                       '_change_count' => 1,
+                                                                       'name' => 'x_out_1',
+                                                                       'id' => '0b39e1874d3c4cb9b4f0b8deb1773747',
+                                                                       'type' => 'X::Output1'
+                                                                     }, 'Compiler::AST::IOEntry' )
+                                                            ],
+                                          'id' => '0758d7942da44dce8429ae9c010ef90d',
+                                          'command' => 'Tools::X'
+                                        }, 'Compiler::AST::Tool' ),
+                                 bless( {
+                                          '__get_serial' => 1385,
+                                          '_change_count' => 1,
+                                          'input_entry' => [
+                                                             bless( {
+                                                                      '__get_serial' => 1370,
+                                                                      '_change_count' => 1,
+                                                                      'name' => 'y_in_1',
+                                                                      'id' => '2228b4fcc15e493094a71d9970570810',
+                                                                      'type' => 'Y::Input1'
+                                                                    }, 'Compiler::AST::IOEntry' ),
+                                                             bless( {
+                                                                      '__get_serial' => 1371,
+                                                                      '_change_count' => 1,
+                                                                      'name' => 'y_in_2',
+                                                                      'id' => '67ea3b3ba553407598746d777f4f4f20',
+                                                                      'type' => 'Y::Input2'
+                                                                    }, 'Compiler::AST::IOEntry' )
+                                                           ],
+                                          'operation_type' => 'Tools::Y',
+                                          'output_entry' => [
+                                                              bless( {
+                                                                       '__get_serial' => 1372,
+                                                                       '_change_count' => 1,
+                                                                       'name' => 'y_out_1',
+                                                                       'id' => 'afcc342d55ac4de5805a29e427d3c0db',
+                                                                       'type' => 'Y::Output1'
+                                                                     }, 'Compiler::AST::IOEntry' )
+                                                            ],
+                                          'id' => 'a491adf3195d4933bc9c40c943c4acc5',
+                                          'command' => 'Tools::Y'
+                                        }, 'Compiler::AST::Tool' )
+                               ],
+                 'id' => '6a319d6f67794fefbd902a5980a74ac2'
+               }, 'Compiler::AST::Process' );

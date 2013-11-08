@@ -1,0 +1,23 @@
+$VAR1 = {
+          'operations' => [
+                            {
+                              'parallel' => undef,
+                              'type' => 'A',
+                              'alias' => 'A',
+                              'inputs' => []
+                            },
+                            {
+                              'parallel' => undef,
+                              'type' => 'B',
+                              'alias' => 'B',
+                              'inputs' => []
+                            },
+                            {
+                              'parallel' => undef,
+                              'type' => 'C',
+                              'alias' => 'C',
+                              'inputs' => []
+                            }
+                          ],
+          'kind' => 'process'
+        };

@@ -1,0 +1,5 @@
+$VAR1 = {
+          'input:T1' => 'T1',
+          'input:T3' => 'T3',
+          'input:T2' => 'T2'
+        };
