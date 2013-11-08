@@ -23,6 +23,11 @@ class Compiler {
             is => 'Path',
             shell_args_position => 1,
         },
+
+        output_directory => {
+            is => 'Path',
+            is_optional => 1,
+        },
     ],
 };
 
@@ -63,7 +68,14 @@ sub search_path {
     return ['definitions'];
 }
 
-sub output_directory {
+sub get_output_directory {
+    my $self = shift;
+
+    return $self->output_directory if $self->output_directory;
+    return $self->default_output_directory;
+}
+
+sub default_output_directory {
     my $self = shift;
 
     my $path = $self->input_file;
@@ -74,8 +86,8 @@ sub output_directory {
 sub make_output_directory {
     my $self = shift;
 
-    File::Path::remove_tree($self->output_directory);
-    File::Path::make_path($self->output_directory);
+    File::Path::remove_tree($self->get_output_directory);
+    File::Path::make_path($self->get_output_directory);
     return;
 }
 
@@ -90,7 +102,7 @@ sub save_data {
 sub output_path {
     my ($self, $filename) = @_;
 
-    return File::Spec->join($self->output_directory, $filename);
+    return File::Spec->join($self->get_output_directory, $filename);
 }
 
 sub format_xml {
