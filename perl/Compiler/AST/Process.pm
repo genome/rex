@@ -20,6 +20,11 @@ class Compiler::AST::Process {
         children => {
             is => 'HASH',
         },
+
+        explicit_link_info => {
+            is => 'HASH',
+            is_optional => 1,
+        },
     ],
 };
 

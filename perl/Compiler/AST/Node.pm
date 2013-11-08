@@ -16,10 +16,6 @@ class Compiler::AST::Node {
         operation_type => {
             is => 'Text',
         },
-        explicit_link_info => {
-            is => 'HASH',
-            is_optional => 1,
-        },
     ],
 };
 

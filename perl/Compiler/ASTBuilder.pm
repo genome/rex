@@ -23,7 +23,36 @@ sub _get_process_object {
 
     return Compiler::AST::Process->create(
         operation_type => $operation_type,
+        explicit_link_info => _get_explicit_link_info($process->{operations}),
         children => _get_children($importer, $process->{operations}));
+}
+
+sub _get_explicit_link_info {
+    my $operations = shift;
+
+    my %info;
+    for my $op (@$operations) {
+        for my $input (@{$op->{inputs}}) {
+            if (exists $info{internal}{$op->{alias}}{$input->{property_name}}) {
+                confess sprintf("Multiple values specified for %s.%s",
+                    $op->{alias}, $input->{property_name});
+            }
+
+            if ($input->{type} eq 'link') {
+                $info{internal}{$op->{alias}}{$input->{property_name}} = {
+                    alias => $input->{source},
+                    type => $input->{type},
+                };
+            } elsif ($input->{type} eq 'constant') {
+                $info{internal}{$op->{alias}}{$input->{property_name}} = {
+                    type => $input->{type},
+                    value => $input->{value},
+                };
+            }
+        }
+    }
+
+    return \%info || undef;  # UR doesn't like empty hashes
 }
 
 sub _get_children {
@@ -49,22 +78,19 @@ sub _get_children {
 sub _get_child {
     my ($op, $imported_stuff, $importer) = @_;
 
-    my $explicit_link_info = _get_explicit_link_info(
-        $op->{inputs}, $op->{alias});
-
     if ($imported_stuff->{kind} eq 'tool') {
         return Compiler::AST::Tool->create(
             operation_type => $op->{type},
             command => $imported_stuff->{command},
             input_entry => _build_io_entries($imported_stuff->{inputs}),
             output_entry => _build_io_entries($imported_stuff->{outputs}),
-            explicit_link_info => $explicit_link_info,
         );
 
     } elsif ($imported_stuff->{kind} eq 'process') {
         return Compiler::AST::Process->create(
             operation_type => $op->{type},
-            explicit_link_info => $explicit_link_info,
+            explicit_link_info => _get_explicit_link_info(
+                $imported_stuff->{operations}),
             children => _get_children($importer,
                 $imported_stuff->{operations}),
         );
@@ -83,32 +109,6 @@ sub _build_io_entries {
 
     return [map {Compiler::AST::IOEntry->create(%{$_})}
         @{$maybe_entries->[0]}];
-}
-
-sub _get_explicit_link_info {
-    my ($inputs, $alias) = @_;
-
-    my %explicit_link_info;
-    for my $input (@$inputs) {
-        my ($key, $value);
-        if ($input->{type} eq 'link') {
-            $key = $input->{property_name};
-            $value = $input->{source};
-        } elsif ($input->{type} eq 'constant') {
-            # Since workflow xml has no concept of a constant we will treat
-            # them as an input link.
-            $key = $input->{property_name};
-            $value = 'inputs';
-        }
-        if (exists $explicit_link_info{$key}) {
-            confess sprintf(
-                "multiple sources named for input (%s) of operation %s: ".
-                "%s and %s", $key, $alias, $explicit_link_info{$key}, $value);
-        } else {
-            $explicit_link_info{$key} = $value;
-        }
-    }
-    return \%explicit_link_info;
 }
 
 
