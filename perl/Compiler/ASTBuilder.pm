@@ -21,66 +21,54 @@ sub _get_process_object {
     die 'not an actual process object'
         unless $process->{kind} eq 'process';
 
-    my @children = _get_children($importer,
-        $process->{operations});
-    my %children = _get_children_hash($operation_type, @children);
-
     return Compiler::AST::Process->create(
-        alias => $operation_type,
         operation_type => $operation_type,
-        children => \%children);
+        children => _get_children($importer, $process->{operations}));
 }
 
 sub _get_children {
     my ($importer, $operation_definitions) = @_;
 
-    my @children;
+    my %children;
     for my $op (@$operation_definitions) {
         my $imported_stuff = $importer->import_file($op->{type});
         my $explicit_link_info = _get_explicit_link_info(
             $op->{inputs}, $op->{alias});
 
         if ($imported_stuff->{kind} eq 'tool') {
-            push @children, Compiler::AST::Tool->create(
-                alias => $op->{alias},
+            if (exists $children{$op->{alias}}) {
+                confess sprintf(
+                    "Multiple children with same alias (%s) in process '%s'",
+                    $op->{alias}, $imported_stuff->{type});
+            }
+            $children{$op->{alias}} = Compiler::AST::Tool->create(
                 operation_type => $op->{type},
                 command => $imported_stuff->{command},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
                 output_entry => _build_io_entries($imported_stuff->{outputs}),
                 explicit_link_info => $explicit_link_info,
             );
-        } elsif ($imported_stuff->{kind} eq 'process') {
-            my @grand_children = _get_children($importer,
-                $imported_stuff->{operations});
-            my %grand_children = _get_children_hash($op->{alias}, @grand_children);
 
-            push @children, Compiler::AST::Process->create(
-                alias => $op->{alias},
+        } elsif ($imported_stuff->{kind} eq 'process') {
+            if (exists $children{$op->{alias}}) {
+                confess sprintf(
+                    "Multiple children with same alias (%s) in process '%s'",
+                    $op->{alias}, $imported_stuff->{type});
+            }
+            $children{$op->{alias}} =Compiler::AST::Process->create(
                 operation_type => $op->{type},
-                children => \%grand_children,
                 explicit_link_info => $explicit_link_info,
+                children => _get_children($importer,
+                    $imported_stuff->{operations}),
             );
+
         } else {
             confess sprintf("Unknown type: %s",
                 $imported_stuff->{type});
         }
     }
-    return @children;
-}
 
-sub _get_children_hash {
-    my ($alias, @children) = @_;
-
-    my %child_lookup;
-    for my $child (@children) {
-        if (exists $child_lookup{$child->alias}) {
-            confess sprintf(
-                "multiple children with same alias (%s) in process %s",
-                $child->alias, $alias);
-        }
-        $child_lookup{$child->alias} = $child;
-    }
-    return %child_lookup;
+    return \%children;
 }
 
 sub _build_io_entries {
