@@ -36,35 +36,42 @@ sub _get_children {
             confess sprintf(
                 "Multiple children with same alias (%s) in process '%s'",
                 $op->{alias}, $imported_stuff->{type});
-        }
-
-        my $explicit_link_info = _get_explicit_link_info(
-            $op->{inputs}, $op->{alias});
-
-        if ($imported_stuff->{kind} eq 'tool') {
-            $children{$op->{alias}} = Compiler::AST::Tool->create(
-                operation_type => $op->{type},
-                command => $imported_stuff->{command},
-                input_entry => _build_io_entries($imported_stuff->{inputs}),
-                output_entry => _build_io_entries($imported_stuff->{outputs}),
-                explicit_link_info => $explicit_link_info,
-            );
-
-        } elsif ($imported_stuff->{kind} eq 'process') {
-            $children{$op->{alias}} =Compiler::AST::Process->create(
-                operation_type => $op->{type},
-                explicit_link_info => $explicit_link_info,
-                children => _get_children($importer,
-                    $imported_stuff->{operations}),
-            );
 
         } else {
-            confess sprintf("Unknown type: %s",
-                $imported_stuff->{type});
+            $children{$op->{alias}} = _get_child($op, $imported_stuff,
+                $importer);
         }
     }
 
     return \%children;
+}
+
+sub _get_child {
+    my ($op, $imported_stuff, $importer) = @_;
+
+    my $explicit_link_info = _get_explicit_link_info(
+        $op->{inputs}, $op->{alias});
+
+    if ($imported_stuff->{kind} eq 'tool') {
+        return Compiler::AST::Tool->create(
+            operation_type => $op->{type},
+            command => $imported_stuff->{command},
+            input_entry => _build_io_entries($imported_stuff->{inputs}),
+            output_entry => _build_io_entries($imported_stuff->{outputs}),
+            explicit_link_info => $explicit_link_info,
+        );
+
+    } elsif ($imported_stuff->{kind} eq 'process') {
+        return Compiler::AST::Process->create(
+            operation_type => $op->{type},
+            explicit_link_info => $explicit_link_info,
+            children => _get_children($importer,
+                $imported_stuff->{operations}),
+        );
+
+    } else {
+        confess sprintf("Unknown kind: %s", $imported_stuff->{kind});
+    }
 }
 
 sub _build_io_entries {
