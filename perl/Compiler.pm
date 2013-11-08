@@ -60,7 +60,7 @@ sub search_path {
     if ($ENV{GMSPATH}) {
         return [split(/:/, $ENV{GMSPATH})];
     }
-    return ['tool-definitions', 'process-definitions'];
+    return ['definitions'];
 }
 
 sub output_directory {
