@@ -51,7 +51,7 @@ sub execute {
     $self->save_data('inputs', Data::Dumper::Dumper($ast->inputs));
     $self->save_data('outputs', Data::Dumper::Dumper($ast->outputs));
 
-    $self->save_data('workflow.xml', $ast->workflow_builder->get_xml);
+    $self->save_data('workflow.xml', $ast->workflow_builder('root')->get_xml);
     $self->format_xml('workflow.xml');
 #    my $outputs = $ast->workflow_builder->execute(
 #        'input:T1' => 'foo1',

@@ -44,7 +44,7 @@ sub _get_explicit_link_info {
                     type => $input->{type},
                 };
             } elsif ($input->{type} eq 'constant') {
-                $info{internal}{$op->{alias}}{$input->{property_name}} = {
+                $info{input}{$op->{alias}}{$input->{property_name}} = {
                     type => $input->{type},
                     value => $input->{value},
                 };

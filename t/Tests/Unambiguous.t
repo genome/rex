@@ -34,7 +34,9 @@ sub diff_ast_files {
     my ($blessed, $new) = @_;
 
     compare_ok($blessed, $new, 'ast files are the same',
-        filters => [qr(^.*['\s]_.*$), qr(^.*'id'.*$)]);
+        filters => [qr(^.*['\s]_.*$), qr(^.*'id'.*$),
+            qr(^.*[[:xdigit:]]{32}.*$)
+        ]);
 }
 
 sub diff_xml_files {

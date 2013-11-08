@@ -45,12 +45,11 @@ sub outputs {
 }
 
 sub workflow_builder {
-    my $self = shift;
+    my ($self, $alias) = @_;
     return Genome::WorkflowBuilder::Command->create(
-        name => $self->command, command => $self->command);
+        name => $alias, command => $self->command);
 }
 Memoize::memoize('workflow_builder');
-
 
 
 sub _collect_by_name {
