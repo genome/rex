@@ -19,6 +19,10 @@ class Compiler::AST::Node {
         alias => {
             is => 'Text',
         },
+        explicit_link_info => {
+            is => 'HASH',
+            is_optional => 1,
+        },
     ],
 };
 

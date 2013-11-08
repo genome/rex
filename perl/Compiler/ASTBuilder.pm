@@ -37,6 +37,8 @@ sub _get_children {
     my @children;
     for my $op (@$operation_definitions) {
         my $imported_stuff = $importer->import_file($op->{type});
+        my $explicit_link_info = _get_explicit_link_info(
+            $op->{inputs}, $op->{alias});
 
         if ($imported_stuff->{kind} eq 'tool') {
             push @children, Compiler::AST::Tool->create(
@@ -45,8 +47,8 @@ sub _get_children {
                 command => $imported_stuff->{command},
                 input_entry => _build_io_entries($imported_stuff->{inputs}),
                 output_entry => _build_io_entries($imported_stuff->{outputs}),
+                explicit_link_info => $explicit_link_info,
             );
-
         } elsif ($imported_stuff->{kind} eq 'process') {
             my @grand_children = _get_children($importer,
                 $imported_stuff->{operations});
@@ -55,8 +57,9 @@ sub _get_children {
             push @children, Compiler::AST::Process->create(
                 alias => $op->{alias},
                 operation_type => $op->{type},
-                children => \%grand_children);
-
+                children => \%grand_children,
+                explicit_link_info => $explicit_link_info,
+            );
         } else {
             confess sprintf("Unknown type: %s",
                 $imported_stuff->{type});
@@ -89,6 +92,32 @@ sub _build_io_entries {
 
     return [map {Compiler::AST::IOEntry->create(%{$_})}
         @{$maybe_entries->[0]}];
+}
+
+sub _get_explicit_link_info {
+    my ($inputs, $alias) = @_;
+
+    my %explicit_link_info;
+    for my $input (@$inputs) {
+        my ($key, $value);
+        if ($input->{type} eq 'link') {
+            $key = $input->{property_name};
+            $value = $input->{source};
+        } elsif ($input->{type} eq 'constant') {
+            # Since workflow xml has no concept of a constant we will treat
+            # them as an input link.
+            $key = $input->{property_name};
+            $value = 'inputs';
+        }
+        if (exists $explicit_link_info{$key}) {
+            confess sprintf(
+                "multiple sources named for input (%s) of operation %s: ".
+                "%s and %s", $key, $alias, $explicit_link_info{$key}, $value);
+        } else {
+            $explicit_link_info{$key} = $value;
+        }
+    }
+    return \%explicit_link_info;
 }
 
 
