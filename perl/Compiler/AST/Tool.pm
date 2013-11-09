@@ -7,6 +7,7 @@ use UR;
 
 use Carp qw(confess);
 use Compiler::AST::Detail::Node;
+use Compiler::AST::Inputs;
 
 use Genome::WorkflowBuilder::Command;
 use Memoize;
@@ -19,9 +20,8 @@ class Compiler::AST::Tool {
             is => 'Command',
         },
 
-        input_entry => {
-            is => 'Compiler::AST::Input',
-            is_many => 1,
+        input_entries => {
+            is => 'Compiler::AST::Inputs',
         },
         output_entry => {
             is => 'Compiler::AST::Output',
@@ -34,7 +34,7 @@ class Compiler::AST::Tool {
 sub inputs {
     my $self = shift;
 
-    return $self->_collect_by_name($self->input_entry);
+    return $self->_collect_by_name($self->input_entries->entries);
 }
 
 sub outputs {

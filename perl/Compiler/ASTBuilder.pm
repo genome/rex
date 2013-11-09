@@ -84,7 +84,8 @@ sub _get_child {
         return Compiler::AST::Tool->create(
             operation_type => $op->{type},
             command => $imported_stuff->{command},
-            input_entry => _build_inputs($imported_stuff->{inputs}),
+            input_entries => Compiler::AST::Inputs->create(
+                entries => _build_inputs($imported_stuff->{inputs})),
             output_entry => _build_outputs($imported_stuff->{outputs}),
         );
 
