@@ -1,4 +1,4 @@
-tool Tool::B
+tool TestTool::B
 
 inputs
     T4 bi1

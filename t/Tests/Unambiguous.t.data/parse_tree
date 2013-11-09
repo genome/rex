@@ -2,20 +2,20 @@ $VAR1 = {
           'operations' => [
                             {
                               'parallel' => undef,
-                              'type' => 'A',
-                              'alias' => 'A',
+                              'type' => 'TestTool::A',
+                              'alias' => 'TestTool::A',
                               'inputs' => []
                             },
                             {
                               'parallel' => undef,
-                              'type' => 'B',
-                              'alias' => 'B',
+                              'type' => 'TestTool::B',
+                              'alias' => 'TestTool::B',
                               'inputs' => []
                             },
                             {
                               'parallel' => undef,
-                              'type' => 'C',
-                              'alias' => 'C',
+                              'type' => 'TestTool::C',
+                              'alias' => 'TestTool::C',
                               'inputs' => []
                             }
                           ],

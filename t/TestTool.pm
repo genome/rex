@@ -1,4 +1,4 @@
-package Tools;
+package TestTool;
 
 use strict;
 use warnings FATAL => 'all';
@@ -6,9 +6,9 @@ use warnings FATAL => 'all';
 use UR;
 
 UR::Object::Type->define(
-    class_name => 'Tools',
+    class_name => 'TestTool',
     is => ['UR::Namespace'],
-    english_name => 'tools',
+    english_name => 'test-tool',
 );
 
 1;

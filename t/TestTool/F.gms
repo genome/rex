@@ -1,4 +1,4 @@
-tool Tool::F
+tool TestTool::F
 
 inputs
     T3 fi1

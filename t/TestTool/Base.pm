@@ -1,11 +1,11 @@
-package Tools::Base;
+package TestTool::Base;
 
 use strict;
 use warnings FATAL => 'all';
 
 use UR;
 
-class Tools::Base {
+class TestTool::Base {
     is => 'Command::V2',
 };
 

@@ -1,13 +1,12 @@
-package Tools::X;
+package TestTool::X;
 
 use strict;
 use warnings FATAL => 'all';
 
 use UR;
-use Tools::Base;
 
-class Tools::X {
-    is => 'Tools::Base',
+class TestTool::X {
+    is => 'TestTool::Base',
 
     has_input => [
         x_in_1 => {},

@@ -1,5 +1,5 @@
 process
 
-A
-B
-C
+TestTool::A
+TestTool::B
+TestTool::C

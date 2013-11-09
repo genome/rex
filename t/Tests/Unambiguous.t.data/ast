@@ -1,153 +1,153 @@
 $VAR1 = bless( {
-                 '__get_serial' => 1416,
+                 '__get_serial' => 1402,
                  '_change_count' => 1,
                  'explicit_link_info' => {},
                  'operation_type' => 'root',
                  '_child_reverse_lookup' => {
-                                              'dd4a538108c040709a2db0f838ffefd3' => 'B',
-                                              'bcb5592930fc4691b9771d220a1d0107' => 'C',
-                                              '0f12e58aff9e4c0da42ad269d4ee67c4' => 'A'
+                                              '0d4a184d76e1427a8887221bb0328258' => 'TestTool::C',
+                                              '7366c5707e51487f9daa1c2e84e49c32' => 'TestTool::B',
+                                              '031515ac23fa4ee09fcef0cad90dade3' => 'TestTool::A'
                                             },
                  'children' => {
-                                 'A' => bless( {
-                                                 '__get_serial' => 1350,
-                                                 '_change_count' => 1,
-                                                 'input_entry' => [
-                                                                    bless( {
-                                                                             '__get_serial' => 1324,
-                                                                             '_change_count' => 1,
-                                                                             'name' => 'ai1',
-                                                                             'id' => '3305bd755bf54b88abde981b303764d8',
-                                                                             'type' => 'T1'
-                                                                           }, 'Compiler::AST::IOEntry' )
-                                                                  ],
-                                                 'operation_type' => 'A',
-                                                 'output_entry' => [
-                                                                     bless( {
-                                                                              '__get_serial' => 1325,
-                                                                              '_change_count' => 1,
-                                                                              'name' => 'ao1',
-                                                                              'id' => '9cead7f7150940e697d52895164b9961',
-                                                                              'type' => 'T6'
-                                                                            }, 'Compiler::AST::IOEntry' )
-                                                                   ],
-                                                 'id' => '0f12e58aff9e4c0da42ad269d4ee67c4',
-                                                 'command' => 'Tool::A'
-                                               }, 'Compiler::AST::Tool' ),
-                                 'C' => bless( {
-                                                 '__get_serial' => 1415,
-                                                 '_change_count' => 1,
-                                                 'explicit_link_info' => {},
-                                                 'operation_type' => 'C',
-                                                 '_child_reverse_lookup' => {
-                                                                              'ef96c4cb07ef4ee09d5758887ef524a8' => 'E',
-                                                                              'e43c9104e33c452cb9a8e402869aba65' => 'D'
-                                                                            },
-                                                 'children' => {
-                                                                 'D' => bless( {
-                                                                                 '__get_serial' => 1385,
-                                                                                 '_change_count' => 1,
-                                                                                 'input_entry' => [
-                                                                                                    bless( {
-                                                                                                             '__get_serial' => 1375,
-                                                                                                             '_change_count' => 1,
-                                                                                                             'name' => 'di1',
-                                                                                                             'id' => '887c6bef24624b1299bbce4470455093',
-                                                                                                             'type' => 'T2'
-                                                                                                           }, 'Compiler::AST::IOEntry' )
-                                                                                                  ],
-                                                                                 'operation_type' => 'D',
-                                                                                 'output_entry' => [
-                                                                                                     bless( {
-                                                                                                              '__get_serial' => 1376,
-                                                                                                              '_change_count' => 1,
-                                                                                                              'name' => 'do1',
-                                                                                                              'id' => '9965406e9e704566a5b0e532adf64c65',
-                                                                                                              'type' => 'T4'
-                                                                                                            }, 'Compiler::AST::IOEntry' )
-                                                                                                   ],
-                                                                                 'id' => 'e43c9104e33c452cb9a8e402869aba65',
-                                                                                 'command' => 'Tool::D'
-                                                                               }, 'Compiler::AST::Tool' ),
-                                                                 'E' => bless( {
-                                                                                 '__get_serial' => 1414,
-                                                                                 '_change_count' => 1,
-                                                                                 'explicit_link_info' => {},
-                                                                                 'operation_type' => 'E',
-                                                                                 '_child_reverse_lookup' => {
-                                                                                                              '84c03ea755534cbcace3a5cdae914c39' => 'F'
-                                                                                                            },
-                                                                                 'children' => {
-                                                                                                 'F' => bless( {
-                                                                                                                 '__get_serial' => 1398,
-                                                                                                                 '_change_count' => 1,
-                                                                                                                 'input_entry' => [
-                                                                                                                                    bless( {
-                                                                                                                                             '__get_serial' => 1388,
-                                                                                                                                             '_change_count' => 1,
-                                                                                                                                             'name' => 'fi1',
-                                                                                                                                             'id' => 'a374ac6a22ee4de694fd7471b6292946',
-                                                                                                                                             'type' => 'T3'
-                                                                                                                                           }, 'Compiler::AST::IOEntry' )
-                                                                                                                                  ],
-                                                                                                                 'operation_type' => 'F',
-                                                                                                                 'output_entry' => [
-                                                                                                                                     bless( {
-                                                                                                                                              '__get_serial' => 1389,
-                                                                                                                                              '_change_count' => 1,
-                                                                                                                                              'name' => 'fo1',
-                                                                                                                                              'id' => 'fabb1db87d1149bb93e9af4e288274a0',
-                                                                                                                                              'type' => 'T5'
-                                                                                                                                            }, 'Compiler::AST::IOEntry' )
-                                                                                                                                   ],
-                                                                                                                 'id' => '84c03ea755534cbcace3a5cdae914c39',
-                                                                                                                 'command' => 'Tool::F'
-                                                                                                               }, 'Compiler::AST::Tool' )
-                                                                                               },
-                                                                                 'id' => 'ef96c4cb07ef4ee09d5758887ef524a8'
-                                                                               }, 'Compiler::AST::Process' )
-                                                               },
-                                                 'id' => 'bcb5592930fc4691b9771d220a1d0107'
-                                               }, 'Compiler::AST::Process' ),
-                                 'B' => bless( {
-                                                 '__get_serial' => 1372,
-                                                 '_change_count' => 1,
-                                                 'input_entry' => [
-                                                                    bless( {
-                                                                             '__get_serial' => 1352,
-                                                                             '_change_count' => 1,
-                                                                             'name' => 'bi1',
-                                                                             'id' => '3262b6753799471fa91bdf9435e5966a',
-                                                                             'type' => 'T4'
-                                                                           }, 'Compiler::AST::IOEntry' ),
-                                                                    bless( {
-                                                                             '__get_serial' => 1353,
-                                                                             '_change_count' => 1,
-                                                                             'name' => 'bi2',
-                                                                             'id' => '62920cd7579e41c5bc297f466d5a46c7',
-                                                                             'type' => 'T5'
-                                                                           }, 'Compiler::AST::IOEntry' ),
-                                                                    bless( {
-                                                                             '__get_serial' => 1354,
-                                                                             '_change_count' => 1,
-                                                                             'name' => 'bi3',
-                                                                             'id' => 'fd8935834293419db0a932737a378057',
-                                                                             'type' => 'T6'
-                                                                           }, 'Compiler::AST::IOEntry' )
-                                                                  ],
-                                                 'operation_type' => 'B',
-                                                 'output_entry' => [
-                                                                     bless( {
-                                                                              '__get_serial' => 1355,
-                                                                              '_change_count' => 1,
-                                                                              'name' => 'bo1',
-                                                                              'id' => 'e80993d96ac247588736d7572f03e545',
-                                                                              'type' => 'T7'
-                                                                            }, 'Compiler::AST::IOEntry' )
-                                                                   ],
-                                                 'id' => 'dd4a538108c040709a2db0f838ffefd3',
-                                                 'command' => 'Tool::B'
-                                               }, 'Compiler::AST::Tool' )
+                                 'TestTool::C' => bless( {
+                                                           '__get_serial' => 1401,
+                                                           '_change_count' => 1,
+                                                           'explicit_link_info' => {},
+                                                           'operation_type' => 'TestTool::C',
+                                                           '_child_reverse_lookup' => {
+                                                                                        '59da7529d5e949eab803e76bfd2921b1' => 'TestTool::D',
+                                                                                        '6982f41ce65e421ebc331d103f5ed709' => 'TestTool::E'
+                                                                                      },
+                                                           'children' => {
+                                                                           'TestTool::D' => bless( {
+                                                                                                     '__get_serial' => 1371,
+                                                                                                     '_change_count' => 1,
+                                                                                                     'input_entry' => [
+                                                                                                                        bless( {
+                                                                                                                                 '__get_serial' => 1361,
+                                                                                                                                 '_change_count' => 1,
+                                                                                                                                 'name' => 'di1',
+                                                                                                                                 'id' => '1bf1a28c39ea4f06b5615a38b92485e9',
+                                                                                                                                 'type' => 'T2'
+                                                                                                                               }, 'Compiler::AST::IOEntry' )
+                                                                                                                      ],
+                                                                                                     'operation_type' => 'TestTool::D',
+                                                                                                     'output_entry' => [
+                                                                                                                         bless( {
+                                                                                                                                  '__get_serial' => 1362,
+                                                                                                                                  '_change_count' => 1,
+                                                                                                                                  'name' => 'do1',
+                                                                                                                                  'id' => '2c6a04b3082a4efe874f803a19385d1b',
+                                                                                                                                  'type' => 'T4'
+                                                                                                                                }, 'Compiler::AST::IOEntry' )
+                                                                                                                       ],
+                                                                                                     'id' => '59da7529d5e949eab803e76bfd2921b1',
+                                                                                                     'command' => 'TestTool::D'
+                                                                                                   }, 'Compiler::AST::Tool' ),
+                                                                           'TestTool::E' => bless( {
+                                                                                                     '__get_serial' => 1400,
+                                                                                                     '_change_count' => 1,
+                                                                                                     'explicit_link_info' => {},
+                                                                                                     'operation_type' => 'TestTool::E',
+                                                                                                     '_child_reverse_lookup' => {
+                                                                                                                                  'db1698a20af8458dbd6c2b883eada956' => 'TestTool::F'
+                                                                                                                                },
+                                                                                                     'children' => {
+                                                                                                                     'TestTool::F' => bless( {
+                                                                                                                                               '__get_serial' => 1384,
+                                                                                                                                               '_change_count' => 1,
+                                                                                                                                               'input_entry' => [
+                                                                                                                                                                  bless( {
+                                                                                                                                                                           '__get_serial' => 1374,
+                                                                                                                                                                           '_change_count' => 1,
+                                                                                                                                                                           'name' => 'fi1',
+                                                                                                                                                                           'id' => 'abac6956cecc44c1a970130304d41b5a',
+                                                                                                                                                                           'type' => 'T3'
+                                                                                                                                                                         }, 'Compiler::AST::IOEntry' )
+                                                                                                                                                                ],
+                                                                                                                                               'operation_type' => 'TestTool::F',
+                                                                                                                                               'output_entry' => [
+                                                                                                                                                                   bless( {
+                                                                                                                                                                            '__get_serial' => 1375,
+                                                                                                                                                                            '_change_count' => 1,
+                                                                                                                                                                            'name' => 'fo1',
+                                                                                                                                                                            'id' => '987178252f4645b2af690288539a6968',
+                                                                                                                                                                            'type' => 'T5'
+                                                                                                                                                                          }, 'Compiler::AST::IOEntry' )
+                                                                                                                                                                 ],
+                                                                                                                                               'id' => 'db1698a20af8458dbd6c2b883eada956',
+                                                                                                                                               'command' => 'TestTool::F'
+                                                                                                                                             }, 'Compiler::AST::Tool' )
+                                                                                                                   },
+                                                                                                     'id' => '6982f41ce65e421ebc331d103f5ed709'
+                                                                                                   }, 'Compiler::AST::Process' )
+                                                                         },
+                                                           'id' => '0d4a184d76e1427a8887221bb0328258'
+                                                         }, 'Compiler::AST::Process' ),
+                                 'TestTool::A' => bless( {
+                                                           '__get_serial' => 1336,
+                                                           '_change_count' => 1,
+                                                           'input_entry' => [
+                                                                              bless( {
+                                                                                       '__get_serial' => 1310,
+                                                                                       '_change_count' => 1,
+                                                                                       'name' => 'ai1',
+                                                                                       'id' => '537f65917db241369a5a5ead64457708',
+                                                                                       'type' => 'T1'
+                                                                                     }, 'Compiler::AST::IOEntry' )
+                                                                            ],
+                                                           'operation_type' => 'TestTool::A',
+                                                           'output_entry' => [
+                                                                               bless( {
+                                                                                        '__get_serial' => 1311,
+                                                                                        '_change_count' => 1,
+                                                                                        'name' => 'ao1',
+                                                                                        'id' => '526b806c3dc64636932dd733c6c92d2a',
+                                                                                        'type' => 'T6'
+                                                                                      }, 'Compiler::AST::IOEntry' )
+                                                                             ],
+                                                           'id' => '031515ac23fa4ee09fcef0cad90dade3',
+                                                           'command' => 'TestTool::A'
+                                                         }, 'Compiler::AST::Tool' ),
+                                 'TestTool::B' => bless( {
+                                                           '__get_serial' => 1358,
+                                                           '_change_count' => 1,
+                                                           'input_entry' => [
+                                                                              bless( {
+                                                                                       '__get_serial' => 1338,
+                                                                                       '_change_count' => 1,
+                                                                                       'name' => 'bi1',
+                                                                                       'id' => 'fc250fa5313c4ccf908d36e35a224219',
+                                                                                       'type' => 'T4'
+                                                                                     }, 'Compiler::AST::IOEntry' ),
+                                                                              bless( {
+                                                                                       '__get_serial' => 1339,
+                                                                                       '_change_count' => 1,
+                                                                                       'name' => 'bi2',
+                                                                                       'id' => '70a26515f6104eef81d91aa7a83f69a1',
+                                                                                       'type' => 'T5'
+                                                                                     }, 'Compiler::AST::IOEntry' ),
+                                                                              bless( {
+                                                                                       '__get_serial' => 1340,
+                                                                                       '_change_count' => 1,
+                                                                                       'name' => 'bi3',
+                                                                                       'id' => '01bf522e4cbd477993e0f82d8dda45fd',
+                                                                                       'type' => 'T6'
+                                                                                     }, 'Compiler::AST::IOEntry' )
+                                                                            ],
+                                                           'operation_type' => 'TestTool::B',
+                                                           'output_entry' => [
+                                                                               bless( {
+                                                                                        '__get_serial' => 1341,
+                                                                                        '_change_count' => 1,
+                                                                                        'name' => 'bo1',
+                                                                                        'id' => 'f86a96ba4fe24e75ac01e44dd36cbe04',
+                                                                                        'type' => 'T7'
+                                                                                      }, 'Compiler::AST::IOEntry' )
+                                                                             ],
+                                                           'id' => '7366c5707e51487f9daa1c2e84e49c32',
+                                                           'command' => 'TestTool::B'
+                                                         }, 'Compiler::AST::Tool' )
                                },
-                 'id' => '3f83c37e49c3404ca6f430321c71ec0b'
+                 'id' => 'f8a32c6bc9984c85827508495685b358'
                }, 'Compiler::AST::Process' );

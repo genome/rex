@@ -1,4 +1,4 @@
-tool Tool::D
+tool TestTool::D
 
 inputs
     T2 di1

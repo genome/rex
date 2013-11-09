@@ -1,13 +1,13 @@
-package Tool::B;
+package TestTool::B;
 
 use strict;
 use warnings FATAL => 'all';
 
 use UR;
-use Tool::Base;
+use TestTool::Base;
 
-class Tool::B {
-    is => 'Tool::Base',
+class TestTool::B {
+    is => 'TestTool::Base',
 
     has_input => [
         bi1 => {},

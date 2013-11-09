@@ -1,4 +1,4 @@
-tool Tool::A
+tool TestTool::A
 
 inputs
     T1 ai1
