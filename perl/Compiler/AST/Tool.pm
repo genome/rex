@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 use UR;
 
 use Carp qw(confess);
-use Compiler::AST::Node;
+use Compiler::AST::Detail::Node;
 use Compiler::AST::IOEntry;
 
 use Genome::WorkflowBuilder::Command;
@@ -14,7 +14,7 @@ use Memoize;
 
 
 class Compiler::AST::Tool {
-    is => 'Compiler::AST::Node',
+    is => 'Compiler::AST::Detail::Node',
     has => [
         command => {
             is => 'Command',

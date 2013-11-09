@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 use UR;
 
 use Carp qw(confess);
-use Compiler::AST::Node;
+use Compiler::AST::Detail::Node;
 
 use Genome::WorkflowBuilder::DAG;
 use Genome::WorkflowBuilder::Link;
@@ -14,7 +14,7 @@ use Memoize;
 
 
 class Compiler::AST::Process {
-    is => 'Compiler::AST::Node',
+    is => 'Compiler::AST::Detail::Node',
 
     has => [
         children => {

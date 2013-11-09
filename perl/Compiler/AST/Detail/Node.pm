@@ -1,4 +1,4 @@
-package Compiler::AST::Node;
+package Compiler::AST::Detail::Node;
 
 use strict;
 use warnings FATAL => 'all';
@@ -7,7 +7,7 @@ use UR;
 use Carp qw(confess);
 
 
-class Compiler::AST::Node {
+class Compiler::AST::Detail::Node {
     is_abstract => 1,
 
     id_generator => '-uuid',
