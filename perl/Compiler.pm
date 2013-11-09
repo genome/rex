@@ -42,8 +42,7 @@ sub execute {
 
     $self->save_data('parse_tree', Data::Dumper::Dumper($parse_tree));
 
-    my $importer = Compiler::Importer->create(
-        search_path => $self->search_path);
+    my $importer = Compiler::Importer->create();
 
     my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
     $self->save_data('ast', Data::Dumper::Dumper($ast));
@@ -59,13 +58,6 @@ sub execute {
 #        'input:T3' => 'foo3');
 #    print Data::Dumper::Dumper($outputs);
     return 1;
-}
-
-sub search_path {
-    if ($ENV{GMSPATH}) {
-        return [split(/:/, $ENV{GMSPATH})];
-    }
-    return ['definitions'];
 }
 
 sub get_output_directory {
