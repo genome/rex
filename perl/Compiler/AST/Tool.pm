@@ -7,7 +7,6 @@ use UR;
 
 use Carp qw(confess);
 use Compiler::AST::Detail::Node;
-use Compiler::AST::Detail::IOEntry;
 
 use Genome::WorkflowBuilder::Command;
 use Memoize;
