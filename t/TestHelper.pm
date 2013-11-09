@@ -1,4 +1,4 @@
-package TestHelpers;
+package TestHelper;
 
 use strict;
 use warnings FATAL => 'all';

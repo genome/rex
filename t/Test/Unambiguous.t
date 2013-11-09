@@ -3,7 +3,7 @@ use warnings FATAL => 'all';
 
 use Test::More;
 
-use TestHelpers qw(
+use TestHelper qw(
     run_basic_test
 );
 
