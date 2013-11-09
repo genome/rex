@@ -4,9 +4,10 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use TestTool::Base;
 
 class TestTool::Y {
-    is => 'Tools::Base',
+    is => 'TestTool::Base',
 
     has_input => [
         y_in_1 => {},

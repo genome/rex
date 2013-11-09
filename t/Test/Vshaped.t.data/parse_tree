@@ -1,0 +1,34 @@
+$VAR1 = {
+          'operations' => [
+                            {
+                              'parallel' => undef,
+                              'type' => 'TestTool::X',
+                              'alias' => 'x1',
+                              'inputs' => []
+                            },
+                            {
+                              'parallel' => undef,
+                              'type' => 'TestTool::X',
+                              'alias' => 'x2',
+                              'inputs' => []
+                            },
+                            {
+                              'parallel' => undef,
+                              'type' => 'TestTool::Y',
+                              'alias' => 'TestTool::Y',
+                              'inputs' => [
+                                            {
+                                              'source' => 'x1',
+                                              'property_name' => 'y_in_1',
+                                              'type' => 'link'
+                                            },
+                                            {
+                                              'source' => 'x2',
+                                              'property_name' => 'y_in_2',
+                                              'type' => 'link'
+                                            }
+                                          ]
+                            }
+                          ],
+          'kind' => 'process'
+        };

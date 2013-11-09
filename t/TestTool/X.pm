@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use TestTool::Base;
 
 class TestTool::X {
     is => 'TestTool::Base',

@@ -1,4 +1,4 @@
-tool Tools::X
+tool TestTool::X
 
 inputs
 X::Input1 x_in_1

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<operation name="root">
+  <operationtype typeClass="Workflow::OperationType::Model">
+    <inputproperty>input:X::Input1</inputproperty>
+    <outputproperty>input:Y::Output1</outputproperty>
+  </operationtype>
+  <operation name="TestTool::Y">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::Y">
+      <inputproperty>y_in_1</inputproperty>
+      <inputproperty>y_in_2</inputproperty>
+      <outputproperty>result</outputproperty>
+      <outputproperty>y_out_1</outputproperty>
+    </operationtype>
+  </operation>
+  <operation name="x2">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
+      <inputproperty>x_in_1</inputproperty>
+      <outputproperty>result</outputproperty>
+      <outputproperty>x_out_1</outputproperty>
+    </operationtype>
+  </operation>
+  <operation name="x1">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
+      <inputproperty>x_in_1</inputproperty>
+      <outputproperty>result</outputproperty>
+      <outputproperty>x_out_1</outputproperty>
+    </operationtype>
+  </operation>
+  <link fromOperation="x2" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_2" />
+  <link fromOperation="x1" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_1" />
+  <link fromOperation="input connector" fromProperty="input:X::Input1" toOperation="x2" toProperty="x_in_1" />
+  <link fromOperation="input connector" fromProperty="input:X::Input1" toOperation="x1" toProperty="x_in_1" />
+  <link fromOperation="TestTool::Y" fromProperty="y_out_1" toOperation="output connector" toProperty="input:Y::Output1" />
+</operation>
