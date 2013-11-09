@@ -6,6 +6,8 @@ use warnings FATAL => 'all';
 use Carp qw(confess);
 use Compiler::AST::Tool;
 use Compiler::AST::Process;
+use Compiler::AST::Input;
+use Compiler::AST::Output;
 
 
 sub build_AST {
@@ -82,8 +84,8 @@ sub _get_child {
         return Compiler::AST::Tool->create(
             operation_type => $op->{type},
             command => $imported_stuff->{command},
-            input_entry => _build_io_entries($imported_stuff->{inputs}),
-            output_entry => _build_io_entries($imported_stuff->{outputs}),
+            input_entry => _build_inputs($imported_stuff->{inputs}),
+            output_entry => _build_outputs($imported_stuff->{outputs}),
         );
 
     } elsif ($imported_stuff->{kind} eq 'process') {
@@ -100,14 +102,22 @@ sub _get_child {
     }
 }
 
+sub _build_inputs {
+    return _build_io_entries('Compiler::AST::Input', @_);
+}
+
+sub _build_outputs {
+    return _build_io_entries('Compiler::AST::Output', @_);
+}
+
 sub _build_io_entries {
-    my $maybe_entries = shift;
+    my ($class, $maybe_entries) = @_;
 
     unless (scalar(@$maybe_entries)) {
         return [];
     }
 
-    return [map {Compiler::AST::IOEntry->create(%{$_})}
+    return [map {$class->create(%{$_})}
         @{$maybe_entries->[0]}];
 }
 

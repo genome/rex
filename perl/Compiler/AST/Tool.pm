@@ -7,7 +7,7 @@ use UR;
 
 use Carp qw(confess);
 use Compiler::AST::Detail::Node;
-use Compiler::AST::IOEntry;
+use Compiler::AST::Detail::IOEntry;
 
 use Genome::WorkflowBuilder::Command;
 use Memoize;
@@ -21,11 +21,11 @@ class Compiler::AST::Tool {
         },
 
         input_entry => {
-            is => 'Compiler::AST::IOEntry',
+            is => 'Compiler::AST::Input',
             is_many => 1,
         },
         output_entry => {
-            is => 'Compiler::AST::IOEntry',
+            is => 'Compiler::AST::Output',
             is_many => 1,
         },
     ],
