@@ -81,12 +81,7 @@ sub _get_child {
     my ($importer, $op, $imported_stuff) = @_;
 
     if ($imported_stuff->{kind} eq 'tool') {
-        return Compiler::AST::Tool->create(
-            operation_type => $op->{type},
-            command => $imported_stuff->{command},
-            input_entries => _build_inputs($imported_stuff->{inputs}),
-            output_entries => _build_outputs($imported_stuff->{outputs}),
-        );
+        return $imported_stuff->{object};
 
     } elsif ($imported_stuff->{kind} eq 'process') {
         return Compiler::AST::Process->create(
@@ -100,27 +95,6 @@ sub _get_child {
     } else {
         confess sprintf("Unknown kind: %s", $imported_stuff->{kind});
     }
-}
-
-sub _build_inputs {
-    return Compiler::AST::Inputs->create(
-        entries => _build_io_entries('Compiler::AST::Input', @_));
-}
-
-sub _build_outputs {
-    return Compiler::AST::Outputs->create(
-        entries => _build_io_entries('Compiler::AST::Output', @_));
-}
-
-sub _build_io_entries {
-    my ($class, $maybe_entries) = @_;
-
-    unless (scalar(@$maybe_entries)) {
-        return [];
-    }
-
-    return [map {$class->create(%{$_})}
-        @{$maybe_entries->[0]}];
 }
 
 

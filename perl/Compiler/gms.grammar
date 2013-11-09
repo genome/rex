@@ -34,21 +34,41 @@ with_statement: name "from" identifier
 
 
 
-tool_definition: tool_header tool_command tool_inputs(?) tool_outputs(?)
+tool_definition: tool_header tool_command tool_inputs tool_outputs
         { $return = { kind => 'tool',
-                command => $item[2],
-                inputs => $item[3],
-                outputs => $item[4] }; }
+                object => Compiler::AST::Tool->create(
+                    command => $item[2],
+                    input_entries => $item[3],
+                    output_entries => $item[4]) }; }
+    | tool_header tool_command tool_inputs
+        { $return = { kind => 'tool',
+                object => Compiler::AST::Tool->create(
+                    command => $item[2],
+                    input_entries => $item[3],
+                    output_entries => Compiler::AST::Outputs->create()) }; }
+    | tool_header tool_command tool_outputs
+        { $return = { kind => 'tool',
+                object => Compiler::AST::Tool->create(
+                    command => $item[2],
+                    input_entries => Compiler::AST::Inputs->create(),
+                    output_entries => $item[4]) }; }
+
 tool_header: "tool"
 
 tool_command: type
         { $return = $item[1]; }
 
-tool_inputs: "inputs" tool_io_entry(s)
-        { $return = $item[2]; }
+tool_inputs: "inputs" tool_input(s)
+        { $return = Compiler::AST::Inputs->create(entries => $item[2]); }
 
-tool_outputs: "outputs" tool_io_entry(s)
-        { $return = $item[2]; }
+tool_input: tool_io_entry
+        { $return = Compiler::AST::Input->create(%{$item[1]}); }
+
+tool_outputs: "outputs" tool_output(s)
+        { $return = Compiler::AST::Outputs->create(entries => $item[2]); }
+
+tool_output: tool_io_entry
+        { $return = Compiler::AST::Output->create(%{$item[1]}); }
 
 tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
