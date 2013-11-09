@@ -6,8 +6,11 @@ use UR;
 use Test::More;
 use File::Temp;
 
+use TestHelpers qw(
+    diff_ast_files
+    diff_xml_files
+);
 use Compiler;
-use Genome::Utility::Test qw(compare_ok);
 
 (my $input_file = __FILE__) =~ s/\.t$/.gms/;
 my $test_data_directory = __FILE__ . '.data';
@@ -29,22 +32,3 @@ diff_xml_files(
 );
 
 done_testing();
-
-sub diff_ast_files {
-    my ($blessed, $new) = @_;
-
-    compare_ok($blessed, $new, 'ast files are the same',
-        filters => [qr(^.*['\s]_.*$), qr(^.*'id'.*$),
-            qr(^.*[[:xdigit:]]{32}.*$)
-        ]);
-}
-
-sub diff_xml_files {
-    my ($blessed, $new) = @_;
-
-    ok(-f $blessed, 'found blessed xml file');
-    ok(-f $new, 'found new xml file');
-
-    my $diff = `bash -c 'diff <(sort $blessed) <(sort $new)'`;
-    is($diff, '', 'xml files are the same');
-}
