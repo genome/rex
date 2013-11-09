@@ -67,8 +67,8 @@ sub _get_children {
                 $op->{alias}, $imported_stuff->{type});
 
         } else {
-            $children{$op->{alias}} = _get_child($op, $imported_stuff,
-                $importer);
+            $children{$op->{alias}} = _get_child($importer,
+                $op, $imported_stuff);
         }
     }
 
@@ -76,7 +76,7 @@ sub _get_children {
 }
 
 sub _get_child {
-    my ($op, $imported_stuff, $importer) = @_;
+    my ($importer, $op, $imported_stuff) = @_;
 
     if ($imported_stuff->{kind} eq 'tool') {
         return Compiler::AST::Tool->create(
