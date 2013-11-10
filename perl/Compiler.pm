@@ -8,12 +8,11 @@ use Carp qw(confess);
 use Data::Dumper;
 
 use Compiler::Parser;
-use Compiler::Importer;
-use Compiler::ASTBuilder;
 
 use File::Slurp qw();
 use File::Spec qw();
 use File::Path qw();
+
 
 class Compiler {
     is => 'Command::V2',
@@ -35,20 +34,14 @@ class Compiler {
 sub execute {
     my $self = shift;
 
-    my $parse_tree = Compiler::Parser::parse_tree($self->input_file);
-    die 'Syntax error' unless $parse_tree;
+    my $ast = Compiler::Parser::parse_tree($self->input_file);
 
     $self->make_output_directory;
 
-    $self->save_data('parse_tree', Data::Dumper::Dumper($parse_tree));
-
-    my $importer = Compiler::Importer->create();
-
-    my $ast = Compiler::ASTBuilder::build_AST($importer, $parse_tree);
     $self->save_data('ast', Data::Dumper::Dumper($ast));
 
-    $self->save_data('inputs', Data::Dumper::Dumper($ast->inputs));
-    $self->save_data('outputs', Data::Dumper::Dumper($ast->outputs));
+#    $self->save_data('inputs', Data::Dumper::Dumper($ast->inputs));
+#    $self->save_data('outputs', Data::Dumper::Dumper($ast->outputs));
 
     $self->save_data('workflow.xml', $ast->workflow_builder('root')->get_xml);
     $self->format_xml('workflow.xml');

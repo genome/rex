@@ -3,8 +3,6 @@ package Compiler::Importer;
 use strict;
 use warnings FATAL => 'all';
 
-use UR;
-
 use Carp qw(confess);
 use Data::Dumper;
 use File::Spec qw();
@@ -14,19 +12,15 @@ use Compiler::Parser;
 use constant EXTENSION => '.gms';
 
 
-class Compiler::Importer {
-};
-
-
 sub import_file {
-    my ($self, $name) = @_;
+    my $name = shift;
 
-    return Compiler::Parser::parse_tree($self->resolve_path($name));
+    return Compiler::Parser::parse_tree(resolve_path($name));
 }
 
 
 sub resolve_path {
-    my ($self, $name) = @_;
+    my $name = shift;
     my $relative_path = $name . EXTENSION();
 
     for my $base_path (search_path()) {
@@ -38,7 +32,7 @@ sub resolve_path {
     }
 
     confess sprintf("Could not find %s in search path: %s",
-        $relative_path, Data::Dumper::Dumper($self->search_path));
+        $relative_path, Data::Dumper::Dumper(search_path()));
 }
 
 sub search_path {

@@ -2,70 +2,57 @@ start: (process_definition | tool_definition) eof
         { $return = $item[1]; }
     | <error>
 
-process_definition: process_header operation(s)
-        { $return = { operations => $item[2],
-            kind => 'process' }; }
-process_header: "process"
+process_definition: "process" operation(s)
+        { $return = Compiler::AST::Definition::Process->create(
+                nodes => $item[2]);
+        }
 
 operation: alias(?) type parallel_statement(?) with_statements(?)
-        { $return = { type => $item[2] };
-          $return->{parallel} = $item[3][0] || undef;
-          $return->{inputs} = $item[4][0] || [];
-          $return->{alias} = $item[1][0] || $item[2];
+        { $return = Compiler::AST::Node->create(
+                type => $item[2],
+                alias => $item[1][0] || $item[2],
+                parallel => $item[3][0] || [],
+                explicit_links => $item[4][0] || [],
+            );
         }
 
 alias: name "is"
         { $return = $item[1]; }
     | <error>
 
-parallel_statement: "parallel" name
+parallel_statement: "parallel" name(s /\*/)
         { $return = $item[2]; }
 
 with_statements: "with" with_statement(s /,/)
         { $return = $item[2]; }
 
 with_statement: name "from" identifier
-        { $return = { property_name => $item[1],
-                type => "link", source => $item[3] }; }
+        { $return = Compiler::AST::Link::Internal->create(
+                property_name => $item[1], source => $item[3]); }
     | name "=" constant
-        { $return = { property_name => $item[1],
-                type => "constant", value => $item[3] }; }
+        { $return = Compiler::AST::Link::Constant->create(
+                property_name => $item[1], value => $item[3]); }
     | <error>
 
 
-
-tool_definition: tool_header tool_command tool_inputs tool_outputs
-        { $return = { kind => 'tool',
-                object => Compiler::AST::Tool->create(
-                    command => $item[2],
-                    input_entries => $item[3],
-                    output_entries => $item[4]) }; }
-    | tool_header tool_command tool_inputs
-        { $return = { kind => 'tool',
-                object => Compiler::AST::Tool->create(
-                    command => $item[2],
-                    input_entries => $item[3],
-                    output_entries => Compiler::AST::Outputs->create()) }; }
-    | tool_header tool_command tool_outputs
-        { $return = { kind => 'tool',
-                object => Compiler::AST::Tool->create(
-                    command => $item[2],
-                    input_entries => Compiler::AST::Inputs->create(),
-                    output_entries => $item[4]) }; }
-
-tool_header: "tool"
+tool_definition: "tool" tool_command tool_inputs(?) tool_outputs(?)
+        { $return = Compiler::AST::Definition::Tool->create(
+                command => $item[2],
+                inputs => $item[3][0] || [],
+                outputs => $item[4][0] || []);
+        }
 
 tool_command: type
         { $return = $item[1]; }
 
 tool_inputs: "inputs" tool_input(s)
-        { $return = Compiler::AST::Inputs->create(entries => $item[2]); }
+        { $return = $item[2]; }
 
 tool_input: tool_io_entry
         { $return = Compiler::AST::Input->create(%{$item[1]}); }
 
 tool_outputs: "outputs" tool_output(s)
-        { $return = Compiler::AST::Outputs->create(entries => $item[2]); }
+        { $return = $item[2]; }
 
 tool_output: tool_io_entry
         { $return = Compiler::AST::Output->create(%{$item[1]}); }

@@ -10,6 +10,13 @@ use File::Spec qw();
 use File::Slurp qw();
 
 use Parse::RecDescent qw();
+use Compiler::AST::Node;
+use Compiler::AST::Definition::Process;
+use Compiler::AST::Definition::Tool;
+use Compiler::AST::Link::Internal;
+use Compiler::AST::Link::Constant;
+use Compiler::AST::Input;
+use Compiler::AST::Output;
 
 use Memoize qw();
 
