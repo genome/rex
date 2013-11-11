@@ -13,7 +13,9 @@ use File::Slurp qw();
 use File::Spec qw();
 use File::Path qw();
 
-use Text::CSV;
+use IO::File qw();
+
+use InputFile;
 
 
 class Compiler {
@@ -52,19 +54,12 @@ sub execute {
 sub save_inputs_with_constants {
     my ($self, $inputs, $constants) = @_;
 
-    my $csv = Text::CSV->new({binary => 1, sep_char => "\t"});
+    my $input_file = InputFile->create_from_inputs_and_constants(
+        $inputs, $constants);
 
-    my $outfile = IO::File->new($self->output_path('inputs.tsv'), 'w');
-    for my $input (@$inputs) {
-        my @row = ($input->type, $input->name);
-
-        if (exists $constants->{$input->name}) {
-            push @row, $constants->{$input->name};
-        }
-
-        $csv->combine(@row);
-        printf $outfile "%s\n", $csv->string
-    }
+    my $file_handle = IO::File->new($self->output_path('inputs.tsv'), 'w');
+    $input_file->write($file_handle);
+    $file_handle->close;
 
     return;
 }
