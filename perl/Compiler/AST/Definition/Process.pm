@@ -115,11 +115,9 @@ sub _add_explicit_links_to {
         for my $explicit_input ($node->explicit_inputs) {
             my $consumer = $self->_consumer_from_node_and_link(
                 $node, $explicit_input);
-            $dag->connect_input(
-                input_property => $self->_automatic_property_name([$consumer]),
-                destination => $consumer->workflow_builder,
-                destination_property => $consumer->property_name,
-            );
+            $self->_connect_input($dag,
+                $self->_automatic_property_name([$consumer]),
+                $consumer);
         }
     }
 
@@ -315,6 +313,19 @@ sub _producers_of {
     return [map {$_->outputs_of($data_type)} $self->nodes];
 }
 
+
+sub _connect_input {
+    my ($self, $input_property, $consumer) = @_;
+
+    $self->_satisfy($consumer);
+    connect_input(
+        input_property => $input_property,
+        destination => $consumer->workflow_builder,
+        destination_property => $consumer->property_name,
+    );
+
+    return;
+}
 
 sub _create_link {
     my ($self, $dag, $producer, $consumer) = @_;
