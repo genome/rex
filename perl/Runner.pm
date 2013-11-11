@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
-use Carp qw(confess);
+use Genome::WorkflowBuilder::DAG;
 
 use IO::File qw();
 use InputFile;
@@ -22,6 +22,12 @@ class Runner {
             is => 'Path',
         },
     ],
+
+    has_optional_output => [
+        outputs => {
+            is => 'HASH',
+        },
+    ],
 };
 
 
@@ -29,7 +35,9 @@ sub execute {
     my $self = shift;
 
     my %inputs_hash = $self->inputs_hash;
-    print Data::Dumper::Dumper(\%inputs_hash);
+    my $dag = Genome::WorkflowBuilder::DAG->from_xml_filename($self->workflow);
+
+    $self->outputs($dag->execute(%inputs_hash));
 
     1;
 }
