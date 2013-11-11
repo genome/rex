@@ -315,10 +315,10 @@ sub _producers_of {
 
 
 sub _connect_input {
-    my ($self, $input_property, $consumer) = @_;
+    my ($self, $dag, $input_property, $consumer) = @_;
 
     $self->_satisfy($consumer);
-    connect_input(
+    $dag->connect_input(
         input_property => $input_property,
         destination => $consumer->workflow_builder,
         destination_property => $consumer->property_name,
