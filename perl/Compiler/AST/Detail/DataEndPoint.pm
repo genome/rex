@@ -28,10 +28,10 @@ class Compiler::AST::Detail::DataEndPoint {
 sub create {
     my $class = shift;
 
-    my $self = $class->SUPER::create(@_);
+    my $self = $class->get(@_);
 
     unless (defined($self)) {
-        $self = $class->get(@_);
+        $self = $class->SUPER::create(@_);
     }
 
     return $self;
