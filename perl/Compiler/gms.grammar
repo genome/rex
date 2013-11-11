@@ -2,12 +2,12 @@ start: (process_definition | tool_definition) eof
         { $return = $item[1]; }
     | <error>
 
-process_definition: "process" operation(s)
+process_definition: "process" node(s)
         { $return = Compiler::AST::Definition::Process->create(
                 nodes => $item[2]);
         }
 
-operation: alias(?) type parallel_statement(?) with_statements(?)
+node: alias(?) type parallel_statement(?) with_statements(?)
         { $return = Compiler::AST::Node->create(
                 type => $item[2],
                 alias => $item[1][0] || $item[2],
