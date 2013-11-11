@@ -9,6 +9,7 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 * perl/Tool - Command objects used by Workflow XML
 * \*-definitions - contains re-usable DSL files
 * vim - contains vim syntax hilighting files for the DSL
+* t/SystemTest - each subdirectory is a separate system test
 
 
 ## TODO
