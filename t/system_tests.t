@@ -43,12 +43,14 @@ sub label {
 
 
 for my $test_dir (test_dirs()) {
-    my $output_directory = File::Temp::tempdir(CLEANUP => 1);
-    TestHelper::compile(source_file($test_dir), $output_directory,
-        label($test_dir));
+    subtest $test_dir => sub {
+        my $output_directory = File::Temp::tempdir(CLEANUP => 1);
+        TestHelper::compile(source_file($test_dir), $output_directory,
+            label($test_dir));
 
-    TestHelper::diff_directories(compiler_expected_result($test_dir),
-        $output_directory, label($test_dir));
+        TestHelper::diff_directories(compiler_expected_result($test_dir),
+            $output_directory, label($test_dir));
+    };
 }
 
 done_testing();
