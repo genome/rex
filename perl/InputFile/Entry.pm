@@ -52,5 +52,22 @@ sub write {
     return;
 }
 
+sub create_from_line {
+    my ($class, $line) = @_;
+
+    unless ($_CSV->parse($line)) {
+        confess sprintf("Failed to parse line: %s", $line);
+    }
+    my @columns = $_CSV->fields;
+
+    unless (scalar(@columns) > 1 && scalar(@columns) < 4) {
+        confess sprintf(
+            "Bad number of columns (%s) in line, expected 2 or 3: [%s]",
+            scalar(@columns), join(', ', map {sprintf("'%s'")} @columns));
+    }
+
+    my ($type, $name, $value) = @columns;
+    return $class->create(name => $name, type => $type, value => $value);
+}
 
 1;

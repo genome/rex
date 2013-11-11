@@ -19,10 +19,15 @@ class InputFile {
 };
 
 
-sub create_from_filename {
-    my $class = shift;
+sub create_from_file_handle {
+    my ($class, $file_handle) = @_;
 
-    my $self = $class->create(whatishas => []);
+    my @entries;
+    for my $line (<$file_handle>) {
+        push @entries, InputFile::Entry->create_from_line($line);
+    }
+
+    my $self = $class->create(entries => \@entries);
 
     return $self;
 }
