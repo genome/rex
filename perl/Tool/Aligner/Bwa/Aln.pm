@@ -41,7 +41,7 @@ class Tool::Aligner::Bwa::Aln {
         },
     ],
 
-    has_transient => [
+    has_optional_transient => [
         tempdir => {
             is => 'Path',
         },
