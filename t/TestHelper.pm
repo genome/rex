@@ -24,40 +24,57 @@ sub run_basic_test {
 
     (my $input_file = $test_file) =~ s/\.t$/.gms/;
     my $output_directory = File::Temp::tempdir(CLEANUP => 1);
+    compile($input_file, $output_directory, '');
+
+    my $test_data_directory = $test_file . '.data';
+    diff_directories($test_data_directory, $output_directory, '');
+
+    return $test_data_directory, $output_directory;
+}
+
+sub compile {
+    my ($input_file, $output_directory, $label) = @_;
+
     my $cmd = Compiler->create(
         input_file => $input_file,
         output_directory => $output_directory,
     );
 
-    ok($cmd->execute, 'command ran') || die;
+    ok($cmd->execute, sprintf('command ran (%s)', $label)) || die;
+    return;
+}
 
-    my $test_data_directory = $test_file . '.data';
+sub diff_directories {
+    my ($expected, $actual, $label) = @_;
+
     diff_ast_files(
-        File::Spec->join($test_data_directory, 'ast'),
-        File::Spec->join($output_directory, 'ast')
+        File::Spec->join($expected, 'ast'),
+        File::Spec->join($actual, 'ast'),
+        $label,
     );
     diff_xml_files(
-        File::Spec->join($test_data_directory, 'workflow.xml'),
-        File::Spec->join($output_directory, 'workflow.xml')
+        File::Spec->join($expected, 'workflow.xml'),
+        File::Spec->join($actual, 'workflow.xml'),
+        $label,
     );
-    return $test_data_directory, $output_directory;
+    return;
 }
 
 sub diff_ast_files {
-    my ($blessed, $new) = @_;
+    my ($blessed, $new, $label) = @_;
 
-    compare_ok($blessed, $new, 'ast files are the same',
+    compare_ok($blessed, $new, sprintf('ast files are the same (%s)', $label),
         filters => [qr(^.*['\s]_.*$), qr(^.*'id'.*$),
             qr(^.*[[:xdigit:]]{32}.*$)
         ]);
 }
 
 sub diff_xml_files {
-    my ($blessed, $new) = @_;
+    my ($blessed, $new, $label) = @_;
 
-    ok(-f $blessed, 'found blessed xml file');
-    ok(-f $new, 'found new xml file');
+    ok(-f $blessed, sprintf('found blessed xml file (%s)', $label));
+    ok(-f $new, sprintf('found new xml file (%s)', $label));
 
     my $diff = `bash -c 'diff <(sort $blessed) <(sort $new)'`;
-    is($diff, '', 'xml files are the same');
+    is($diff, '', sprintf('xml files are the same (%s)', $label));
 }
