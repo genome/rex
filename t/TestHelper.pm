@@ -47,11 +47,6 @@ sub compile {
 sub diff_directories {
     my ($expected, $actual, $label) = @_;
 
-    diff_ast_files(
-        File::Spec->join($expected, 'ast'),
-        File::Spec->join($actual, 'ast'),
-        $label,
-    );
     diff_xml_files(
         File::Spec->join($expected, 'workflow.xml'),
         File::Spec->join($actual, 'workflow.xml'),
