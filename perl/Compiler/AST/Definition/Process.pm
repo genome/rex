@@ -37,59 +37,46 @@ class Compiler::AST::Definition::Process {
 sub workflow_builder {
     my ($self, $alias) = @_;
 
-    $self->_used_producer_ids({});
-    $self->_satisfied_consumer_ids({});
-
-    my $dag = Genome::WorkflowBuilder::DAG->create(name => $alias);
-
-    $self->_add_operations_to($dag);
-
-    $self->_add_explicit_links_to($dag);
-    $self->_add_implicit_links_to($dag);
+    my ($dag) = $self->_resolve;
+    $dag->name($alias);
 
     return $dag;
 }
-Memoize::memoize('workflow_builder');
 
 sub inputs {
     my $self = shift;
 
-    # NOTE: This is how we figure out which consumers are unsatisfied
-    $self->workflow_builder('');
+    my ($dag, $inputs, $outputs) = $self->_resolve;
 
-    my @result;
-    for my $data_type ($self->_involved_data_types) {
-        my $consumers = $self->_unsatisfied_consumers_of($data_type);
-        if (scalar(@$consumers)) {
-            push @result, Compiler::AST::IO::Input->create(
-                type => $data_type,
-                name => $self->_automatic_property_name($consumers),
-            );
-        }
-    }
-
-    return @result;
+    return @$inputs;
 }
 
 sub outputs {
     my $self = shift;
 
-    # NOTE: This is how we figure out which producers are unused
-    $self->workflow_builder('');
+    my ($dag, $inputs, $outputs) = $self->_resolve;
 
-    my @result;
-    for my $data_type ($self->_involved_data_types) {
-        my $producers = $self->_unused_producers_of($data_type);
-        if (scalar(@$producers)) {
-            push @result, Compiler::AST::IO::Output->create(
-                type => $data_type,
-                name => $self->_automatic_property_name($producers),
-            );
-        }
-    }
-
-    return @result;
+    return @$outputs;
 }
+
+sub _resolve {
+    my $self = shift;
+
+    $self->_used_producer_ids({});
+    $self->_satisfied_consumer_ids({});
+
+    my $dag = Genome::WorkflowBuilder::DAG->create(name => 'unspecified');
+    my $inputs = [];
+    my $outputs = [];
+
+    $self->_add_operations_to($dag);
+
+    $self->_add_explicit_links_to($dag, $inputs, $outputs);
+    $self->_add_implicit_links_to($dag, $inputs, $outputs);
+
+    return $dag, $inputs, $outputs;
+}
+Memoize::memoize('_resolve');
 
 sub _add_operations_to {
     my ($self, $dag) = @_;
@@ -101,7 +88,7 @@ sub _add_operations_to {
 }
 
 sub _add_explicit_links_to {
-    my ($self, $dag) = @_;
+    my ($self, $dag, $inputs, $outputs) = @_;
 
     for my $node ($self->nodes) {
         for my $explicit_link ($node->explicit_internal_links) {
@@ -115,6 +102,9 @@ sub _add_explicit_links_to {
         for my $explicit_input ($node->explicit_inputs) {
             my $consumer = $self->_consumer_from_node_and_link(
                 $node, $explicit_input);
+            push @$inputs, Compiler::AST::IO::Input->create(
+                name => $self->_automatic_property_name([$consumer]),
+                type => $consumer->data_type);
             $self->_connect_input($dag,
                 $self->_automatic_property_name([$consumer]),
                 $consumer);
@@ -154,10 +144,11 @@ sub _consumer_from_node_and_link {
 }
 
 sub _add_implicit_links_to {
-    my ($self, $dag) = @_;
+    my ($self, $dag, $inputs, $outputs) = @_;
 
     for my $data_type ($self->_involved_data_types) {
-        $self->_add_implicit_links_for_data_type_to($data_type, $dag);
+        $self->_add_implicit_links_for_data_type_to($data_type, $dag,
+            $inputs, $outputs);
     }
 
     return;
@@ -183,13 +174,14 @@ Memoize::memoize('_involved_data_types');
 
 
 sub _add_implicit_links_for_data_type_to {
-    my ($self, $data_type, $dag) = @_;
+    my ($self, $data_type, $dag, $inputs, $outputs) = @_;
 
     my $consumers = $self->_unsatisfied_consumers_of($data_type);
     my $producers = $self->_unused_producers_of($data_type);
 
     if (scalar(@$producers) == 1) {
-        $self->_add_implicit_links_between($dag, $producers->[0], $consumers);
+        $self->_add_implicit_links_between($dag, $producers->[0], $consumers,
+            $inputs, $outputs);
 
     } elsif (scalar(@$producers) > 1) {
         confess sprintf("Ambiguity:  Found multiple unused producers "
@@ -198,6 +190,10 @@ sub _add_implicit_links_for_data_type_to {
 
     } else {
         if (scalar(@$consumers)) {
+            push @$inputs, map {Compiler::AST::IO::Input->create(
+                    name => $self->_automatic_property_name($consumers),
+                    type => $data_type
+                )} @$consumers;
             $self->_add_implicit_input($dag, $consumers);
         } else {
             # No producers or consumers for this data type.
@@ -208,21 +204,26 @@ sub _add_implicit_links_for_data_type_to {
 }
 
 sub _add_implicit_links_between {
-    my ($self, $dag, $producer, $consumers) = @_;
+    my ($self, $dag, $producer, $consumers, $inputs, $outputs) = @_;
 
     if (scalar(@$consumers)) {
         for my $consumer (@$consumers) {
             $self->_create_link($dag, $producer, $consumer);
         }
     } else {
-        $self->_add_implicit_output($dag, $producer);
+        $self->_add_implicit_output($dag, $producer, $outputs);
     }
 
     return;
 }
 
 sub _add_implicit_output {
-    my ($self, $dag, $producer) = @_;
+    my ($self, $dag, $producer, $outputs) = @_;
+
+    push @$outputs, Compiler::AST::IO::Output->create(
+        type => $producer->data_type,
+        name => $self->_automatic_property_name([$producer]),
+    );
 
     $dag->connect_output(
         output_property => $self->_automatic_property_name([$producer]),
@@ -318,6 +319,7 @@ sub _connect_input {
     my ($self, $dag, $input_property, $consumer) = @_;
 
     $self->_satisfy($consumer);
+
     $dag->connect_input(
         input_property => $input_property,
         destination => $consumer->workflow_builder,

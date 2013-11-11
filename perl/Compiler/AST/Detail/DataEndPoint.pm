@@ -49,4 +49,10 @@ sub alias {
 }
 
 
+sub data_type {
+    my $self = shift;
+
+    return $self->node->type_of($self->property_name);
+}
+
 1;
