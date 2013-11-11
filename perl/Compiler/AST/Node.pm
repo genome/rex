@@ -25,11 +25,13 @@ class Compiler::AST::Node {
         parallel => {
             is => 'Text',
             is_many => 1,
+            is_optional => 1,
         },
 
         explicit_links => {
             is => 'Compiler::AST::Link',
             is_many => 1,
+            is_optional => 1,
         },
     ],
 };
