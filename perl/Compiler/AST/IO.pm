@@ -1,4 +1,4 @@
-package Compiler::AST::Detail::IOEntry;
+package Compiler::AST::IO;
 
 use strict;
 use warnings FATAL => 'all';
@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 use UR;
 
 
-class Compiler::AST::Detail::IOEntry {
+class Compiler::AST::IO {
     id_generator => '-uuid',
 
     has => [

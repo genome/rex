@@ -15,8 +15,8 @@ use Compiler::AST::Definition::Process;
 use Compiler::AST::Definition::Tool;
 use Compiler::AST::Link::Internal;
 use Compiler::AST::Link::Constant;
-use Compiler::AST::Input;
-use Compiler::AST::Output;
+use Compiler::AST::IO::Input;
+use Compiler::AST::IO::Output;
 
 use Memoize qw();
 

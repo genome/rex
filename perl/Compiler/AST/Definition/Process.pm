@@ -61,7 +61,7 @@ sub inputs {
     for my $data_type ($self->_involved_data_types) {
         my $consumers = $self->_unsatisfied_consumers_of($data_type);
         if (scalar(@$consumers)) {
-            push @result, Compiler::AST::Input->create(
+            push @result, Compiler::AST::IO::Input->create(
                 type => $data_type,
                 name => $self->_automatic_property_name($consumers),
             );
@@ -81,7 +81,7 @@ sub outputs {
     for my $data_type ($self->_involved_data_types) {
         my $producers = $self->_unused_producers_of($data_type);
         if (scalar(@$producers)) {
-            push @result, Compiler::AST::Output->create(
+            push @result, Compiler::AST::IO::Output->create(
                 type => $data_type,
                 name => $self->_automatic_property_name($producers),
             );

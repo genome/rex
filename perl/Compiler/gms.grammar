@@ -49,13 +49,13 @@ tool_inputs: "inputs" tool_input(s)
         { $return = $item[2]; }
 
 tool_input: tool_io_entry
-        { $return = Compiler::AST::Input->create(%{$item[1]}); }
+        { $return = Compiler::AST::IO::Input->create(%{$item[1]}); }
 
 tool_outputs: "outputs" tool_output(s)
         { $return = $item[2]; }
 
 tool_output: tool_io_entry
-        { $return = Compiler::AST::Output->create(%{$item[1]}); }
+        { $return = Compiler::AST::IO::Output->create(%{$item[1]}); }
 
 tool_io_entry: type name
         { $return = { type => $item[1], name => $item[2] }; }
