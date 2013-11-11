@@ -54,7 +54,7 @@ sub save_inputs_with_constants {
 
     my $csv = Text::CSV->new({binary => 1, sep_char => "\t"});
 
-    my $outfile = IO::File->new($self->output_path('inputs'), 'w');
+    my $outfile = IO::File->new($self->output_path('inputs.tsv'), 'w');
     for my $input (@$inputs) {
         my @row = ($input->type, $input->name);
 

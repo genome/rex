@@ -41,8 +41,8 @@ sub diff_directories {
     );
 
     diff_input_files(
-        File::Spec->join($expected, 'inputs'),
-        File::Spec->join($actual, 'inputs'),
+        File::Spec->join($expected, 'inputs.tsv'),
+        File::Spec->join($actual, 'inputs.tsv'),
         $label,
     );
 
