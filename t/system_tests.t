@@ -13,8 +13,6 @@ use TestHelper qw();
 sub system_test_base_dir {
     my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__, '.t');
 
-    print "$name:$path:$suffix\n";
-
     return File::Spec->join($path, 'SystemTest');
 }
 
