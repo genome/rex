@@ -59,6 +59,45 @@ sub outputs {
     return @$outputs;
 }
 
+sub constants {
+    my $self = shift;
+
+    my %result;
+    for my $node ($self->nodes) {
+        my $implicit_constants = $node->constants;
+        for my $constant_name (keys %$implicit_constants) {
+            my $external_name =_external_connection_name($node->alias,
+                $constant_name);
+            unless (exists $result{$external_name}) {
+                $result{$external_name} = $implicit_constants->{$constant_name};
+            }
+        }
+
+        for my $constant ($node->explicit_constants) {
+            my $name = _external_connection_name($node->alias,
+                $constant->property_name);
+            if (exists $result{$name}) {
+                confess sprintf("Found duplicate entry for constant: %s",
+                    $name);
+            }
+            $result{$name} = $constant->value;
+        }
+    }
+
+    return \%result;
+}
+
+sub _external_connection_name {
+    my ($alias, $property_name) = @_;
+    return sprintf("%s.%s", $alias, $property_name);
+}
+
+sub _constant_links {
+    my $self = shift;
+
+    return grep {$_->value} map {$_->explicit_links} $self->nodes;
+}
+
 sub _resolve {
     my $self = shift;
 
@@ -190,10 +229,9 @@ sub _add_implicit_links_for_data_type_to {
 
     } else {
         if (scalar(@$consumers)) {
-            push @$inputs, map {Compiler::AST::IO::Input->create(
+            push @$inputs, Compiler::AST::IO::Input->create(
                     name => $self->_automatic_property_name($consumers),
-                    type => $data_type
-                )} @$consumers;
+                    type => $data_type);
             $self->_add_implicit_input($dag, $consumers);
         } else {
             # No producers or consumers for this data type.

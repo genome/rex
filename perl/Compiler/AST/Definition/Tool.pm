@@ -37,5 +37,8 @@ sub workflow_builder {
 }
 Memoize::memoize('workflow_builder');
 
+sub constants {
+    return {};
+}
 
 1;

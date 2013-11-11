@@ -19,19 +19,6 @@ use Genome::Utility::Test qw(compare_ok);
 use UR;
 use Compiler;
 
-sub run_basic_test {
-    my $test_file = shift;
-
-    (my $input_file = $test_file) =~ s/\.t$/.gms/;
-    my $output_directory = File::Temp::tempdir(CLEANUP => 1);
-    compile($input_file, $output_directory, '');
-
-    my $test_data_directory = $test_file . '.data';
-    diff_directories($test_data_directory, $output_directory, '');
-
-    return $test_data_directory, $output_directory;
-}
-
 sub compile {
     my ($input_file, $output_directory, $label) = @_;
 
@@ -52,24 +39,33 @@ sub diff_directories {
         File::Spec->join($actual, 'workflow.xml'),
         $label,
     );
+
+    diff_input_files(
+        File::Spec->join($expected, 'inputs'),
+        File::Spec->join($actual, 'inputs'),
+        $label,
+    );
+
     return;
-}
-
-sub diff_ast_files {
-    my ($blessed, $new, $label) = @_;
-
-    compare_ok($blessed, $new, sprintf('ast files are the same (%s)', $label),
-        filters => [qr(^.*['\s]_.*$), qr(^.*'id'.*$),
-            qr(^.*[[:xdigit:]]{32}.*$)
-        ]);
 }
 
 sub diff_xml_files {
     my ($blessed, $new, $label) = @_;
 
-    ok(-f $blessed, sprintf('found blessed xml file (%s)', $label));
-    ok(-f $new, sprintf('found new xml file (%s)', $label));
+    sort_then_diff_files($blessed, $new, $label, 'xml');
+}
+
+sub diff_input_files {
+    my ($blessed, $new, $label) = @_;
+
+    sort_then_diff_files($blessed, $new, $label, 'input');
+}
+
+sub sort_then_diff_files {
+    my ($blessed, $new, $label, $file_type) = @_;
+    ok(-f $blessed, sprintf('found blessed %s file (%s)', $file_type, $label));
+    ok(-f $new, sprintf('found new %s file (%s)', $file_type, $label));
 
     my $diff = `bash -c 'diff <(sort $blessed) <(sort $new)'`;
-    is($diff, '', sprintf('xml files are the same (%s)', $label));
+    is($diff, '', sprintf('%s files are the same (%s)', $file_type, $label));
 }

@@ -33,6 +33,11 @@ class Compiler::AST::Node {
             is_many => 1,
             is_optional => 1,
         },
+        explicit_constants => {
+            is => 'Compiler::AST::Link::Constant',
+            is_many => 1,
+            is_optional => 1,
+        },
     ],
 };
 
@@ -61,6 +66,12 @@ sub outputs {
     my $self = shift;
 
     return $self->definition->outputs;
+}
+
+sub constants {
+    my $self = shift;
+
+    return $self->definition->constants;
 }
 
 sub inputs_of {
@@ -102,7 +113,7 @@ sub explicit_internal_links {
 sub explicit_inputs {
     my $self = shift;
 
-    return grep {$_->is_input} $self->explicit_links;
+    return $self->explicit_constants;
 }
 
 sub unique_output_of_type {

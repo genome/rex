@@ -12,7 +12,8 @@ node: alias(?) type parallel_statement(?) with_statements(?)
                 type => $item[2],
                 alias => $item[1][0] || $item[2],
                 parallel => $item[3][0] || [],
-                explicit_links => $item[4][0] || [],
+                explicit_links => $item[4][0]{links} || [],
+                explicit_constants => $item[4][0]{constants} || [],
             );
         }
 
@@ -23,16 +24,20 @@ alias: name "is"
 parallel_statement: "parallel" name(s /\*/)
         { $return = $item[2]; }
 
-with_statements: "with" with_statement(s /,/)
-        { $return = $item[2]; }
+with_statements: "with" link_statement(s /,/) "," constant_statement(s /,/)
+        { $return = { links => $item[2], constants => $item[4] }; }
+    | "with" link_statement(s /,/)
+        { $return = { links => $item[2] }; }
+    | "with" constant_statement(s /,/)
+        { $return = { constants => $item[2] }; }
+    | <error>
 
-with_statement: name "from" identifier
+link_statement: name "from" identifier
         { $return = Compiler::AST::Link::Internal->create(
                 property_name => $item[1], source => $item[3]); }
-    | name "=" constant
+constant_statement: name "=" constant
         { $return = Compiler::AST::Link::Constant->create(
                 property_name => $item[1], value => $item[3]); }
-    | <error>
 
 
 tool_definition: "tool" tool_command tool_inputs(?) tool_outputs(?)

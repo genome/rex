@@ -13,6 +13,8 @@ use File::Slurp qw();
 use File::Spec qw();
 use File::Path qw();
 
+use Text::CSV;
+
 
 class Compiler {
     is => 'Command::V2',
@@ -38,19 +40,33 @@ sub execute {
 
     $self->make_output_directory;
 
-    $self->save_data('ast', Data::Dumper::Dumper($ast));
-
-#    $self->save_data('inputs', Data::Dumper::Dumper($ast->inputs));
-#    $self->save_data('outputs', Data::Dumper::Dumper($ast->outputs));
+    my @inputs = $ast->inputs;
+    $self->save_inputs_with_constants(\@inputs, $ast->constants);
 
     $self->save_data('workflow.xml', $ast->workflow_builder('root')->get_xml);
     $self->format_xml('workflow.xml');
-#    my $outputs = $ast->workflow_builder->execute(
-#        'input:T1' => 'foo1',
-#        'input:T2' => 'foo2',
-#        'input:T3' => 'foo3');
-#    print Data::Dumper::Dumper($outputs);
+
     return 1;
+}
+
+sub save_inputs_with_constants {
+    my ($self, $inputs, $constants) = @_;
+
+    my $csv = Text::CSV->new({binary => 1, sep_char => "\t"});
+
+    my $outfile = IO::File->new($self->output_path('inputs'), 'w');
+    for my $input (@$inputs) {
+        my @row = ($input->type, $input->name);
+
+        if (exists $constants->{$input->name}) {
+            push @row, $constants->{$input->name};
+        }
+
+        $csv->combine(@row);
+        printf $outfile "%s\n", $csv->string
+    }
+
+    return;
 }
 
 sub get_output_directory {
