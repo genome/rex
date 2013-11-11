@@ -1,45 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>input:T1</inputproperty>
-    <inputproperty>input:T3</inputproperty>
-    <inputproperty>input:T2</inputproperty>
-    <outputproperty>input:T7</outputproperty>
+    <inputproperty>TestTool::C.TestTool::E.TestTool::F.fi1</inputproperty>
+    <inputproperty>TestTool::A.ai1</inputproperty>
+    <inputproperty>TestTool::C.TestTool::D.di1</inputproperty>
+    <outputproperty>TestTool::B.bo1</outputproperty>
   </operationtype>
-  <operation name="TestTool::C">
-    <operationtype typeClass="Workflow::OperationType::Model">
-      <inputproperty>input:T3</inputproperty>
-      <inputproperty>input:T2</inputproperty>
-      <outputproperty>input:T4</outputproperty>
-      <outputproperty>input:T5</outputproperty>
-    </operationtype>
-    <operation name="TestTool::D">
-      <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::D">
-        <inputproperty>di1</inputproperty>
-        <outputproperty>do1</outputproperty>
-        <outputproperty>result</outputproperty>
-      </operationtype>
-    </operation>
-    <operation name="TestTool::E">
-      <operationtype typeClass="Workflow::OperationType::Model">
-        <inputproperty>input:T3</inputproperty>
-        <outputproperty>input:T5</outputproperty>
-      </operationtype>
-      <operation name="TestTool::F">
-        <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::F">
-          <inputproperty>fi1</inputproperty>
-          <outputproperty>fo1</outputproperty>
-          <outputproperty>result</outputproperty>
-        </operationtype>
-      </operation>
-      <link fromOperation="input connector" fromProperty="input:T3" toOperation="TestTool::F" toProperty="fi1" />
-      <link fromOperation="TestTool::F" fromProperty="fo1" toOperation="output connector" toProperty="input:T5" />
-    </operation>
-    <link fromOperation="input connector" fromProperty="input:T3" toOperation="TestTool::E" toProperty="input:T3" />
-    <link fromOperation="input connector" fromProperty="input:T2" toOperation="TestTool::D" toProperty="di1" />
-    <link fromOperation="TestTool::D" fromProperty="do1" toOperation="output connector" toProperty="input:T4" />
-    <link fromOperation="TestTool::E" fromProperty="input:T5" toOperation="output connector" toProperty="input:T5" />
-  </operation>
   <operation name="TestTool::A">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::A">
       <inputproperty>ai1</inputproperty>
@@ -56,11 +22,45 @@
       <outputproperty>result</outputproperty>
     </operationtype>
   </operation>
-  <link fromOperation="input connector" fromProperty="input:T1" toOperation="TestTool::A" toProperty="ai1" />
-  <link fromOperation="input connector" fromProperty="input:T2" toOperation="TestTool::C" toProperty="input:T2" />
-  <link fromOperation="input connector" fromProperty="input:T3" toOperation="TestTool::C" toProperty="input:T3" />
-  <link fromOperation="TestTool::C" fromProperty="input:T4" toOperation="TestTool::B" toProperty="bi1" />
+  <operation name="TestTool::C">
+    <operationtype typeClass="Workflow::OperationType::Model">
+      <inputproperty>TestTool::D.di1</inputproperty>
+      <inputproperty>TestTool::E.TestTool::F.fi1</inputproperty>
+      <outputproperty>TestTool::E.TestTool::F.fo1</outputproperty>
+      <outputproperty>TestTool::D.do1</outputproperty>
+    </operationtype>
+    <operation name="TestTool::D">
+      <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::D">
+        <inputproperty>di1</inputproperty>
+        <outputproperty>do1</outputproperty>
+        <outputproperty>result</outputproperty>
+      </operationtype>
+    </operation>
+    <operation name="TestTool::E">
+      <operationtype typeClass="Workflow::OperationType::Model">
+        <inputproperty>TestTool::F.fi1</inputproperty>
+        <outputproperty>TestTool::F.fo1</outputproperty>
+      </operationtype>
+      <operation name="TestTool::F">
+        <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::F">
+          <inputproperty>fi1</inputproperty>
+          <outputproperty>fo1</outputproperty>
+          <outputproperty>result</outputproperty>
+        </operationtype>
+      </operation>
+      <link fromOperation="TestTool::F" fromProperty="fo1" toOperation="output connector" toProperty="TestTool::F.fo1" />
+      <link fromOperation="input connector" fromProperty="TestTool::F.fi1" toOperation="TestTool::F" toProperty="fi1" />
+    </operation>
+    <link fromOperation="TestTool::D" fromProperty="do1" toOperation="output connector" toProperty="TestTool::D.do1" />
+    <link fromOperation="TestTool::E" fromProperty="TestTool::F.fo1" toOperation="output connector" toProperty="TestTool::E.TestTool::F.fo1" />
+    <link fromOperation="input connector" fromProperty="TestTool::E.TestTool::F.fi1" toOperation="TestTool::E" toProperty="TestTool::F.fi1" />
+    <link fromOperation="input connector" fromProperty="TestTool::D.di1" toOperation="TestTool::D" toProperty="di1" />
+  </operation>
+  <link fromOperation="TestTool::C" fromProperty="TestTool::D.do1" toOperation="TestTool::B" toProperty="bi1" />
   <link fromOperation="TestTool::A" fromProperty="ao1" toOperation="TestTool::B" toProperty="bi3" />
-  <link fromOperation="TestTool::C" fromProperty="input:T5" toOperation="TestTool::B" toProperty="bi2" />
-  <link fromOperation="TestTool::B" fromProperty="bo1" toOperation="output connector" toProperty="input:T7" />
+  <link fromOperation="input connector" fromProperty="TestTool::A.ai1" toOperation="TestTool::A" toProperty="ai1" />
+  <link fromOperation="TestTool::B" fromProperty="bo1" toOperation="output connector" toProperty="TestTool::B.bo1" />
+  <link fromOperation="TestTool::C" fromProperty="TestTool::E.TestTool::F.fo1" toOperation="TestTool::B" toProperty="bi2" />
+  <link fromOperation="input connector" fromProperty="TestTool::C.TestTool::D.di1" toOperation="TestTool::C" toProperty="TestTool::D.di1" />
+  <link fromOperation="input connector" fromProperty="TestTool::C.TestTool::E.TestTool::F.fi1" toOperation="TestTool::C" toProperty="TestTool::E.TestTool::F.fi1" />
 </operation>
