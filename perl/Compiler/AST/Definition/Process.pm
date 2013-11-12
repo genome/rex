@@ -228,17 +228,43 @@ sub _add_implicit_links_for_data_type_to {
             join(', ', map {sprintf("'%s'", $_->alias)} @$producers));
 
     } else {
-        if (scalar(@$consumers)) {
+        my ($non_constant_consumers, $constant_consumers) =
+            $self->_separate_constant_consumers($consumers);
+        if (scalar(@$non_constant_consumers)) {
             push @$inputs, Compiler::AST::IO::Input->create(
-                    name => $self->_automatic_property_name($consumers),
+                    name => $self->_automatic_property_name($non_constant_consumers),
                     type => $data_type);
-            $self->_add_implicit_input($dag, $consumers);
+            $self->_add_implicit_input($dag, $non_constant_consumers);
         } else {
             # No producers or consumers for this data type.
+        }
+
+        for my $constant_consumer (@$constant_consumers) {
+            push @$inputs, Compiler::AST::IO::Input->create(
+                    name => $self->_automatic_property_name(
+                        [$constant_consumer]),
+                    type => $data_type);
+            $self->_add_implicit_input($dag, [$constant_consumer]);
         }
     }
 
     return;
+}
+
+sub _separate_constant_consumers {
+    my ($self, $all_consumers) = @_;
+
+    my @non_constant_consumers;
+    my @constant_consumers;
+    for my $consumer (@$all_consumers) {
+        if (exists $consumer->node->constants->{$consumer->property_name}) {
+            push @constant_consumers, $consumer;
+        } else {
+            push @non_constant_consumers, $consumer;
+        }
+    }
+
+    return (\@non_constant_consumers, \@constant_consumers);
 }
 
 sub _add_implicit_links_between {
