@@ -32,7 +32,7 @@ sub resolve_path {
     }
 
     confess sprintf("Could not find %s in search path: %s",
-        $relative_path, Data::Dumper::Dumper(search_path()));
+        $relative_path, Data::Dumper::Dumper([search_path()]));
 }
 
 sub search_path {
