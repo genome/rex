@@ -8,4 +8,4 @@ File::Bam::Unaligned::Paired unaligned_bam
 Integer::Bwa::Sampe::MaxInsertSize max_insert_size
 
 outputs
-File::Bam::Aligned output_file
+File::Sam::Aligned output_file
