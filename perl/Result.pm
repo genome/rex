@@ -1,0 +1,60 @@
+package Result;
+
+use strict;
+use warnings FATAL => 'all';
+
+use Genome;
+use UR;
+use Carp qw(confess);
+
+
+class Result {
+    table_name => 'experimental.result',
+    schema_name => 'GMSchema',
+    data_source => 'Genome::DataSource::GMSchema',
+
+    id_generator => '-uuid',
+
+    id_by => [
+        id => {
+            is => 'Text',
+            len => 32,
+        },
+    ],
+
+    has => [
+        tool_class => {
+            is => 'Text',
+            len => 255,
+        },
+        inputs => {
+            is => 'HASH',
+            is_optional => 1,
+        },
+        allocation => {
+            is => 'Genome::Disk::Allocation',
+        },
+    ],
+
+    has_optional => [
+        lookup_hash => {
+            is => 'Text',
+            len => 32
+        },
+
+        test_name => {
+            is => 'Text',
+            len => '255',
+        },
+
+        users => {
+            is => 'Result::User',
+            reverse_as => 'result',
+            is_many => 1,
+            is_optional => 1,
+        },
+    ],
+};
+
+
+1;
