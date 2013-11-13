@@ -35,7 +35,8 @@ subtest base_path => sub {
 };
 
 subtest schema_path => sub {
-    is(Manifest::Reader::schema_path(), 'perl/Manifest/manifest.xsd');
+    is(Manifest::Detail::ReaderWriterBase::schema_path(),
+        File::Spec->rel2abs('perl/Manifest/Detail/manifest.xsd'));
 };
 
 

@@ -8,11 +8,12 @@ use Carp qw(confess);
 use File::Basename qw();
 use File::Spec qw();
 
+use Manifest::Detail::ReaderWriterBase;
 use XML::LibXML qw();
 
 
 class Manifest::Reader {
-    id_generator => '-uuid',
+    is => 'Manifest::Detail::ReaderWriterBase',
 
     has => [
         manifest_file => {
@@ -26,20 +27,9 @@ class Manifest::Reader {
         _parser => {
             is => 'XML::LibXML',
         },
-        _schema => {
-            is => 'XML::LibXML::Schema',
-        },
     ],
 };
 
-
-sub validate {
-    my $self = shift;
-
-    $self->schema->validate($self->document);
-
-    return;
-}
 
 sub path_to {
     my ($self, $tag) = @_;
@@ -66,12 +56,6 @@ sub base_path {
     return $path;
 }
 
-sub schema_path {
-    my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__);
-
-    return File::Spec->join($path, 'manifest.xsd');
-}
-
 sub document {
     my $self = shift;
 
@@ -90,17 +74,6 @@ sub parser {
     }
 
     return $self->_parser;
-}
-
-sub schema {
-    my $self = shift;
-
-    unless ($self->_schema) {
-        $self->_schema(XML::LibXML::Schema->new(
-                location => schema_path()));
-    }
-
-    return $self->_schema;
 }
 
 
