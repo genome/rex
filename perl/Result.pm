@@ -88,7 +88,7 @@ sub calculate_lookup_hash {
     _validate_inputs_structure($inputs);
 
     my $json = JSON->new();
-    $json->canonical([1]);
+    $json->canonical(1);
     my $json_string = $json->encode($inputs);
 
     return Genome::Sys->md5sum_data($json_string);
