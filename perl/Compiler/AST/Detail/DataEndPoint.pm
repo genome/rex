@@ -1,7 +1,7 @@
 package Compiler::AST::Detail::DataEndPoint;
 
 use strict;
-#use warnings FATAL => 'all';
+use warnings FATAL => 'all';
 
 use UR;
 
