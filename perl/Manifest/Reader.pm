@@ -1,4 +1,4 @@
-package Manifest;
+package Manifest::Reader;
 
 use strict;
 use warnings FATAL => 'all';
@@ -11,7 +11,7 @@ use File::Spec qw();
 use XML::LibXML qw();
 
 
-class Manifest {
+class Manifest::Reader {
     id_generator => '-uuid',
 
     has => [

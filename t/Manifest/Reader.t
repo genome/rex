@@ -4,7 +4,7 @@ use warnings FATAL => 'all';
 use Test::More;
 use Test::Exception;
 
-use Manifest;
+use Manifest::Reader;
 use File::Find::Rule qw();
 use File::Spec qw();
 use File::Basename qw();
@@ -13,13 +13,13 @@ use File::Basename qw();
 sub valid_manifest_base_dir {
     my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__, '.t');
 
-    return File::Spec->join($path, 'Manifest/valid');
+    return File::Spec->join($path, 'Reader/valid');
 }
 
 sub invalid_manifest_base_dir {
     my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__, '.t');
 
-    return File::Spec->join($path, 'Manifest/invalid');
+    return File::Spec->join($path, 'Reader/invalid');
 }
 
 sub test_files {
@@ -30,18 +30,19 @@ sub test_files {
 
 
 subtest base_path => sub {
-    my $m = Manifest->create(manifest_file => '/tmp/foo/bar.xml');
+    my $m = Manifest::Reader->create(manifest_file => '/tmp/foo/bar.xml');
     is($m->base_path, '/tmp/foo/');
 };
 
 subtest schema_path => sub {
-    is(Manifest::schema_path(), 'perl/manifest.xsd');
+    is(Manifest::Reader::schema_path(), 'perl/Manifest/manifest.xsd');
 };
 
 
 subtest 'valid manifests' => sub {
     for my $valid_manifest (test_files(valid_manifest_base_dir())) {
-        my $manifest = Manifest->create(manifest_file => $valid_manifest);
+        my $manifest = Manifest::Reader->create(
+            manifest_file => $valid_manifest);
         lives_ok { $manifest->validate }
             sprintf('valid manfiest lives (%s)', $valid_manifest);
     }
@@ -49,7 +50,8 @@ subtest 'valid manifests' => sub {
 
 subtest 'invalid manifests' => sub {
     for my $invalid_manifest (test_files(invalid_manifest_base_dir())) {
-        my $manifest = Manifest->create(manifest_file => $invalid_manifest);
+        my $manifest = Manifest::Reader->create(
+            manifest_file => $invalid_manifest);
         dies_ok { $manifest->validate }
             sprintf('invalid manifest dies (%s)', $invalid_manifest);
     }
@@ -62,7 +64,8 @@ sub sample_manifest_file {
 }
 
 subtest path_to => sub {
-    my $manifest = Manifest->create(manifest_file => sample_manifest_file());
+    my $manifest = Manifest::Reader->create(
+        manifest_file => sample_manifest_file());
     is($manifest->path_to('foo'), 'bar', 'good lookup OK');
     dies_ok { $manifest->path_to('bad') } 'bad lookup dies';
 };
