@@ -36,6 +36,7 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - often have to look at code to know file paths
 - data are difficult to secure
     - cannot be made read only because of DV2/symlinks
+- difficult to know how often "tools" are being run
 
 ## Weakness Brainstorm Area
 - multiple places to do "orchestration"
