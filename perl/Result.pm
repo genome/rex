@@ -18,21 +18,23 @@ class Result {
     id_by => [
         id => {
             is => 'Text',
-            len => 32,
+            len => 36,
         },
     ],
 
     has => [
-        tool_class => {
+        tool_class_name => {
             is => 'Text',
             len => 255,
         },
         inputs => {
             is => 'HASH',
             is_optional => 1,
+            is_transient => 1,
         },
         allocation => {
             is => 'Genome::Disk::Allocation',
+            id_by => 'allocation_id',
         },
     ],
 
