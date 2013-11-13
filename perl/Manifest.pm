@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use Carp qw(confess);
 use File::Basename qw();
 use File::Spec qw();
 
@@ -43,7 +44,16 @@ sub validate {
 sub path_to {
     my ($self, $tag) = @_;
 
-    return $tag;
+    my $nodes = $self->document->findnodes(
+        sprintf('//file[@tag="%s"]', $tag));
+
+    unless (scalar(@$nodes) == 1) {
+        confess sprintf(
+            "Didn't find exactly one node for tag '%s' in manifest file '%s'",
+            $tag, $self->manifest_file);
+    }
+
+    return $nodes->[0]->getAttribute('path');
 }
 
 

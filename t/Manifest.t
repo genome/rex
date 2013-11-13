@@ -56,4 +56,16 @@ subtest 'invalid manifests' => sub {
 };
 
 
+sub sample_manifest_file {
+    return File::Spec->join(valid_manifest_base_dir(),
+        'simple_manifest.xml');
+}
+
+subtest path_to => sub {
+    my $manifest = Manifest->create(manifest_file => sample_manifest_file());
+    is($manifest->path_to('foo'), 'bar', 'good lookup OK');
+    dies_ok { $manifest->path_to('bad') } 'bad lookup dies';
+};
+
+
 done_testing;
