@@ -64,33 +64,3 @@ USING btree (
     value_id COLLATE pg_catalog."default",
     value_class_name COLLATE pg_catalog."default"
 );
-
-
---- Result users
-CREATE TABLE experimental.result_user (
-    id uuid NOT NULL,
-    result_id uuid NOT NULL,
-    user_class_name character varying(255),
-    user_id character varying(1024),
-    CONSTRAINT ru_pk PRIMARY KEY (id),
-    CONSTRAINT ru_r_fk FOREIGN KEY (result_id)
-        REFERENCES experimental.result (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT ru_id_name UNIQUE (result_id, user_class_name, user_id)
-)
-WITH (
-    OIDS=FALSE,
-    toast.autovacuum_enabled=FALSE
-);
-ALTER TABLE experimental.result_user
-  OWNER TO genome;
-GRANT ALL ON TABLE experimental.result_user TO genome;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE experimental.result_user TO "gms-user";
-
-CREATE INDEX ru_user
-ON experimental.result_user
-USING btree (
-    user_id COLLATE pg_catalog."default",
-    user_class_name COLLATE pg_catalog."default"
-);

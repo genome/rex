@@ -48,13 +48,6 @@ class Result {
             is => 'Text',
             len => '255',
         },
-
-        users => {
-            is => 'Result::User',
-            reverse_as => 'result',
-            is_many => 1,
-            is_optional => 1,
-        },
     ],
 };
 
