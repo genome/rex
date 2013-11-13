@@ -43,18 +43,10 @@ sub path_to {
             $tag, $self->manifest_file);
     }
 
-    return $nodes->[0]->getAttribute('path');
+    return File::Spec->join($self->base_path,
+        $nodes->[0]->getAttribute('path'));
 }
 
-
-sub base_path {
-    my $self = shift;
-
-    my ($name, $path, $suffix) = File::Basename::fileparse(
-        $self->manifest_file);
-
-    return $path;
-}
 
 sub document {
     my $self = shift;

@@ -47,4 +47,14 @@ sub schema_path {
 }
 
 
+sub base_path {
+    my $self = shift;
+
+    my ($name, $path, $suffix) = File::Basename::fileparse(
+        $self->manifest_file);
+
+    return $path;
+}
+
+
 1;

@@ -69,7 +69,9 @@ sub sample_manifest_file {
 subtest path_to => sub {
     my $manifest = Manifest::Reader->create(
         manifest_file => sample_manifest_file());
-    is($manifest->path_to('foo'), 'bar', 'good lookup OK');
+    is($manifest->path_to('foo'),
+        File::Spec->join($manifest->base_path, 'bar'),
+        'good lookup OK');
     dies_ok { $manifest->path_to('bad') } 'bad lookup dies';
 };
 
