@@ -57,12 +57,9 @@ sub lookup {
     my $class = shift;
     my %params = Params::Validate::validate(@_, {
             inputs => { type => Params::Validate::HASHREF },
-            test_name => { type => Params::Validate::HASHREF, optional => 1 },
+            test_name => { type => Params::Validate::SCALAR, optional => 1 },
             tool_class_name => { type => Params::Validate::SCALAR },
         });
-
-    _validate_tool_inputs(tool_class_name => $params{tool_class_name},
-        inputs => $params{inputs});
 
     my $force_scalar = $class->get(tool_class_name => $params{tool_class_name},
         lookup_hash => calculate_lookup_hash($params{inputs}),

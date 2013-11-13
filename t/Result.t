@@ -19,5 +19,39 @@ subtest calculate_lookup_hash => sub {
         "order doesn't matter");
 };
 
+subtest lookup_without_test_name => sub {
+    my $lookup_hash = Result::calculate_lookup_hash({});
+    my $tool_class_name = 'TestToolWithoutTestName';
+
+    my $result = Result->create(
+        lookup_hash => $lookup_hash,
+        tool_class_name => $tool_class_name,
+    );
+
+    is(Result->lookup(inputs => {}, tool_class_name => $tool_class_name),
+        $result, 'successful lookup');
+    is(Result->lookup(inputs => {}, tool_class_name => $tool_class_name,
+            test_name => 'some test name'),
+        undef, "didn't find item with test name");
+};
+
+subtest lookup_with_test_name => sub {
+    my $lookup_hash = Result::calculate_lookup_hash({});
+    my $tool_class_name = 'TestToolWithTestName';
+    my $test_name = 'some test name';
+
+    my $result = Result->create(
+        lookup_hash => $lookup_hash,
+        tool_class_name => $tool_class_name,
+        test_name => $test_name,
+    );
+
+    is(Result->lookup(inputs => {}, tool_class_name => $tool_class_name,
+            test_name => $test_name),
+        $result, "found item with test name");
+    is(Result->lookup(inputs => {}, tool_class_name => $tool_class_name),
+        undef, "didn't find item without test name");
+};
+
 
 done_testing;
