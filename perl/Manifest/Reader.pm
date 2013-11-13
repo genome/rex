@@ -21,13 +21,6 @@ class Manifest::Reader {
         },
     ],
 
-    has_transient_optional => [
-        _document => {
-        },
-        _parser => {
-            is => 'XML::LibXML',
-        },
-    ],
 };
 
 
@@ -51,22 +44,9 @@ sub path_to {
 sub document {
     my $self = shift;
 
-    unless ($self->_document) {
-        $self->_document($self->parser->parse_file($self->manifest_file));
-    }
-
-    return $self->_document;
+    return $self->parser->parse_file($self->manifest_file);
 }
-
-sub parser {
-    my $self = shift;
-
-    unless ($self->_parser) {
-        $self->_parser(XML::LibXML->new);
-    }
-
-    return $self->_parser;
-}
+Memoize::memoize('document');
 
 
 1;

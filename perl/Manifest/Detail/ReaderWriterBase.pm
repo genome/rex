@@ -7,38 +7,32 @@ use UR;
 use Carp qw(confess);
 
 use XML::LibXML qw();
+use Memoize qw();
 
 
 class Manifest::Detail::ReaderWriterBase {
     id_generator => '-uuid',
     is_abstract => 1,
-
-    has_transient_optional => [
-        _schema => {
-            is => 'XML::LibXML::Schema',
-        },
-    ],
 };
 
 
 sub validate {
     my $self = shift;
 
-    $self->schema->validate($self->document);
+    # Re-construct the doc to avoid an apparent bug in XML::LibXML validation
+    my $doc_to_validate = $self->parser->parse_string(
+        $self->document->toString);
+
+    $self->schema->validate($doc_to_validate);
 
     return;
 }
 
 sub schema {
     my $self = shift;
-
-    unless ($self->_schema) {
-        $self->_schema(XML::LibXML::Schema->new(
-                location => schema_path()));
-    }
-
-    return $self->_schema;
+    return XML::LibXML::Schema->new(location => schema_path());
 }
+Memoize::memoize('schema');
 
 sub schema_path {
     my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__);
@@ -54,6 +48,12 @@ sub base_path {
         $self->manifest_file);
 
     return $path;
+}
+
+sub parser {
+    my $self = shift;
+
+    return XML::LibXML->new;
 }
 
 

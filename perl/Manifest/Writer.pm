@@ -19,16 +19,12 @@ class Manifest::Writer {
             is => 'Path',
         },
     ],
-
-    has_transient_optional => [
-        _document => {
-        },
-    ],
 };
 
 
 sub add_file {
     my $self = shift;
+
     my %params = Params::Validate::validate(@_,
         {
             path => { type => Params::Validate::SCALAR },
@@ -64,15 +60,13 @@ sub root {
 sub document {
     my $self = shift;
 
-    unless ($self->_document) {
-        $self->_document(XML::LibXML::Document->new);
+    my $document = XML::LibXML::Document->new;
 
-        my $root = $self->_document->createElement('manifest');
-        $self->_document->setDocumentElement($root);
-    }
+    $document->setDocumentElement($document->createElement('manifest'));
 
-    return $self->_document;
+    return $document;
 }
+Memoize::memoize('document');
 
 
 1;
