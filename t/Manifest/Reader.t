@@ -4,10 +4,12 @@ use warnings FATAL => 'all';
 use Test::More;
 use Test::Exception;
 
-use Manifest::Reader;
 use File::Find::Rule qw();
 use File::Spec qw();
 use File::Basename qw();
+
+
+use_ok('Manifest::Reader');
 
 
 sub valid_manifest_base_dir {
