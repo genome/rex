@@ -67,7 +67,8 @@ sub lookup {
     return $force_scalar;
 }
 
-sub _validate_tool_inputs {
+sub validate_for_lookup {
+    my $class = shift;
     my %params = Params::Validate::validate(@_, {
             inputs => { type => Params::Validate::HASHREF },
             tool_class_name => { type => Params::Validate::SCALAR },
@@ -75,6 +76,8 @@ sub _validate_tool_inputs {
 
     require $params{tool_class_name};
     $params{tool_class_name}->validate_inputs($params{inputs});
+
+    _validate_inputs_structure($params{inputs});
 
     return;
 }
