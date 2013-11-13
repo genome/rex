@@ -5,6 +5,7 @@ CREATE TABLE experimental.result (
     tool_class_name character varying(255) NOT NULL,
     test_name character varying(255),
     allocation_id character varying(64) NOT NULL,
+    software_revision character varying(1024),
     CONSTRAINT r_pk PRIMARY KEY (id),
     CONSTRAINT r_a_fk FOREIGN KEY (allocation_id)
         REFERENCES disk.allocation (id) MATCH SIMPLE
