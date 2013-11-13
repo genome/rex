@@ -61,17 +61,16 @@ sub lookup {
             tool_class_name => { type => Params::Validate::SCALAR },
         });
 
-    $class->_validate_tool_inputs(tool_class_name => $params{tool_class_name},
+    _validate_tool_inputs(tool_class_name => $params{tool_class_name},
         inputs => $params{inputs});
 
     my $force_scalar = $class->get(tool_class_name => $params{tool_class_name},
-        lookup_hash => $class->calculate_lookup_hash($params{inputs}),
+        lookup_hash => calculate_lookup_hash($params{inputs}),
         test_name => $params{test_name});
     return $force_scalar;
 }
 
 sub _validate_tool_inputs {
-    my $class = shift;
     my %params = Params::Validate::validate(@_, {
             inputs => { type => Params::Validate::HASHREF },
             tool_class_name => { type => Params::Validate::SCALAR },
@@ -84,9 +83,9 @@ sub _validate_tool_inputs {
 }
 
 sub calculate_lookup_hash {
-    my ($self, $inputs) = @_;
+    my $inputs = shift;
 
-    $self->_validate_inputs_structure($inputs);
+    _validate_inputs_structure($inputs);
 
     my $json = JSON->new();
     $json->canonical([1]);
@@ -97,7 +96,7 @@ sub calculate_lookup_hash {
 
 
 sub _validate_inputs_structure {
-    my ($self, $inputs) = @_;
+    my $inputs = shift;
 
     # XXX Make sure each value is a scalar or arrayref of scalars
 
