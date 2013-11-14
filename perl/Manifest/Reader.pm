@@ -23,6 +23,20 @@ class Manifest::Reader {
 
 };
 
+sub path_to {
+    my ($self, $tag) = @_;
+
+    my $node = $self->file_node_with_tag($tag);
+    return File::Spec->join($self->base_path, $node->getAttribute('path'));
+}
+
+sub kilobytes_of {
+    my ($self, $tag) = @_;
+
+    my $node = $self->file_node_with_tag($tag);
+    return $node->getAttribute('kilobytes');
+}
+
 sub file_node_with_tag {
     my ($self, $tag) = @_;
 
@@ -35,13 +49,6 @@ sub file_node_with_tag {
             $tag, $self->manifest_file);
     }
     return $nodes->[0];
-}
-
-sub path_to {
-    my ($self, $tag) = @_;
-
-    my $node = $self->file_node_with_tag($tag);
-    return File::Spec->join($self->base_path, $node->getAttribute('path'));
 }
 
 sub total_kilobytes {

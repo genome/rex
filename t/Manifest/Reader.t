@@ -87,6 +87,14 @@ subtest path_to => sub {
     dies_ok { $manifest->path_to('bad') } 'bad lookup dies';
 };
 
+subtest kilobytes_of => sub {
+    my $manifest = Manifest::Reader->create(
+        manifest_file => sample_manifest_file()
+    );
+    is($manifest->kilobytes_of('foo'), 10, 'good lookup OK');
+    dies_ok { $manifest->kilobytes_of('bad') } 'bad lookup dies';
+};
+
 subtest entries => sub {
     my $manifest = Manifest::Reader->create(
         manifest_file => sample_manifest_file()
