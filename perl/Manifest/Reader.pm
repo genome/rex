@@ -26,8 +26,7 @@ class Manifest::Reader {
 sub path_to {
     my ($self, $tag) = @_;
 
-    return File::Spec->join($self->base_path,
-        $self->relative_path_to($tag));
+    return File::Spec->join($self->base_path, $self->relative_path_to($tag));
 }
 
 sub relative_path_to {

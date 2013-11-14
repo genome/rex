@@ -48,7 +48,7 @@ sub base_path {
     my ($name, $path, $suffix) = File::Basename::fileparse(
         $self->manifest_file);
 
-    return $path;
+    return File::Spec->rel2abs($path);
 }
 
 sub parser {

@@ -46,7 +46,11 @@ sub add_file {
 sub _make_relative {
     my ($self, $other_path) = @_;
 
-    return File::Spec->abs2rel($other_path, $self->base_path);
+    if (File::Spec->file_name_is_absolute($other_path)) {
+        return File::Spec->abs2rel($other_path, $self->base_path);
+    } else {
+        return $other_path;
+    }
 }
 
 
