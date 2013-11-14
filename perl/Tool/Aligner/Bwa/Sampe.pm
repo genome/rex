@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UR;
+use IPC::Run qw();
 
 
 class Tool::Aligner::Bwa::Sampe {
