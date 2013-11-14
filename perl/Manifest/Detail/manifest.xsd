@@ -12,6 +12,7 @@
     <xsd:complexType name="FileType">
         <xsd:attribute name="tag" type="xsd:string" use="required"/>
         <xsd:attribute name="path" type="xsd:string" use="required"/>
+        <xsd:attribute name="kilobytes" type="xsd:integer" use="required"/>
     </xsd:complexType>
 
 </xsd:schema>

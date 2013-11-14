@@ -35,7 +35,7 @@ sub expected_simple_manifest {
 subtest simple_manifest => sub {
     my $writer = new_writer();
 
-    $writer->add_file(tag => 'foo', path => 'bar');
+    $writer->add_file(tag => 'foo', path => 'bar', kilobytes => 10);
 
     lives_ok { $writer->validate } 'simple manifest validates';
 

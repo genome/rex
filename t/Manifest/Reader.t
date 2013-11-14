@@ -60,6 +60,17 @@ subtest 'invalid manifests' => sub {
     }
 };
 
+subtest 'total_kilobytes' => sub {
+    my $manifest = Manifest::Reader->create(
+        manifest_file => composite_manifest_file(),
+    );
+    is($manifest->total_kilobytes, '111', 'calculates total kilobytes properly');
+};
+
+sub composite_manifest_file {
+    return File::Spec->join(valid_manifest_base_dir(),
+        'composite_manifest.xml');
+}
 
 sub sample_manifest_file {
     return File::Spec->join(valid_manifest_base_dir(),
@@ -68,7 +79,8 @@ sub sample_manifest_file {
 
 subtest path_to => sub {
     my $manifest = Manifest::Reader->create(
-        manifest_file => sample_manifest_file());
+        manifest_file => sample_manifest_file()
+    );
     is($manifest->path_to('foo'),
         File::Spec->join($manifest->base_path, 'bar'),
         'good lookup OK');
@@ -77,9 +89,10 @@ subtest path_to => sub {
 
 subtest entries => sub {
     my $manifest = Manifest::Reader->create(
-        manifest_file => sample_manifest_file());
+        manifest_file => sample_manifest_file()
+    );
     my @entries = $manifest->entries;
-    is_deeply(\@entries, [{path => 'bar', tag => 'foo'}], 'entires ok');
+    is_deeply(\@entries, [{path => 'bar', tag => 'foo', kilobytes => 10}], 'entires ok');
 };
 
 

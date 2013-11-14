@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <manifest>
-  <file path="bar" tag="foo"/>
+  <file path="bar" tag="foo" kilobytes="10"/>
 </manifest>

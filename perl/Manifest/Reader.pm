@@ -40,6 +40,16 @@ sub path_to {
         $nodes->[0]->getAttribute('path'));
 }
 
+sub total_kilobytes {
+    my $self = shift;
+
+    my $total = 0;
+    for my $entry ($self->entries) {
+        $total += $entry->{'kilobytes'};
+    }
+    return $total;
+}
+
 sub entries {
     my $self = shift;
 

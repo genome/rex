@@ -29,11 +29,13 @@ sub add_file {
         {
             path => { type => Params::Validate::SCALAR },
             tag => { type => Params::Validate::SCALAR },
+            kilobytes => { type => Params::Validate::SCALAR },
         });
 
     my $element = $self->document->createElement('file');
     $element->setAttribute('path', $params{path});
     $element->setAttribute('tag', $params{tag});
+    $element->setAttribute('kilobytes', $params{kilobytes});
 
     $self->root->appendChild($element);
 
