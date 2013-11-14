@@ -8,6 +8,7 @@ use Carp qw(confess);
 
 use XML::LibXML qw();
 use Memoize qw();
+use File::Spec qw();
 
 
 class Manifest::Detail::ReaderWriterBase {

@@ -10,6 +10,7 @@ use Manifest::Detail::ReaderWriterBase;
 use XML::LibXML qw();
 use Params::Validate qw();
 
+use File::Spec qw();
 
 class Manifest::Writer {
     is => 'Manifest::Detail::ReaderWriterBase',
@@ -33,13 +34,19 @@ sub add_file {
         });
 
     my $element = $self->document->createElement('file');
-    $element->setAttribute('path', $params{path});
+    $element->setAttribute('path', $self->_make_relative($params{path}));
     $element->setAttribute('tag', $params{tag});
     $element->setAttribute('kilobytes', $params{kilobytes});
 
     $self->root->appendChild($element);
 
     return;
+}
+
+sub _make_relative {
+    my ($self, $other_path) = @_;
+
+    return File::Spec->abs2rel($other_path, $self->base_path);
 }
 
 
