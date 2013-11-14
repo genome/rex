@@ -8,7 +8,7 @@ use IPC::Run qw();
 
 
 class Tool::Aligner::Bwa::Sampe {
-    is => 'Command::V2',
+    is => 'Tool::Base',
 
     has_input => [
         alignment_index => {
@@ -36,13 +36,13 @@ class Tool::Aligner::Bwa::Sampe {
     ],
 };
 
-sub execute {
+sub execute_tool {
     my $self = shift;
 
     $self->output_file($self->_create_output_filename);
     IPC::Run::run($self->command_line, '>', $self->output_file);
 
-    return 1;
+    return;
 }
 
 sub command_line {
