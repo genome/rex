@@ -23,8 +23,7 @@ class Manifest::Reader {
 
 };
 
-
-sub path_to {
+sub file_node_with_tag {
     my ($self, $tag) = @_;
 
     my $nodes = $self->document->findnodes(
@@ -35,9 +34,14 @@ sub path_to {
             "Didn't find exactly one node for tag '%s' in manifest file '%s'",
             $tag, $self->manifest_file);
     }
+    return $nodes->[0];
+}
 
-    return File::Spec->join($self->base_path,
-        $nodes->[0]->getAttribute('path'));
+sub path_to {
+    my ($self, $tag) = @_;
+
+    my $node = $self->file_node_with_tag($tag);
+    return File::Spec->join($self->base_path, $node->getAttribute('path'));
 }
 
 sub total_kilobytes {
