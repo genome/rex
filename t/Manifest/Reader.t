@@ -75,5 +75,12 @@ subtest path_to => sub {
     dies_ok { $manifest->path_to('bad') } 'bad lookup dies';
 };
 
+subtest entries => sub {
+    my $manifest = Manifest::Reader->create(
+        manifest_file => sample_manifest_file());
+    my @entries = $manifest->entries;
+    is_deeply(\@entries, [{path => 'bar', tag => 'foo'}], 'entires ok');
+};
+
 
 done_testing;
