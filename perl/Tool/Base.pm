@@ -93,7 +93,6 @@ sub _input_names {
 sub _translate_inputs {
     my $self = shift;
 
-    printf("Translating inputs for command: %s\n", $self->class);
     for my $input_name ($self->_input_names) {
         $self->$input_name(Translator::url_to_scalar($self->$input_name));
     }
