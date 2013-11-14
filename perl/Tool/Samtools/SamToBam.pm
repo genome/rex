@@ -6,7 +6,6 @@ use warnings FATAL => 'all';
 use UR;
 
 use Carp qw(confess);
-use File::Temp qw();
 use IPC::Run qw();
 
 
@@ -31,7 +30,6 @@ sub execute_tool {
     my $self = shift;
 
     $self->output_bam($self->_create_output_filename);
-    $self->status_message(sprintf('Writing bam file to %s', $self->output_bam));
     IPC::Run::run($self->command_line, '>', $self->output_bam);
 
     return;
@@ -41,9 +39,7 @@ sub execute_tool {
 sub _create_output_filename {
     my $self = shift;
 
-    my $fh = File::Temp->new(UNLINK => 0, SUFFIX => '.bam');
-
-    return $fh->filename;
+    return 'sam-to-bam.bam';
 }
 
 sub command_line {

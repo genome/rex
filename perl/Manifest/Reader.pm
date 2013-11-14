@@ -36,6 +36,20 @@ sub relative_path_to {
     return $node->getAttribute('path');
 }
 
+sub tag_from {
+    my ($self, $path) = @_;
+
+    my $nodes = $self->document->findnodes(
+        sprintf('manifest/file[@path="%s"]', $path));
+
+    unless (scalar(@$nodes) == 1) {
+        confess sprintf(
+            "Didn't find exactly one node for path '%s' in manifest file '%s'",
+            $path, $self->manifest_file);
+    }
+    return $nodes->[0]->getAttribute('tag');
+}
+
 sub kilobytes_of {
     my ($self, $tag) = @_;
 

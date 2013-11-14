@@ -60,9 +60,8 @@ sub command_line {
 sub _create_output_filename {
     my $self = shift;
 
-    my $fh = File::Temp->new(UNLINK => 0, SUFFIX => '.sam');
-
-    return $fh->filename;
+    return 'bwa-sampe.sam';
 }
+
 
 1;

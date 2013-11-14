@@ -8,7 +8,6 @@ use UR;
 use Carp qw(confess);
 use File::Basename qw();
 use File::Spec qw();
-use File::Temp qw();
 use IPC::Run qw();
 
 
@@ -56,9 +55,7 @@ sub execute_tool {
 sub _create_output_filename {
     my $self = shift;
 
-    my $fh = File::Temp->new(UNLINK => 0, SUFFIX => '.sai');
-
-    return $fh->filename;
+    return 'bwa-aln.sai';
 }
 
 sub command_line {

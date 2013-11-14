@@ -16,11 +16,12 @@ sub from_manifest {
     my $manifest_file = shift;
 
     my $reader = Manifest::Reader->create(manifest_file => $manifest_file);
+    my $owner = Genome::Sys->current_user;
     my $allocation = Genome::Disk::Allocation->create(
         allocation_path => _generate_allocation_path(),
         disk_group_name => 'info_genome_models',
-        owner_class_name => 'Genome::Sys::User',
-        owner_id => 'mburnett@genome.wustl.edu',
+        owner_class_name => $owner->class,
+        owner_id => $owner->id,
         kilobytes_requested => $reader->total_kilobytes);
 
     my $writer = Manifest::Writer->create(
