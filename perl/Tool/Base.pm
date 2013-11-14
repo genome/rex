@@ -178,8 +178,9 @@ sub _save_outputs {
     $self->_create_output_manifest;
     my $allocation = $self->_create_allocation_from_output_manifest;
 
-    $self->status_message("Saving outputs from tool '%s' to allocation (%s)",
+    $self->status_message("Saved outputs from tool '%s' to allocation (%s)",
         $self->class, $allocation->id);
+    $allocation->reallocate;
 
     return $allocation;
 }
