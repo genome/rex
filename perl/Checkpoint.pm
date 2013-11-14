@@ -1,4 +1,4 @@
-package Result;
+package Checkpoint;
 
 use strict;
 use warnings FATAL => 'all';
@@ -14,8 +14,8 @@ use Params::Validate qw();
 
 use JSON qw();
 
-class Result {
-    table_name => 'experimental.result',
+class Checkpoint {
+    table_name => 'experimental.checkpoint',
     schema_name => 'GMSchema',
     data_source => 'Genome::DataSource::GMSchema',
 
