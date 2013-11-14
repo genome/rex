@@ -1,0 +1,7 @@
+Integer::Bwa::Aln::ReadMode	Aligner::Bwa::Paired.first_reads.read_mode	1
+Integer::Bwa::Aln::ReadMode	Aligner::Bwa::Paired.second_reads.read_mode	2
+File::AlignerIndex::Bwa	Aligner::Bwa::Paired.(first_reads.alignment_index+second_reads.alignment_index+Aligner::Bwa::Sampe.alignment_index)	gms:///data/6aa7fea6271d4f7fa640c99fe790d272?tag=fasta
+File::Bam::Unaligned::Paired	Aligner::Bwa::Paired.(first_reads.input_bam+second_reads.input_bam+Aligner::Bwa::Sampe.unaligned_bam)	gms:///data/bc1285135b9d47f797b20e746eb57ee6?tag=bam
+Integer::Bwa::Aln::Threads	Aligner::Bwa::Paired.(first_reads.threads+second_reads.threads)	4
+Integer::Bwa::Sampe::MaxInsertSize	Aligner::Bwa::Paired.Aligner::Bwa::Sampe.max_insert_size	500
+Integer::Bwa::Aln::TrimmingQualityThreshold	Aligner::Bwa::Paired.(first_reads.trimming_quality_threshold+second_reads.trimming_quality_threshold)	5
