@@ -18,7 +18,7 @@ use_ok('Translator::GMS');
 
 
 subtest specified_host_dies => sub {
-    my $url = new URI::URL 'gms://host:port/data/12345/bam';
+    my $url = new URI::URL 'gms://host:port/data/12345?tag=bam';
     dies_ok {Translator::GMS->fetch($url)} 'specified host dies';
 };
 
@@ -74,7 +74,7 @@ subtest data_returns_path_in_allocation => sub {
         $file_tag => $file_path);
 
     my $url = new URI::URL sprintf(
-        'gms:///data/%s/%s', $allocation->id, $file_tag);
+        'gms:///data/%s?tag=%s', $allocation->id, $file_tag);
     is(Translator::GMS->fetch($url),
         path_in_allocation($allocation, $file_path),
         'basic manifest lookup works');
