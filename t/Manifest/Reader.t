@@ -33,7 +33,7 @@ sub test_files {
 
 subtest base_path => sub {
     my $m = Manifest::Reader->create(manifest_file => '/tmp/foo/bar.xml');
-    is($m->base_path, '/tmp/foo/');
+    is($m->base_path, '/tmp/foo');
 };
 
 subtest schema_path => sub {
