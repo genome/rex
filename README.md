@@ -40,6 +40,7 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - data are difficult to secure
     - cannot be made read only because of DV2/symlinks
 - difficult to know how often "tools" are being run
+- deadlocking (completely eliminated)
 
 ## Weakness Brainstorm Area
 - multiple places to do "orchestration"
