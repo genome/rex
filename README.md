@@ -20,6 +20,9 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - fix string escaping regular expressions (grammar and syntax)
 - improve syntax hilighting of errors
 - add array type support (for grouping and parallel)
+- add workspace input to Tool
+- add locking to Tool
+- add array input/output support
 
 
 ## Addressed Legacy System Weaknesses
