@@ -50,6 +50,17 @@ class Result {
             len => '255',
         },
     ],
+
+    has_many_optional => [
+        inputs => {
+            is => 'Result::Input',
+            reverse_as => 'result',
+        },
+        outputs => {
+            is => 'Result::Output',
+            reverse_as => 'result',
+        },
+    ],
 };
 
 
@@ -57,7 +68,9 @@ sub lookup {
     my $class = shift;
     my %params = Params::Validate::validate(@_, {
             inputs => { type => Params::Validate::HASHREF },
-            test_name => { type => Params::Validate::SCALAR, optional => 1 },
+            test_name => {
+                type => Params::Validate::SCALAR | Params::Validate::UNDEF,
+                optional => 1 },
             tool_class_name => { type => Params::Validate::SCALAR },
         });
 
