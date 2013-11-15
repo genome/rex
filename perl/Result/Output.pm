@@ -1,4 +1,4 @@
-package Result::Input;
+package Result::Output;
 
 use strict;
 use warnings FATAL => 'all';
@@ -7,10 +7,10 @@ use Genome;
 use UR;
 
 
-class Result::Input {
+class Result::Output {
     data_source => 'Genome::DataSource::GMSchema',
     schema_name => 'GMSchema',
-    table_name => 'experimental.result_input',
+    table_name => 'experimental.result_output',
 
     id_generator => '-uuid',
 

@@ -1,4 +1,4 @@
-package Result::Input;
+package Result::Detail::IOBase;
 
 use strict;
 use warnings FATAL => 'all';
@@ -7,10 +7,9 @@ use Genome;
 use UR;
 
 
-class Result::Input {
-    data_source => 'Genome::DataSource::GMSchema',
+class Result::Detail::IOBase {
     schema_name => 'GMSchema',
-    table_name => 'experimental.result_input',
+    data_source => 'Genome::DataSource::GMSchema',
 
     id_generator => '-uuid',
 
@@ -26,6 +25,10 @@ class Result::Input {
             is => 'Text',
             len => 32,
         },
+#        result => {
+#            is => 'Result',
+#            id_by => 'result_id',
+#        },
         name => {
             is => 'Text',
             len => 255,

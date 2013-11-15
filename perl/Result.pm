@@ -11,6 +11,8 @@ use Carp qw(confess);
 #use File::Spec qw();
 #use Memoize qw();
 use Params::Validate qw();
+use Result::Input;
+use Result::Output;
 
 use JSON qw();
 
@@ -49,19 +51,26 @@ class Result {
             is => 'Text',
             len => '255',
         },
-    ],
-
-    has_many_optional => [
-        inputs => {
-            is => 'Result::Input',
-            reverse_as => 'result',
-        },
-        outputs => {
-            is => 'Result::Output',
-            reverse_as => 'result',
-        },
+        software_revision => {
+            is => 'Text',
+            len => 1024,
+        }
     ],
 };
+
+sub inputs {
+    my $self = shift;
+
+    my @force_array = Result::Input->get(result_id => $self->id);
+    return @force_array;
+}
+
+sub outputs {
+    my $self = shift;
+
+    my @force_array = Result::Output->get(result_id => $self->id);
+    return @force_array;
+}
 
 
 sub lookup {
@@ -112,6 +121,19 @@ sub _validate_inputs_structure {
     my $inputs = shift;
 
     # XXX Make sure each value is a scalar or arrayref of scalars
+
+    return;
+}
+
+sub update_lookup_hash {
+    my $self = shift;
+
+    my %inputs;
+    for my $input ($self->inputs) {
+        $inputs{$input->name} = $input->value_id;
+    }
+
+    $self->lookup_hash(calculate_lookup_hash(\%inputs));
 
     return;
 }

@@ -17,7 +17,9 @@ use Manifest::Reader;
 use Manifest::Writer;
 use Factory::ManifestAllocation;
 
-#use Checkpoint;
+use Result;
+use Result::Input;
+use Result::Output;
 
 
 class Tool::Base {
@@ -38,23 +40,34 @@ class Tool::Base {
 };
 
 
-#sub shortcut {
-#    my $self = shift;
-#
-#    my $result = Checkpoint->lookup(inputs => $self->_inputs_as_hashref,
-#        tool_class_name => $self->class, test_name => $self->_test_name);
-#
-#    if ($result) {
-#        $self->_set_outputs_from_result($result);
-#        return 1;
-#    } else {
-#        return;
-#    }
-#}
+sub shortcut {
+    my $self = shift;
 
-#sub _test_name {
-#    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || undef;
-#}
+    my $result = Result->lookup(inputs => $self->_inputs_as_hashref,
+        tool_class_name => $self->class, test_name => $self->_test_name);
+
+    if ($result) {
+        $self->_set_outputs_from_result($result);
+        return 1;
+    } else {
+        return;
+    }
+}
+
+sub _test_name {
+    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || undef;
+}
+
+sub _set_outputs_from_result {
+    my ($self, $result) = @_;
+
+    for my $output ($result->outputs) {
+        my $name = $output->name;
+        $self->$name($output->value_id);
+    }
+
+    return;
+}
 
 
 sub execute {
@@ -106,8 +119,9 @@ sub _save {
 
     $self->_verify_outputs_in_workspace;
 
-    $self->_save_and_translate_outputs;
-    $self->_create_checkpoint;
+    my $allocation = $self->_save_outputs;
+    $self->_translate_outputs($allocation);
+    $self->_create_checkpoint($allocation);
 
     return;
 };
@@ -146,8 +160,15 @@ sub _inputs_as_hashref {
 sub _input_names {
     my $self = shift;
 
-    return map {$_->property_name} $self->__meta__->properties(is_input => 1);
+    return $self->_property_names(is_input => 1);
 }
+
+sub _output_names {
+    my $self = shift;
+
+    return grep {'result' ne $_} $self->_property_names(is_output => 1);
+}
+
 
 sub _translate_inputs {
     my $self = shift;
@@ -163,13 +184,6 @@ sub _input_file_names {
     my $self = shift;
 
     return $self->_property_names(is_input => 1, data_type => 'File');
-}
-
-sub _save_and_translate_outputs {
-    my $self = shift;
-
-    my $allocation = $self->_save_outputs;
-    $self->_translate_outputs($allocation);
 }
 
 sub _save_outputs {
@@ -244,7 +258,26 @@ sub _translate_output {
 }
 
 sub _create_checkpoint {
-    my $self = shift;
+    my ($self, $allocation) = @_;
+
+    my $result = Result->create(tool_class_name => $self->class,
+        test_name => $self->_test_name, allocation => $allocation);
+
+    for my $input_name ($self->_input_names) {
+        my $input = Result::Input->create(name => $input_name,
+            value_class_name => 'UR::Value',
+            value_id => $self->_raw_inputs->{$input_name},
+            result_id => $result->id);
+    }
+
+    for my $output_name ($self->_output_names) {
+        Result::Output->create(name => $output_name,
+            value_class_name => 'UR::Value',
+            value_id => $self->$output_name,
+            result_id => $result->id);
+    }
+
+    $result->update_lookup_hash;
 
     return;
 }
