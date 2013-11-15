@@ -7,9 +7,6 @@ use Genome;
 use UR;
 use Carp qw(confess);
 
-#use Manifest::Reader;
-#use File::Spec qw();
-#use Memoize qw();
 use Params::Validate qw();
 use Result::Input;
 use Result::Output;
@@ -137,32 +134,6 @@ sub update_lookup_hash {
 
     return;
 }
-
-#sub create_from_manifest {
-#    my $class = shift;
-#}
-#
-#
-#sub path_to {
-#    my ($self, $tag) = @_;
-#
-#    return $self->manifest->path_to($tag);
-#}
-#
-#
-#sub manifest {
-#    my $self = shift;
-#
-#    return Manifest::Reader->create(manifest_path => $self->_manifest_path);
-#}
-#Memoize::memoize('manifest');
-#
-#sub _manifest_path {
-#    my $self = shift;
-#
-#    return File::Spec->join($self->allocation->absolute_path,
-#        'manifest.xml');
-#}
 
 
 1;
