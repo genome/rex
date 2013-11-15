@@ -26,3 +26,6 @@ sub _generate_allocation_path {
     return File::Spec->join('model_data',
         substr($uuid, 2, 3), substr($uuid, 5));
 }
+
+
+1;

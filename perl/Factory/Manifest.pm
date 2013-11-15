@@ -9,8 +9,6 @@ use File::Basename qw();
 use File::Spec qw();
 use File::Find::Rule qw();
 
-use Genome::Disk::Allocation;
-
 
 sub on_directory {
     my $dir = shift;

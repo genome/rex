@@ -1,12 +1,52 @@
+--- Process
+CREATE TABLE experimental.process (
+    id uuid NOT NULL,
+    owner_class_name character varying(255) NOT NULL,
+    owner_id character varying(255) NOT NULL,
+    status character varying(20) NOT NULL,
+    allocation_id character varying(64) NOT NULL,
+    CONSTRAINT p_pk PRIMARY KEY (id),
+    CONSTRAINT p_a_fk FOREIGN KEY (allocation_id)
+        REFERENCES disk.allocation (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS=FALSE,
+    toast.autovacuum_enabled=FALSE
+);
+ALTER TABLE experimental.process
+  OWNER TO genome;
+GRANT ALL ON TABLE experimental.process TO genome;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE experimental.process TO "gms-user";
+
+CREATE INDEX p_owner
+ON experimental.process
+USING btree (
+    owner_class_name COLLATE pg_catalog."default",
+    owner_id COLLATE pg_catalog."default"
+);
+
+CREATE INDEX p_status
+ON experimental.process
+USING btree (
+    status COLLATE pg_catalog."default"
+);
+
 --- Result
 CREATE TABLE experimental.result (
     id uuid NOT NULL,
-    tool_class_name character varying(255) NOT NULL,
-    software_revision character varying(1024),
-    test_name character varying(255),
-    lookup_hash character varying(32) NOT NULL,
+    process_id uuid,
     allocation_id character varying(64) NOT NULL,
+    tool_class_name character varying(255) NOT NULL,
+    lookup_hash character varying(32) NOT NULL,
+    test_name character varying(255),
+
     CONSTRAINT r_pk PRIMARY KEY (id),
+    CONSTRAINT r_p_fk FOREIGN KEY (process_id)
+        REFERENCES experimental.process (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
     CONSTRAINT r_a_fk FOREIGN KEY (allocation_id)
         REFERENCES disk.allocation (id) MATCH SIMPLE
         ON UPDATE NO ACTION

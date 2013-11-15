@@ -48,10 +48,11 @@ class Result {
             is => 'Text',
             len => '255',
         },
-        software_revision => {
-            is => 'Text',
-            len => 1024,
-        }
+
+        process => {
+            is => 'Process',
+            id_by => 'process_id',
+        },
     ],
 };
 

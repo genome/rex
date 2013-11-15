@@ -7,7 +7,7 @@ use UR;
 use Carp qw(confess);
 use File::Spec qw();
 use Manifest::Reader;
-
+use Process;
 
 class Translator::GMS {};
 
@@ -62,6 +62,21 @@ sub data {
 }
 
 sub _extract_allocation_id {
+    my $url = shift;
+
+    my ($type, $rest) = _split_path($url->path);
+
+    return $rest->[0];
+}
+
+sub process {
+    my ($class, $url) = @_;
+
+    my $process_id = _extract_process_id($url);
+    return Process->get(id => $process_id);
+}
+
+sub _extract_process_id {
     my $url = shift;
 
     my ($type, $rest) = _split_path($url->path);

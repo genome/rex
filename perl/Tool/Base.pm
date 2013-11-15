@@ -26,6 +26,19 @@ class Tool::Base {
     is => 'Command::V2',
     is_abstract => 1,
 
+    attributes_have => [
+        is_contextual => {
+            is => 'Boolean',
+            is_optional => 1,
+        },
+    ],
+
+    has_contextual_input => [
+        process_ => {
+            is => 'File',
+        },
+    ],
+
     has_optional_transient => [
         _raw_inputs => {
             is => 'HASH',
@@ -150,17 +163,19 @@ sub _inputs_as_hashref {
     my $self = shift;
 
     my %inputs;
-    for my $input_name ($self->_input_names) {
+    for my $input_name ($self->_non_contextual_input_names) {
         $inputs{$input_name} = $self->$input_name;
     }
 
     return \%inputs;
 }
 
-sub _input_names {
+sub _non_contextual_input_names {
     my $self = shift;
 
-    return $self->_property_names(is_input => 1);
+    return $self->_property_names(is_input => 1,
+        is_contextual => undef), $self->_property_names(is_input => 1,
+        is_contextual => 0);
 }
 
 sub _output_names {
@@ -173,18 +188,31 @@ sub _output_names {
 sub _translate_inputs {
     my $self = shift;
 
-    for my $input_name ($self->_input_file_names) {
+    for my $input_name ($self->_translatable_input_names) {
         $self->$input_name(Translator::url_to_scalar($self->$input_name));
     }
 
     return;
 }
 
-sub _input_file_names {
+my @_TRANSLATABLE_TYPES = (
+    'File',
+    'Process',
+);
+sub _translatable_input_names {
     my $self = shift;
 
-    return $self->_property_names(is_input => 1, data_type => 'File');
+    return map {$self->_property_names(is_input => 1, data_type => $_)}
+        @_TRANSLATABLE_TYPES;
 }
+
+sub _translatable_output_names {
+    my $self = shift;
+
+    return map {$self->_property_names(is_output => 1, data_type => $_)}
+        @_TRANSLATABLE_TYPES;
+}
+
 
 sub _save_outputs {
     my $self = shift;
@@ -242,7 +270,7 @@ sub _property_names {
 sub _translate_outputs {
     my ($self, $allocation) = @_;
 
-    for my $output_file_name ($self->_output_file_names) {
+    for my $output_file_name ($self->_translatable_output_names) {
         $self->$output_file_name(
             _translate_output($allocation->id, $output_file_name)
         );
@@ -261,9 +289,10 @@ sub _create_checkpoint {
     my ($self, $allocation) = @_;
 
     my $result = Result->create(tool_class_name => $self->class,
-        test_name => $self->_test_name, allocation => $allocation);
+        test_name => $self->_test_name, allocation => $allocation,
+        process => $self->process_);
 
-    for my $input_name ($self->_input_names) {
+    for my $input_name ($self->_non_contextual_input_names) {
         my $input = Result::Input->create(name => $input_name,
             value_class_name => 'UR::Value',
             value_id => $self->_raw_inputs->{$input_name},

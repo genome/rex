@@ -5,3 +5,4 @@ File::Bam::Unaligned::Paired	Aligner::Bwa::Paired.(first_reads.input_bam+second_
 Integer::Bwa::Aln::Threads	Aligner::Bwa::Paired.(first_reads.threads+second_reads.threads)	4
 Integer::Bwa::Sampe::MaxInsertSize	Aligner::Bwa::Paired.Aligner::Bwa::Sampe.max_insert_size	500
 Integer::Bwa::Aln::TrimmingQualityThreshold	Aligner::Bwa::Paired.(first_reads.trimming_quality_threshold+second_reads.trimming_quality_threshold)	5
+PROCESS	(Aligner::Bwa::Paired.(first_reads.process_+second_reads.process_+Aligner::Bwa::Sampe.process_)+Samtools::SamToBam.process_+Samtools::Sort.process_)

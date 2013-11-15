@@ -5,6 +5,7 @@ use warnings FATAL => 'all';
 
 use UR;
 use Carp qw(confess);
+use List::MoreUtils qw();
 
 use InputFile::Entry;
 
@@ -101,6 +102,41 @@ sub _validate_no_duplicate_names {
     }
 
     return;
+}
+
+sub unique_input_name_for {
+    my ($self, $type) = @_;
+
+    my @found_entries = grep {$_->type eq $type} $self->entries;
+    unless (scalar(@found_entries) == 1) {
+        confess sprintf("Found multiple entries of type '%s': [%s]",
+            $type, join(', ',
+                map {sprintf("'%s' => '%s'", $_->name, $_->value || '')}
+                @found_entries)
+        );
+    }
+
+    return $found_entries[0]->name;
+}
+
+sub set_inputs {
+    my $self = shift;
+    my %params = @_;
+
+    for my $name (keys %params) {
+        my $entry = $self->entry_named($name);
+        $entry->value($params{$name});
+    }
+
+    return;
+}
+
+sub entry_named {
+    my ($self, $name) = @_;
+
+    $self->_validate_no_duplicate_names;
+
+    return List::MoreUtils::first_value {$_->name eq $name} $self->entries;
 }
 
 
