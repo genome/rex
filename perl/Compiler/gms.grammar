@@ -1,4 +1,4 @@
-start: (process_definition | tool_definition) eof
+start: process_definition eof
         { $return = $item[1]; }
     | <error>
 
@@ -38,33 +38,6 @@ link_statement: name "from" identifier
 constant_statement: name "=" constant
         { $return = Compiler::AST::Link::Constant->create(
                 property_name => $item[1], value => $item[3]); }
-
-
-tool_definition: "tool" tool_command tool_inputs(?) tool_outputs(?)
-        { $return = Compiler::AST::Definition::Tool->create(
-                command => $item[2],
-                inputs => $item[3][0] || [],
-                outputs => $item[4][0] || []);
-        }
-
-tool_command: type
-        { $return = $item[1]; }
-
-tool_inputs: "inputs" tool_input(s)
-        { $return = $item[2]; }
-
-tool_input: tool_io_entry
-        { $return = Compiler::AST::IO::Input->create(%{$item[1]}); }
-
-tool_outputs: "outputs" tool_output(s)
-        { $return = $item[2]; }
-
-tool_output: tool_io_entry
-        { $return = Compiler::AST::IO::Output->create(%{$item[1]}); }
-
-tool_io_entry: type name
-        { $return = { type => $item[1], name => $item[2] }; }
-
 
 constant: /'(\\'|.)*'/
         { $return = substr $item[1], 1, -1; }
