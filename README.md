@@ -25,7 +25,6 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - make test_name a Tool input
 - add locking to Tool
 - add array input/output support
-- eliminate 'tool' dsl files
 - add process template
 
 
