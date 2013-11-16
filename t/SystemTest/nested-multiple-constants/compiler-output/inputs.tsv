@@ -1,3 +1,0 @@
-PROCESS	TestTool::ProcessWithMultipleConstants.(x1.process_+x2.process_+TestTool::Y.process_)
-X::Input1	TestTool::ProcessWithMultipleConstants.x1.x_in_1	42
-X::Input1	TestTool::ProcessWithMultipleConstants.x2.x_in_1	77

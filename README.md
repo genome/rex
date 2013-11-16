@@ -22,7 +22,6 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - improve syntax hilighting of errors
 - add array type support (for grouping and parallel)
 - add workspace input to Tool
-- make test_name a Tool input
 - add locking to Tool
 - add array input/output support
 - add process template

@@ -61,9 +61,15 @@ sub inputs_file {
     $inputs_fh->close;
 
     my $process_input_name = $input_file->unique_input_name_for('PROCESS');
-    $input_file->set_inputs($process_input_name => $process->url);
+    my $test_name_input_name = $input_file->unique_input_name_for('TEST_NAME');
+    $input_file->set_inputs($process_input_name => $process->url,
+        $test_name_input_name => _test_name());
 
     return $input_file;
+}
+
+sub _test_name {
+    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || '';
 }
 
 

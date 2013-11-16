@@ -30,7 +30,7 @@ class Tool::Aligner::Bwa::Sampe {
 
         max_insert_size => {
             is => "Number",
-            dsl_type => 'Integer::Bwa::Aln::Threads',
+            dsl_type => 'Integer::Bwa::Sampe::MaxInsertSize',
         },
     ],
 

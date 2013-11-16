@@ -3,12 +3,14 @@
   <operationtype typeClass="Workflow::OperationType::Model">
     <inputproperty>TestTool::A.ai1</inputproperty>
     <inputproperty>TestTool::A.process_</inputproperty>
+    <inputproperty>TestTool::A.test_name</inputproperty>
     <outputproperty>TestTool::A.ao1</outputproperty>
   </operationtype>
   <operation name="TestTool::A">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::A">
       <inputproperty>ai1</inputproperty>
       <inputproperty>process_</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <outputproperty>ao1</outputproperty>
       <outputproperty>result</outputproperty>
     </operationtype>
@@ -16,4 +18,5 @@
   <link fromOperation="TestTool::A" fromProperty="ao1" toOperation="output connector" toProperty="TestTool::A.ao1" />
   <link fromOperation="input connector" fromProperty="TestTool::A.ai1" toOperation="TestTool::A" toProperty="ai1" />
   <link fromOperation="input connector" fromProperty="TestTool::A.process_" toOperation="TestTool::A" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="TestTool::A.test_name" toOperation="TestTool::A" toProperty="test_name" />
 </operation>

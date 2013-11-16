@@ -10,6 +10,8 @@ use Text::CSV qw();
 
 
 class InputFile::Entry {
+    id_generator => '-uuid',
+
     has => [
         name => {
             is => 'Text',
@@ -29,7 +31,7 @@ class InputFile::Entry {
 sub assert_has_value {
     my $self = shift;
 
-    unless ($self->value) {
+    unless (defined($self->value)) {
         confess sprintf("Input entry %s (%s) has no value",
             $self->type, $self->name);
     }
@@ -42,7 +44,7 @@ sub write {
     my ($self, $file_handle) = @_;
 
     my @columns = ($self->type, $self->name);
-    if ($self->value) {
+    if (defined($self->value)) {
         push @columns, $self->value;
     }
 

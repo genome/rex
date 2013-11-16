@@ -3,11 +3,13 @@
   <operationtype typeClass="Workflow::OperationType::Model">
     <inputproperty>(x1.process_+x2.process_+TestTool::Y.process_)</inputproperty>
     <inputproperty>(x1.x_in_1+x2.x_in_1)</inputproperty>
+    <inputproperty>(x1.test_name+x2.test_name+TestTool::Y.test_name)</inputproperty>
     <outputproperty>TestTool::Y.y_out_1</outputproperty>
   </operationtype>
   <operation name="TestTool::Y">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::Y">
       <inputproperty>process_</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>y_in_1</inputproperty>
       <inputproperty>y_in_2</inputproperty>
       <outputproperty>result</outputproperty>
@@ -17,6 +19,7 @@
   <operation name="x1">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
       <inputproperty>process_</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>result</outputproperty>
       <outputproperty>x_out_1</outputproperty>
@@ -25,6 +28,7 @@
   <operation name="x2">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
       <inputproperty>process_</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>result</outputproperty>
       <outputproperty>x_out_1</outputproperty>
@@ -32,9 +36,12 @@
   </operation>
   <link fromOperation="TestTool::Y" fromProperty="y_out_1" toOperation="output connector" toProperty="TestTool::Y.y_out_1" />
   <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="TestTool::Y" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="TestTool::Y" toProperty="test_name" />
   <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="x1" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="x1" toProperty="test_name" />
   <link fromOperation="input connector" fromProperty="(x1.x_in_1+x2.x_in_1)" toOperation="x1" toProperty="x_in_1" />
   <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="x2" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="x2" toProperty="test_name" />
   <link fromOperation="input connector" fromProperty="(x1.x_in_1+x2.x_in_1)" toOperation="x2" toProperty="x_in_1" />
   <link fromOperation="x1" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_1" />
   <link fromOperation="x2" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_2" />

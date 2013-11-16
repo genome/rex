@@ -42,6 +42,10 @@ class Tool::Base {
             is => 'File',
             dsl_type => 'PROCESS',
         },
+        test_name => {
+            is => 'Text',
+            dsl_type => 'TEST_NAME',
+        },
     ],
 
     has_optional_transient => [
@@ -62,10 +66,10 @@ sub shortcut {
     my $self = shift;
 
     $self->status_message('Attempting to shortcut %s with test name (%s)',
-        $self->class, $self->_test_name);
+        $self->class, $self->test_name);
 
     my $result = Result->lookup(inputs => $self->_inputs_as_hashref,
-        tool_class_name => $self->class, test_name => $self->_test_name);
+        tool_class_name => $self->class, test_name => $self->test_name);
 
     if ($result) {
         $self->status_message('Found matching result with lookup hash (%s)',
@@ -78,9 +82,6 @@ sub shortcut {
     }
 }
 
-sub _test_name {
-    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || '';
-}
 
 sub _set_outputs_from_result {
     my ($self, $result) = @_;
@@ -335,7 +336,7 @@ sub _create_checkpoint {
     my ($self, $allocation) = @_;
 
     my $result = Result->create(tool_class_name => $self->class,
-        test_name => $self->_test_name, allocation => $allocation,
+        test_name => $self->test_name, allocation => $allocation,
         process => $self->process_);
 
     for my $input_name ($self->_non_contextual_input_names) {
