@@ -1,5 +1,3 @@
-process
-
 x1 is TestTool::X
 x2 is TestTool::X
 TestTool::Y with

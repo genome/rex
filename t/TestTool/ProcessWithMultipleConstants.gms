@@ -1,5 +1,3 @@
-process
-
 x1 is TestTool::X with x_in_1 = 42
 x2 is TestTool::X with x_in_1 = 77
 
