@@ -41,14 +41,14 @@ class Result {
             is => 'Text',
             len => 32
         },
-    ],
 
-    has_optional => [
         test_name => {
             is => 'Text',
             len => '255',
         },
+    ],
 
+    has_optional => [
         process => {
             is => 'Process',
             id_by => 'process_id',
@@ -76,8 +76,8 @@ sub lookup {
     my %params = Params::Validate::validate(@_, {
             inputs => { type => Params::Validate::HASHREF },
             test_name => {
-                type => Params::Validate::SCALAR | Params::Validate::UNDEF,
-                optional => 1 },
+                type => Params::Validate::SCALAR,
+                optional => 1, default => '' },
             tool_class_name => { type => Params::Validate::SCALAR },
         });
 

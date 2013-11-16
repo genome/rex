@@ -10,11 +10,15 @@ class TestTool::D {
     is => 'TestTool::Base',
 
     has_input => [
-        di1 => {},
+        di1 => {
+            dsl_type => 'T2',
+        },
     ],
 
     has_output => [
-        do1 => {},
+        do1 => {
+            dsl_type => 'T4',
+        },
     ],
 };
 

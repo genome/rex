@@ -13,25 +13,31 @@ class Tool::Aligner::Bwa::Sampe {
     has_input => [
         alignment_index => {
             is => "File",
+            dsl_type => 'File::AlignerIndex::Bwa',
         },
         unaligned_bam => {
             is => "File",
+            dsl_type => 'File::Bam::Unaligned::Paired',
         },
         first_sai => {
             is => "File",
+            dsl_type => 'File::Sai',
         },
         second_sai => {
             is => "File",
+            dsl_type => 'File::Sai',
         },
 
         max_insert_size => {
             is => "Number",
+            dsl_type => 'Integer::Bwa::Aln::Threads',
         },
     ],
 
     has_output => [
         output_file => {
             is => "File",
+            dsl_type => 'File::Sam::Aligned',
         },
     ],
 };

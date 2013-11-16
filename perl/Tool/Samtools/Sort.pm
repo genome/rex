@@ -17,12 +17,14 @@ class Tool::Samtools::Sort {
     has_input => [
         input_bam => {
             is => "File",
+            dsl_type => 'File::Bam::Aligned',
         },
     ],
 
     has_output => [
         output_bam => {
             is => "File",
+            dsl_type => 'File::Bam::Aligned',
         },
     ],
 };

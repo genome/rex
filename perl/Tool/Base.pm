@@ -31,11 +31,16 @@ class Tool::Base {
             is => 'Boolean',
             is_optional => 1,
         },
+        dsl_type => {
+            is => 'Text',
+#            is_optional => 0,
+        },
     ],
 
     has_contextual_input => [
         process_ => {
             is => 'File',
+            dsl_type => 'PROCESS',
         },
     ],
 
@@ -56,19 +61,25 @@ class Tool::Base {
 sub shortcut {
     my $self = shift;
 
+    $self->status_message('Attempting to shortcut %s with test name (%s)',
+        $self->class, $self->_test_name);
+
     my $result = Result->lookup(inputs => $self->_inputs_as_hashref,
         tool_class_name => $self->class, test_name => $self->_test_name);
 
     if ($result) {
+        $self->status_message('Found matching result with lookup hash (%s)',
+            $result->lookup_hash);
         $self->_set_outputs_from_result($result);
         return 1;
     } else {
+        $self->status_message('No matching result found for shortcut');
         return;
     }
 }
 
 sub _test_name {
-    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || undef;
+    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || '';
 }
 
 sub _set_outputs_from_result {
@@ -105,6 +116,41 @@ sub execute {
     }
 
     return 1;
+}
+
+sub ast_inputs {
+    my $class = shift;
+
+    return $class->_property_type_hash(is_input => 1);
+}
+
+sub ast_outputs {
+    my $class = shift;
+
+    my $outputs = $class->_property_type_hash(is_output => 1);
+
+    delete $outputs->{result};  #  result is legacy baggage
+    return $outputs;
+}
+
+sub _property_type_hash {
+    my $class = shift;
+    my %result;
+    for my $property ($class->__meta__->properties(@_)) {
+        $result{$property->property_name} = $class->_get_dsl_type($property);
+    }
+
+    return \%result;
+}
+
+sub _get_dsl_type {
+    my ($class, $property) = @_;
+
+    my $meta = $class->__meta__->property_meta_for_name(
+        $property->property_name);
+    my $result = $meta->{dsl_type};
+
+    return $result;
 }
 
 
