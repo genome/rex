@@ -53,38 +53,13 @@ sub update_directory {
 sub diff_directories {
     my ($expected, $actual, $label) = @_;
 
-    diff_xml_files(
-        File::Spec->join($expected, 'workflow.xml'),
-        File::Spec->join($actual, 'workflow.xml'),
-        $label,
-    );
+    for my $filename (@_FILENAMES) {
+        compare_ok(
+            File::Spec->join($expected, $filename),
+            File::Spec->join($actual, $filename),
+            sprintf('%s compares ok (%s)', $filename, $label));
 
-    diff_input_files(
-        File::Spec->join($expected, 'inputs.tsv'),
-        File::Spec->join($actual, 'inputs.tsv'),
-        $label,
-    );
+    }
 
     return;
-}
-
-sub diff_xml_files {
-    my ($blessed, $new, $label) = @_;
-
-    sort_then_diff_files($blessed, $new, $label, 'xml');
-}
-
-sub diff_input_files {
-    my ($blessed, $new, $label) = @_;
-
-    sort_then_diff_files($blessed, $new, $label, 'input');
-}
-
-sub sort_then_diff_files {
-    my ($blessed, $new, $label, $file_type) = @_;
-    ok(-f $blessed, sprintf('found blessed %s file (%s)', $file_type, $label));
-    ok(-f $new, sprintf('found new %s file (%s)', $file_type, $label));
-
-    my $diff = `bash -c 'diff <(sort $blessed) <(sort $new)'`;
-    is($diff, '', sprintf('%s files are the same (%s)', $file_type, $label));
 }
