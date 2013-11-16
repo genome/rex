@@ -12,9 +12,12 @@ use Genome::Sys;
 sub new {
     my $allocation = Factory::Allocation::from_kilobytes_requested(1024);
 
-    return Process->create(allocation => $allocation,
+    my $process = Process->create(allocation => $allocation,
         owner => Genome::Sys->current_user,
         status => 'new');
+
+    mkdir $process->log_directory;
+    return $process;
 }
 
 

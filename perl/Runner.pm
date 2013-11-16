@@ -36,7 +36,8 @@ sub execute {
     my $self = shift;
 
     my $process = Factory::Process::new();
-    $self->status_message('Launching Process %s', $process->id);
+    $self->status_message('Launching Process %s (%s)', $process->id,
+        $process->log_directory);
 
     my $inputs_file = $self->inputs_file($process);
 
