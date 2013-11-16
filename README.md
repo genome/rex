@@ -29,9 +29,9 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - add process template
 
 
-## Addressed Legacy System Weaknesses
+## Directly Addressed Legacy System Weaknesses
 - difficult to make small tweaks to existing processes
-- difficult to know exactly what inputs/parameters were used for a process
+- impossible to know exactly what inputs/parameters were used for a process
 - impossible to know what process created a SoftwareResult
 - difficult to sequence builds/subprocesses
     - composable subprocesses addresses this
@@ -41,10 +41,13 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - possibly change to processing profiles
 - difficult to know how to find data associated with process
     - often have to look at code to know file paths
-- data are difficult to secure
-    - cannot be made read only because of DV2/symlinks
 - difficult to know how often "tools" are being run
 - deadlocking (completely eliminated)
+
+## Indirectly Addressed Legacy System Weaknesses
+- difficult to use different storage backends
+- data are difficult to secure
+    - cannot be made read only because of DV2/symlinks
 
 ## Weakness Brainstorm Area
 - multiple places to do "orchestration"
