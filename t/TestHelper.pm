@@ -11,6 +11,7 @@ our @EXPORT_OK = qw(
     diff_xml_files
 );
 
+use Carp qw(confess);
 use Test::More;
 use File::Temp;
 
@@ -28,6 +29,24 @@ sub compile {
     );
 
     ok($cmd->execute, sprintf('command ran (%s)', $label)) || die;
+    return;
+}
+
+my @_FILENAMES = (
+    'workflow.xml',
+    'inputs.tsv'
+);
+sub update_directory {
+    my ($old, $new) = @_;
+
+    for my $filename (@_FILENAMES) {
+        my $result = File::Copy::copy(
+            File::Spec->join($new, $filename),
+            File::Spec->join($old, $filename),
+        );
+        confess 'failed to copy file' unless $result;
+    }
+
     return;
 }
 

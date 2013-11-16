@@ -42,6 +42,10 @@ sub label {
 }
 
 
+sub should_update_directory {
+    return $ENV{UPDATE_TEST_DATA} || undef;
+}
+
 for my $test_dir (test_dirs()) {
     subtest $test_dir => sub {
         my $output_directory = File::Temp::tempdir(CLEANUP => 1);
@@ -50,6 +54,11 @@ for my $test_dir (test_dirs()) {
 
         TestHelper::diff_directories(compiler_expected_result($test_dir),
             $output_directory, label($test_dir));
+
+        if (defined(should_update_directory())) {
+            TestHelper::update_directory(compiler_expected_result($test_dir),
+                $output_directory);
+        }
     };
 }
 
