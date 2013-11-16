@@ -1,3 +1,4 @@
 T1	TestTool::A.ai1
-T2	TestTool::C.TestTool::D.di1
 T3	TestTool::C.TestTool::E.TestTool::F.fi1
+PROCESS	(TestTool::A.process_+TestTool::B.process_+TestTool::C.(TestTool::D.process_+TestTool::E.TestTool::F.process_))
+T2	TestTool::C.TestTool::D.di1

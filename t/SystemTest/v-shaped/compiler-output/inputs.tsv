@@ -1,1 +1,2 @@
+PROCESS	(x1.process_+x2.process_+TestTool::Y.process_)
 X::Input1	(x1.x_in_1+x2.x_in_1)

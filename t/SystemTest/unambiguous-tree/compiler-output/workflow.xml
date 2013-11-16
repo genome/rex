@@ -2,6 +2,7 @@
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
     <inputproperty>TestTool::C.TestTool::E.TestTool::F.fi1</inputproperty>
+    <inputproperty>(TestTool::A.process_+TestTool::B.process_+TestTool::C.(TestTool::D.process_+TestTool::E.TestTool::F.process_))</inputproperty>
     <inputproperty>TestTool::A.ai1</inputproperty>
     <inputproperty>TestTool::C.TestTool::D.di1</inputproperty>
     <outputproperty>TestTool::B.bo1</outputproperty>
@@ -9,6 +10,7 @@
   <operation name="TestTool::A">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::A">
       <inputproperty>ai1</inputproperty>
+      <inputproperty>process_</inputproperty>
       <outputproperty>ao1</outputproperty>
       <outputproperty>result</outputproperty>
     </operationtype>
@@ -18,6 +20,7 @@
       <inputproperty>bi1</inputproperty>
       <inputproperty>bi2</inputproperty>
       <inputproperty>bi3</inputproperty>
+      <inputproperty>process_</inputproperty>
       <outputproperty>bo1</outputproperty>
       <outputproperty>result</outputproperty>
     </operationtype>
@@ -25,6 +28,7 @@
   <operation name="TestTool::C">
     <operationtype typeClass="Workflow::OperationType::Model">
       <inputproperty>TestTool::D.di1</inputproperty>
+      <inputproperty>(TestTool::D.process_+TestTool::E.TestTool::F.process_)</inputproperty>
       <inputproperty>TestTool::E.TestTool::F.fi1</inputproperty>
       <outputproperty>TestTool::E.TestTool::F.fo1</outputproperty>
       <outputproperty>TestTool::D.do1</outputproperty>
@@ -32,6 +36,7 @@
     <operation name="TestTool::D">
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::D">
         <inputproperty>di1</inputproperty>
+        <inputproperty>process_</inputproperty>
         <outputproperty>do1</outputproperty>
         <outputproperty>result</outputproperty>
       </operationtype>
@@ -39,28 +44,36 @@
     <operation name="TestTool::E">
       <operationtype typeClass="Workflow::OperationType::Model">
         <inputproperty>TestTool::F.fi1</inputproperty>
+        <inputproperty>TestTool::F.process_</inputproperty>
         <outputproperty>TestTool::F.fo1</outputproperty>
       </operationtype>
       <operation name="TestTool::F">
         <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::F">
           <inputproperty>fi1</inputproperty>
+          <inputproperty>process_</inputproperty>
           <outputproperty>fo1</outputproperty>
           <outputproperty>result</outputproperty>
         </operationtype>
       </operation>
       <link fromOperation="TestTool::F" fromProperty="fo1" toOperation="output connector" toProperty="TestTool::F.fo1" />
       <link fromOperation="input connector" fromProperty="TestTool::F.fi1" toOperation="TestTool::F" toProperty="fi1" />
+      <link fromOperation="input connector" fromProperty="TestTool::F.process_" toOperation="TestTool::F" toProperty="process_" />
     </operation>
     <link fromOperation="TestTool::D" fromProperty="do1" toOperation="output connector" toProperty="TestTool::D.do1" />
     <link fromOperation="TestTool::E" fromProperty="TestTool::F.fo1" toOperation="output connector" toProperty="TestTool::E.TestTool::F.fo1" />
-    <link fromOperation="input connector" fromProperty="TestTool::E.TestTool::F.fi1" toOperation="TestTool::E" toProperty="TestTool::F.fi1" />
+    <link fromOperation="input connector" fromProperty="(TestTool::D.process_+TestTool::E.TestTool::F.process_)" toOperation="TestTool::D" toProperty="process_" />
     <link fromOperation="input connector" fromProperty="TestTool::D.di1" toOperation="TestTool::D" toProperty="di1" />
+    <link fromOperation="input connector" fromProperty="(TestTool::D.process_+TestTool::E.TestTool::F.process_)" toOperation="TestTool::E" toProperty="TestTool::F.process_" />
+    <link fromOperation="input connector" fromProperty="TestTool::E.TestTool::F.fi1" toOperation="TestTool::E" toProperty="TestTool::F.fi1" />
   </operation>
-  <link fromOperation="TestTool::C" fromProperty="TestTool::D.do1" toOperation="TestTool::B" toProperty="bi1" />
   <link fromOperation="TestTool::A" fromProperty="ao1" toOperation="TestTool::B" toProperty="bi3" />
-  <link fromOperation="input connector" fromProperty="TestTool::A.ai1" toOperation="TestTool::A" toProperty="ai1" />
   <link fromOperation="TestTool::B" fromProperty="bo1" toOperation="output connector" toProperty="TestTool::B.bo1" />
+  <link fromOperation="TestTool::C" fromProperty="TestTool::D.do1" toOperation="TestTool::B" toProperty="bi1" />
   <link fromOperation="TestTool::C" fromProperty="TestTool::E.TestTool::F.fo1" toOperation="TestTool::B" toProperty="bi2" />
+  <link fromOperation="input connector" fromProperty="(TestTool::A.process_+TestTool::B.process_+TestTool::C.(TestTool::D.process_+TestTool::E.TestTool::F.process_))" toOperation="TestTool::A" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="TestTool::A.ai1" toOperation="TestTool::A" toProperty="ai1" />
+  <link fromOperation="input connector" fromProperty="(TestTool::A.process_+TestTool::B.process_+TestTool::C.(TestTool::D.process_+TestTool::E.TestTool::F.process_))" toOperation="TestTool::B" toProperty="process_" />
+  <link fromOperation="input connector" fromProperty="(TestTool::A.process_+TestTool::B.process_+TestTool::C.(TestTool::D.process_+TestTool::E.TestTool::F.process_))" toOperation="TestTool::C" toProperty="(TestTool::D.process_+TestTool::E.TestTool::F.process_)" />
   <link fromOperation="input connector" fromProperty="TestTool::C.TestTool::D.di1" toOperation="TestTool::C" toProperty="TestTool::D.di1" />
   <link fromOperation="input connector" fromProperty="TestTool::C.TestTool::E.TestTool::F.fi1" toOperation="TestTool::C" toProperty="TestTool::E.TestTool::F.fi1" />
 </operation>
