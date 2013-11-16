@@ -14,15 +14,19 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 
 
 ## TODO
-- sugar for addressing "A::B::C" with "B::C" or "C"
-- forbid recursive imports
-- improve parsing error messages (probably with <reject> and <error>)
-- fix string escaping regular expressions (grammar and syntax)
-- improve syntax hilighting of errors
+- compiler
+    - sugar for addressing "A::B::C" with "B::C" or "C"
+    - forbid recursive imports
+    - improve parsing error messages (probably with <reject> and <error>)
+    - fix string escaping regular expressions (grammar and syntax)
+    - improve syntax hilighting of errors
 - add array type support (for grouping and parallel)
 - add workspace input to Tool
+- make test_name a Tool input
 - add locking to Tool
 - add array input/output support
+- eliminate 'tool' dsl files
+- add process template
 
 
 ## Addressed Legacy System Weaknesses
