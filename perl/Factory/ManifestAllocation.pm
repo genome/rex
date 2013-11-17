@@ -29,6 +29,8 @@ sub from_manifest {
     }
     $writer->save;
 
+    $allocation->reallocate;
+
     return $allocation;
 }
 

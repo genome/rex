@@ -30,7 +30,9 @@ sub on_directory {
 sub _kilobytes {
     my $file = shift;
 
-    return -s $file;
+    my $bytes = -s $file;
+
+    return int($bytes / 1024);
 }
 
 sub _extension {
