@@ -60,10 +60,8 @@ sub inputs_file {
     my $input_file = InputFile->create_from_file_handle($inputs_fh);
     $inputs_fh->close;
 
-    my $process_input_name = $input_file->unique_input_name_for('PROCESS');
-    my $test_name_input_name = $input_file->unique_input_name_for('TEST_NAME');
-    $input_file->set_inputs($process_input_name => $process->url,
-        $test_name_input_name => _test_name());
+    $input_file->set_test_name(_test_name());
+    $input_file->set_process($process->url);
 
     return $input_file;
 }

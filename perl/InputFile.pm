@@ -107,7 +107,8 @@ sub _validate_no_duplicate_names {
 sub unique_input_name_for {
     my ($self, $type) = @_;
 
-    my @found_entries = grep {$_->type eq $type} $self->entries;
+    my @found_entries = grep {$_->type eq $type
+                              && !defined($_->value)} $self->entries;
     unless (scalar(@found_entries) == 1) {
         confess sprintf("Found multiple entries of type '%s': [%s]",
             $type, join(', ',
@@ -117,6 +118,24 @@ sub unique_input_name_for {
     }
 
     return $found_entries[0]->name;
+}
+
+sub set_process {
+    my ($self, $url) = @_;
+
+    my $process_input_name = $self->unique_input_name_for('PROCESS');
+    $self->set_inputs($process_input_name => $url);
+
+    return;
+}
+
+sub set_test_name {
+    my ($self, $value) = @_;
+
+    my $test_name_name = $self->unique_input_name_for('TEST_NAME');
+    $self->set_inputs($test_name_name => $value);
+
+    return;
 }
 
 sub set_inputs {
