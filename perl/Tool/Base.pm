@@ -31,6 +31,10 @@ class Tool::Base {
             is => 'Boolean',
             is_optional => 1,
         },
+        is_saved => {
+            is => 'Boolean',
+            is_optional => 1,
+        },
         dsl_type => {
             is => 'Text',
 #            is_optional => 0,
@@ -136,6 +140,7 @@ sub ast_outputs {
 
 sub _property_type_hash {
     my $class = shift;
+
     my %result;
     for my $property ($class->__meta__->properties(@_)) {
         $result{$property->property_name} = $class->_get_dsl_type($property);
@@ -280,7 +285,7 @@ sub _create_output_manifest {
     my $writer = Manifest::Writer->create(
         manifest_file => File::Spec->join($self->_workspace_path,
             'manifest.xml'));
-    for my $output_name ($self->_output_file_names) {
+    for my $output_name ($self->_saved_file_names) {
         next if $output_name eq 'result';  # legacy baggage
 
         my $path = $self->$output_name || '';
@@ -302,10 +307,12 @@ sub _create_allocation_from_output_manifest {
 }
 
 
-sub _output_file_names {
+sub _saved_file_names {
     my $self = shift;
 
-    return $self->_property_names(is_output => 1, data_type => 'File');
+    return List::MoreUtils::uniq(
+        $self->_property_names(is_output => 1, data_type => 'File'),
+        $self->_property_names(is_saved => 1));
 }
 
 sub _property_names {
