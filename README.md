@@ -20,20 +20,22 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - improve parsing error messages (probably with <reject> and <error>)
     - fix string escaping regular expressions (grammar and syntax)
     - improve syntax hilighting of errors
-- add array type support (for grouping and parallel)
 - add workspace input to Tool
 - add locking to Tool
 - add array input/output support
 - add process template
+- UI
+    - process start
+    - process view
 
-
-## Directly Addressed Legacy System Weaknesses
-- difficult to make small tweaks to existing processes
+## Legacy System Weaknesses
+### Directly Addressed Legacy System Weaknesses
+- difficult to modify existing processes
 - impossible to know exactly what inputs/parameters were used for a process
 - impossible to know what process created a SoftwareResult
 - difficult to sequence builds/subprocesses
     - composable subprocesses addresses this
-- adding "tools" is repetitive
+- adding "tools" is expensive
     - Command, SoftwareResult
     - possibly DV2 Classes
     - possibly change to processing profiles
@@ -42,12 +44,12 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - difficult to know how often "tools" are being run
 - deadlocking (completely eliminated)
 
-## Indirectly Addressed Legacy System Weaknesses
+### Indirectly Addressed Legacy System Weaknesses
 - difficult to use different storage backends
 - data are difficult to secure
     - cannot be made read only because of DV2/symlinks
 
-## Weakness Brainstorm Area
+### Weakness Brainstorm Area
 - multiple places to do "orchestration"
     - some "tools" run lots of sub commands & make multiple SoftwareResults
     - makes it difficult to know exactly what work was done in a process
@@ -56,3 +58,26 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - difficult to make small changes to a "process"
     - difficult to know what happened during a process
     - much work is "untracked"
+
+## User Stories
+### Alignment
+- multiple bams as input
+- aln twice (read 1 and 2) for each bam
+- sampe for each sai pair
+- re-header sam file
+- sam to bam
+- sort bam
+- merge sorted bams
+
+### Variant Detection
+- mixture of tumor and normal bams as input
+- run mutltiple callers
+- filter results of each caller
+- set operations on result
+- filter combined results
+
+### ReferenceAlignment
+- multiple bams as input
+- group bams into tumor & normal
+- align all the bams
+- variant detection
