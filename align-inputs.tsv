@@ -5,12 +5,12 @@ Integer::Bwa::Aln::ReadMode	Aligner::Bwa::Paired.second_reads.read_mode	2
 Integer::Bwa::Aln::Threads	Aligner::Bwa::Paired.(first_reads.threads+second_reads.threads)	4
 Integer::Bwa::Aln::TrimmingQualityThreshold	Aligner::Bwa::Paired.(first_reads.trimming_quality_threshold+second_reads.trimming_quality_threshold)	5
 Integer::Bwa::Sampe::MaxInsertSize	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.max_insert_size	500
-PROCESS	(Tool::Aligner::Bwa::Index.process_+Aligner::Bwa::Paired.(first_reads.process_+second_reads.process_+Tool::Aligner::Bwa::Sampe.process_)+Tool::Samtools::SamToBam.process_+Tool::Samtools::Sort.process_)
-STEP_LABEL_0	Tool::Aligner::Bwa::Index.step_label	Tool::Aligner::Bwa::Index.step_label
-STEP_LABEL_1	Aligner::Bwa::Paired.first_reads.step_label	Aligner::Bwa::Paired.first_reads.step_label
-STEP_LABEL_2	Aligner::Bwa::Paired.second_reads.step_label	Aligner::Bwa::Paired.second_reads.step_label
-STEP_LABEL_3	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.step_label	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.step_label
-STEP_LABEL_4	Tool::Samtools::SamToBam.step_label	Tool::Samtools::SamToBam.step_label
-STEP_LABEL_5	Tool::Samtools::Sort.step_label	Tool::Samtools::Sort.step_label
+PROCESS	(Tool::Aligner::Bwa::Index._process+Aligner::Bwa::Paired.(first_reads._process+second_reads._process+Tool::Aligner::Bwa::Sampe._process)+Tool::Samtools::SamToBam._process+Tool::Samtools::Sort._process)
+STEP_LABEL_0	Tool::Aligner::Bwa::Index._step_label	Tool::Aligner::Bwa::Index._step_label
+STEP_LABEL_1	Aligner::Bwa::Paired.first_reads._step_label	Aligner::Bwa::Paired.first_reads._step_label
+STEP_LABEL_2	Aligner::Bwa::Paired.second_reads._step_label	Aligner::Bwa::Paired.second_reads._step_label
+STEP_LABEL_3	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe._step_label	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe._step_label
+STEP_LABEL_4	Tool::Samtools::SamToBam._step_label	Tool::Samtools::SamToBam._step_label
+STEP_LABEL_5	Tool::Samtools::Sort._step_label	Tool::Samtools::Sort._step_label
 TEST_NAME	(Aligner::Bwa::Paired.(first_reads.test_name+second_reads.test_name+Tool::Aligner::Bwa::Sampe.test_name)+Tool::Samtools::SamToBam.test_name+Tool::Samtools::Sort.test_name)
 TEST_NAME	Tool::Aligner::Bwa::Index.test_name	NONE

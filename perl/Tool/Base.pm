@@ -44,7 +44,7 @@ class Tool::Base {
     ],
 
     has_contextual_input => [
-        process_ => {
+        _process => {
             is => 'File',
             dsl_type => 'PROCESS',
         },
@@ -52,7 +52,7 @@ class Tool::Base {
             is => 'Text',
             dsl_type => 'TEST_NAME',
         },
-        step_label => {
+        _step_label => {
             is => 'Text',
             dsl_type => 'STEP_LABEL',
         },
@@ -114,7 +114,7 @@ sub execute {
     my $self = shift;
 
     $self->_setup;
-    $self->status_message("Process id: %s", $self->process_->id);
+    $self->status_message("Process id: %s", $self->_process->id);
 
     eval {
         $self->execute_tool;
@@ -272,7 +272,7 @@ sub _translatable_input_names {
 }
 
 sub _translatable_contextual_input_names {
-    return ('process_');
+    return ('_process');
 }
 
 sub _translatable_output_names {
@@ -361,7 +361,7 @@ sub _create_checkpoint {
 
     my $result = Result->create(tool_class_name => $self->class,
         test_name => $self->test_name, allocation => $allocation,
-        process => $self->process_);
+        process => $self->_process);
 
     for my $input_name ($self->_non_contextual_input_names) {
         my $input = Result::Input->create(name => $input_name,
@@ -385,8 +385,8 @@ sub _create_checkpoint {
 sub _create_process_step {
     my ($self, $result) = @_;
 
-    ProcessStep->create(process => $self->process_, result => $result,
-        label => $self->step_label);
+    ProcessStep->create(process => $self->_process, result => $result,
+        label => $self->_step_label);
 
     return;
 }
