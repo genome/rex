@@ -49,7 +49,7 @@ class Result {
     ],
 
     has_optional => [
-        process => {
+        owner => {
             is => 'Process',
             id_by => 'process_id',
         },

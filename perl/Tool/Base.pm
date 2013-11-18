@@ -361,7 +361,7 @@ sub _create_checkpoint {
 
     my $result = Result->create(tool_class_name => $self->class,
         test_name => $self->test_name, allocation => $allocation,
-        process => $self->_process);
+        owner => $self->_process);
 
     for my $input_name ($self->_non_contextual_input_names) {
         my $input = Result::Input->create(name => $input_name,
