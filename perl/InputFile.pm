@@ -188,4 +188,16 @@ sub entry_named {
 }
 
 
+sub update {
+    my ($self, $other) = @_;
+
+    for my $other_entry ($other->entries) {
+        my $self_entry = $self->entry_named($other_entry->name);
+        $self_entry->value($other_entry->value);
+    }
+
+    return;
+}
+
+
 1;
