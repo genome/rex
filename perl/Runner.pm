@@ -67,7 +67,7 @@ sub inputs_file {
 }
 
 sub _test_name {
-    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || '';
+    return $ENV{GENOME_SOFTWARE_RESULT_TEST_NAME} || 'NONE';
 }
 
 

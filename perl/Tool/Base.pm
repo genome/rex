@@ -103,6 +103,7 @@ sub execute {
     my $self = shift;
 
     $self->_setup;
+    $self->status_message("Process id: %s", $self->process_->id);
 
     eval {
         $self->execute_tool;
