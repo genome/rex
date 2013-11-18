@@ -57,9 +57,7 @@ sub save_inputs_with_constants {
     my $input_file = InputFile->create_from_inputs_and_constants(
         $inputs, $constants);
 
-    my $file_handle = IO::File->new($self->output_path('inputs.tsv'), 'w');
-    $input_file->write($file_handle);
-    $file_handle->close;
+    $input_file->write_to_filename($self->output_path('inputs.tsv'));
 
     return;
 }

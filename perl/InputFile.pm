@@ -6,6 +6,7 @@ use warnings FATAL => 'all';
 use UR;
 use Carp qw(confess);
 use List::MoreUtils qw();
+use IO::File qw();
 
 use InputFile::Entry;
 
@@ -19,6 +20,16 @@ class InputFile {
     ],
 };
 
+
+sub create_from_filename {
+    my ($class, $filename) = @_;
+
+    my $fh = IO::File->new($filename, 'r');
+    my $self = $class->create_from_file_handle($fh);
+    $fh->close;
+
+    return $self;
+}
 
 sub create_from_file_handle {
     my ($class, $file_handle) = @_;
@@ -52,6 +63,15 @@ sub create_from_inputs_and_constants {
     return $self;
 }
 
+sub write_to_filename {
+    my ($self, $filename) = @_;
+
+    my $fh = IO::File->new($filename, 'w');
+    $self->write($fh);
+    $fh->close;
+
+    return;
+}
 
 sub write {
     my ($self, $file_handle) = @_;

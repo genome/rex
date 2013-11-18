@@ -56,9 +56,7 @@ sub execute {
 sub inputs_file {
     my ($self, $process) = @_;
 
-    my $inputs_fh = IO::File->new($self->inputs, 'r');
-    my $input_file = InputFile->create_from_file_handle($inputs_fh);
-    $inputs_fh->close;
+    my $input_file = InputFile->create_from_filename($self->inputs);
 
     $input_file->set_test_name(_test_name());
     $input_file->set_process($process->url);
