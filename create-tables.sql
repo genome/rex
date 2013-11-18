@@ -139,3 +139,28 @@ USING btree (
     value_id COLLATE pg_catalog."default",
     value_class_name COLLATE pg_catalog."default"
 );
+
+--- Process Step
+CREATE TABLE experimental.process_step (
+    process_id uuid NOT NULL,
+    result_id uuid NOT NULL,
+    label character varying(4096) NOT NULL,
+    CONSTRAINT ps_pk PRIMARY KEY (process_id, result_id),
+    CONSTRAINT ps_p_fk FOREIGN KEY (process_id)
+        REFERENCES experimental.process (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT ps_r_fk FOREIGN KEY (result_id)
+        REFERENCES experimental.result (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT ps_unique_label UNIQUE (process_id, label)
+)
+WITH (
+    OIDS=FALSE,
+    toast.autovacuum_enabled=FALSE
+);
+ALTER TABLE experimental.process_step
+  OWNER TO genome;
+GRANT ALL ON TABLE experimental.process_step TO genome;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE experimental.process_step TO "gms-user";
