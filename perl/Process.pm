@@ -11,6 +11,8 @@ use Params::Validate qw();
 use File::Spec qw();
 use File::Slurp qw();
 use IO::File qw();
+use Data::UUID;
+use Workflow;
 
 
 class Process {
@@ -54,7 +56,23 @@ class Process {
 
 sub workflow_name {
     my $self = shift;
-    return sprintf("Process %s", $self->id);
+    return sprintf("Process %s", $self->hyphenated_id);
+}
+
+sub hyphenated_id {
+    my $self = shift;
+
+    if (is_hyphenated($self->id)) {
+        return $self->id;
+    } else {
+        my $ug = Data::UUID->new();
+        my $uuid = $ug->from_hexstring('0x' . $self->id);
+        return $ug->to_string($uuid);
+    }
+}
+
+sub is_hyphenated {
+    return $_[0] =~ /\-/;
 }
 
 sub workflow_instance {
