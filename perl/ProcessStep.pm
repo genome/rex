@@ -36,7 +36,7 @@ class ProcessStep {
             id_by => 'process_id',
         },
         result => {
-            is => 'Process',
+            is => 'Result',
             id_by => 'result_id',
         },
     ],
