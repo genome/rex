@@ -42,6 +42,7 @@ sub execute {
     my $inputs_file = $self->inputs_file($process);
 
     my $dag = Genome::WorkflowBuilder::DAG->from_xml_filename($self->workflow);
+    $dag->name($process->workflow_name);
     $dag->log_dir($process->log_directory);
 
     $process->save_workflow($dag);

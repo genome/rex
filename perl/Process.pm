@@ -52,6 +52,19 @@ class Process {
 };
 
 
+sub workflow_name {
+    my $self = shift;
+    return sprintf("Process %s", $self->id);
+}
+
+sub workflow_instance {
+    my $self = shift;
+    my $force_scalar = Workflow::Operation::Instance->get(
+        name => $self->workflow_name,
+    );
+    return $force_scalar;
+}
+
 sub log_directory {
     my $self = shift;
 
