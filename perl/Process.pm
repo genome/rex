@@ -14,6 +14,8 @@ use IO::File qw();
 use Data::UUID;
 use Workflow;
 
+use ProcessStep;
+
 
 class Process {
     table_name => 'experimental.process',
@@ -121,5 +123,12 @@ sub url {
 
     return sprintf('gms:///process/%s', $self->id);
 }
+
+sub steps {
+    my $self = shift;
+
+    return ProcessStep->get(process_id => $self->id, '-order_by' => 'label');
+}
+
 
 1;
