@@ -6,5 +6,11 @@ Integer::Bwa::Aln::Threads	Aligner::Bwa::Paired.(first_reads.threads+second_read
 Integer::Bwa::Aln::TrimmingQualityThreshold	Aligner::Bwa::Paired.(first_reads.trimming_quality_threshold+second_reads.trimming_quality_threshold)	5
 Integer::Bwa::Sampe::MaxInsertSize	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.max_insert_size	500
 PROCESS	(Tool::Aligner::Bwa::Index.process_+Aligner::Bwa::Paired.(first_reads.process_+second_reads.process_+Tool::Aligner::Bwa::Sampe.process_)+Tool::Samtools::SamToBam.process_+Tool::Samtools::Sort.process_)
+STEP_LABEL_0	Tool::Aligner::Bwa::Index.step_label	Tool::Aligner::Bwa::Index.step_label
+STEP_LABEL_1	Aligner::Bwa::Paired.first_reads.step_label	Aligner::Bwa::Paired.first_reads.step_label
+STEP_LABEL_2	Aligner::Bwa::Paired.second_reads.step_label	Aligner::Bwa::Paired.second_reads.step_label
+STEP_LABEL_3	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.step_label	Aligner::Bwa::Paired.Tool::Aligner::Bwa::Sampe.step_label
+STEP_LABEL_4	Tool::Samtools::SamToBam.step_label	Tool::Samtools::SamToBam.step_label
+STEP_LABEL_5	Tool::Samtools::Sort.step_label	Tool::Samtools::Sort.step_label
 TEST_NAME	(Aligner::Bwa::Paired.(first_reads.test_name+second_reads.test_name+Tool::Aligner::Bwa::Sampe.test_name)+Tool::Samtools::SamToBam.test_name+Tool::Samtools::Sort.test_name)
 TEST_NAME	Tool::Aligner::Bwa::Index.test_name	NONE

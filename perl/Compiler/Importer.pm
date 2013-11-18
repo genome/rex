@@ -69,11 +69,26 @@ sub _create_tool_inputs {
     my $input_hash = $tool_class_name->ast_inputs;
     my @result;
     for my $name (keys %$input_hash) {
+        my $type = _resolve_type($input_hash->{$name});
         push @result, Compiler::AST::IO::Input->create(name => $name,
-            type => $input_hash->{$name});
+            type => $type);
     }
 
     return \@result;
+}
+
+my $_STEP_COUNTER = 0;
+sub _resolve_type {
+    my $original_type = shift;
+
+    if ($original_type =~ /STEP_LABEL/) {
+        my $new_type = sprintf("%s_%d", $original_type, $_STEP_COUNTER);
+        $_STEP_COUNTER++;
+        return $new_type;
+
+    } else {
+        return $original_type;
+    }
 }
 
 sub _create_tool_outputs {

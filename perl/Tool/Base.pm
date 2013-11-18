@@ -21,6 +21,8 @@ use Result;
 use Result::Input;
 use Result::Output;
 
+use ProcessStep;
+
 
 class Tool::Base {
     is => 'Command::V2',
@@ -50,6 +52,11 @@ class Tool::Base {
             is => 'Text',
             dsl_type => 'TEST_NAME',
         },
+        step_label => {
+            is => 'Text',
+            dsl_type => 'STEP_LABEL',
+        },
+
     ],
 
     has_optional_transient => [
@@ -79,7 +86,11 @@ sub shortcut {
         $self->status_message('Found matching result with lookup hash (%s)',
             $result->lookup_hash);
         $self->_set_outputs_from_result($result);
+
+        $self->_translate_inputs($self->_translatable_contextual_input_names);
+        $self->_create_process_step($result);
         return 1;
+
     } else {
         $self->status_message('No matching result found for shortcut');
         return;
@@ -166,7 +177,7 @@ sub _setup {
 
     $self->_setup_workspace;
     $self->_cache_raw_inputs;
-    $self->_translate_inputs;
+    $self->_translate_inputs($self->_translatable_input_names);
 
     return;
 }
@@ -187,7 +198,8 @@ sub _save {
 
     my $allocation = $self->_save_outputs;
     $self->_translate_outputs($allocation);
-    $self->_create_checkpoint($allocation);
+    my $result = $self->_create_checkpoint($allocation);
+    $self->_create_process_step($result);
 
     return;
 };
@@ -241,7 +253,7 @@ sub _output_names {
 sub _translate_inputs {
     my $self = shift;
 
-    for my $input_name ($self->_translatable_input_names) {
+    for my $input_name (@_) {
         $self->$input_name(Translator::url_to_scalar($self->$input_name));
     }
 
@@ -257,6 +269,10 @@ sub _translatable_input_names {
 
     return map {$self->_property_names(is_input => 1, data_type => $_)}
         @_TRANSLATABLE_TYPES;
+}
+
+sub _translatable_contextual_input_names {
+    return ('process_');
 }
 
 sub _translatable_output_names {
@@ -362,6 +378,15 @@ sub _create_checkpoint {
     }
 
     $result->update_lookup_hash;
+
+    return $result;
+}
+
+sub _create_process_step {
+    my ($self, $result) = @_;
+
+    ProcessStep->create(process => $self->process_, result => $result,
+        label => $self->step_label);
 
     return;
 }

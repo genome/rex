@@ -41,6 +41,12 @@ sub create_from_inputs_and_constants {
     push @entries, map {InputFile::Entry->create(name => $_->name,
             type => $_->type, value => $constants->{$_->name})} @$inputs;
 
+    for my $entry (@entries) {
+        if ($entry->type =~ /STEP_LABEL/) {
+            $entry->value($entry->name);
+        }
+    }
+
     my $self = $class->create(entries => \@entries);
 
     return $self;
