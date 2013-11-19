@@ -28,7 +28,9 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 
 ## Legacy System Weaknesses
 ### Directly Addressed Legacy System Weaknesses
-- difficult to modify existing processes
+- difficult (expensive) (for analysts) to modify existing processes
+    - what do you have to add (tool, Model/Build, SR, processing profile
+      modifications)
 - impossible to know exactly what inputs/parameters were used for a process
 - impossible to know what process created a SoftwareResult
 - difficult to sequence builds/subprocesses
