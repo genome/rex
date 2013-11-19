@@ -16,6 +16,7 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 ## TODO
 - compiler
     - sugar for addressing "A::B::C" with "B::C" or "C"
+        - this is partly implemented, it currently requires the shortest form
     - forbid recursive imports
     - improve parsing error messages (probably with <reject> and <error>)
     - fix string escaping regular expressions (grammar and syntax)
@@ -24,9 +25,6 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - add locking to Tool
 - add array input/output support
 - add process template
-- UI
-    - process start
-    - process view
 
 ## Legacy System Weaknesses
 ### Directly Addressed Legacy System Weaknesses
