@@ -1,4 +1,4 @@
-package Tool::Aligner::Bwa::Index;
+package Tool::Bwa::Index;
 
 use strict;
 use warnings FATAL => 'all';
@@ -11,7 +11,7 @@ use File::Spec qw();
 use IPC::Run qw();
 
 
-class Tool::Aligner::Bwa::Index {
+class Tool::Bwa::Index {
     is => 'Tool::Base',
 
     has_input => [

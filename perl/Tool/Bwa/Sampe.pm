@@ -1,4 +1,4 @@
-package Tool::Aligner::Bwa::Sampe;
+package Tool::Bwa::Sampe;
 
 use strict;
 use warnings FATAL => 'all';
@@ -7,7 +7,7 @@ use UR;
 use IPC::Run qw();
 
 
-class Tool::Aligner::Bwa::Sampe {
+class Tool::Bwa::Sampe {
     is => 'Tool::Base',
 
     has_input => [

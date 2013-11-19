@@ -1,4 +1,4 @@
-package Tool::Aligner::Bwa::Aln;
+package Tool::Bwa::Aln;
 
 use strict;
 use warnings FATAL => 'all';
@@ -11,7 +11,7 @@ use File::Spec qw();
 use IPC::Run qw();
 
 
-class Tool::Aligner::Bwa::Aln {
+class Tool::Bwa::Aln {
     is => 'Tool::Base',
 
     has_input => [
