@@ -20,6 +20,7 @@ class Compiler::AST::Node {
 
         alias => {
             is => 'Text',
+            is_optional => 1,
         },
 
         parallel => {
@@ -139,6 +140,14 @@ sub type_of {
     }
 
     return $results[0]->type;
+}
+
+sub type_path {
+    my $self = shift;
+
+    my @parts = split /::/, $self->type;
+    my @reversed_parts = reverse @parts;
+    return \@reversed_parts;
 }
 
 

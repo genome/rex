@@ -34,6 +34,72 @@ class Compiler::AST::Definition::Process {
     },
 };
 
+sub create {
+    my $class = shift;
+
+    my $self = $class->SUPER::create(@_);
+
+    $self->_set_unset_aliases;
+
+    return $self;
+}
+
+sub _set_unset_aliases {
+    my $self = shift;
+
+    my $tree = $self->_build_alias_tree;
+    for my $node ($self->nodes) {
+        next if $node->alias;
+        my @path = $node->type_path;
+        my $res = _find_leaf($tree, @path);
+        $node->alias($res);
+    }
+
+    return;
+}
+
+
+sub _build_alias_tree {
+    my $self = shift;
+
+    my $tree = {};
+    for my $node ($self->nodes) {
+        next if $node->alias;
+        _insert_path($tree, $node->type_path);
+    }
+
+    return $tree;
+}
+
+sub _insert_path {
+    my ($tree, $path) = @_;
+
+    my $next = shift @$path;
+    if (@$path) {
+        _insert_path($tree->{$next}, $path);
+    } else {
+        $tree->{$next} = 1;
+    }
+
+    return;
+}
+
+sub _find_leaf {
+    my ($tree, $path) = @_;
+
+    my $node = $tree;
+    my $current_part = shift @$path;
+    my @result = ($current_part);
+
+    while (scalar(keys %{$node->{$current_part}}) > 1) {
+        $node = $node->{$current_part};
+        $current_part = shift @$path;
+        push @result, $current_part;
+    }
+
+    return join('::', reverse @result);
+}
+
 sub workflow_builder {
     my ($self, $alias) = @_;
 

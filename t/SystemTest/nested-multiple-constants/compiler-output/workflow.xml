@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>TestTool::ProcessWithMultipleConstants.(x1.test_name+x2.test_name+TestTool::Y.test_name)</inputproperty>
-    <inputproperty>TestTool::ProcessWithMultipleConstants.x2.x_in_1</inputproperty>
-    <inputproperty>TestTool::ProcessWithMultipleConstants.x1.x_in_1</inputproperty>
-    <inputproperty>TestTool::ProcessWithMultipleConstants.(x1.process_+x2.process_+TestTool::Y.process_)</inputproperty>
-    <outputproperty>TestTool::ProcessWithMultipleConstants.TestTool::Y.y_out_1</outputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x2._step_label</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x1._step_label</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x2.x_in_1</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x1.x_in_1</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.(x1._process+x2._process+Y._process)</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.Y._step_label</inputproperty>
+    <outputproperty>ProcessWithMultipleConstants.Y.y_out_1</outputproperty>
   </operationtype>
-  <operation name="TestTool::ProcessWithMultipleConstants">
+  <operation name="ProcessWithMultipleConstants">
     <operationtype typeClass="Workflow::OperationType::Model">
+      <inputproperty>(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
+      <inputproperty>x2._step_label</inputproperty>
       <inputproperty>x2.x_in_1</inputproperty>
-      <inputproperty>(x1.process_+x2.process_+TestTool::Y.process_)</inputproperty>
-      <inputproperty>(x1.test_name+x2.test_name+TestTool::Y.test_name)</inputproperty>
+      <inputproperty>Y._step_label</inputproperty>
+      <inputproperty>(x1._process+x2._process+Y._process)</inputproperty>
+      <inputproperty>x1._step_label</inputproperty>
       <inputproperty>x1.x_in_1</inputproperty>
-      <outputproperty>TestTool::Y.y_out_1</outputproperty>
+      <outputproperty>Y.y_out_1</outputproperty>
     </operationtype>
-    <operation name="TestTool::Y">
+    <operation name="Y">
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::Y">
-        <inputproperty>process_</inputproperty>
+        <inputproperty>_process</inputproperty>
+        <inputproperty>_step_label</inputproperty>
         <inputproperty>test_name</inputproperty>
         <inputproperty>y_in_1</inputproperty>
         <inputproperty>y_in_2</inputproperty>
@@ -27,7 +34,8 @@
     </operation>
     <operation name="x1">
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
-        <inputproperty>process_</inputproperty>
+        <inputproperty>_process</inputproperty>
+        <inputproperty>_step_label</inputproperty>
         <inputproperty>test_name</inputproperty>
         <inputproperty>x_in_1</inputproperty>
         <outputproperty>result</outputproperty>
@@ -36,28 +44,35 @@
     </operation>
     <operation name="x2">
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
-        <inputproperty>process_</inputproperty>
+        <inputproperty>_process</inputproperty>
+        <inputproperty>_step_label</inputproperty>
         <inputproperty>test_name</inputproperty>
         <inputproperty>x_in_1</inputproperty>
         <outputproperty>result</outputproperty>
         <outputproperty>x_out_1</outputproperty>
       </operationtype>
     </operation>
-    <link fromOperation="TestTool::Y" fromProperty="y_out_1" toOperation="output connector" toProperty="TestTool::Y.y_out_1" />
-    <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="TestTool::Y" toProperty="process_" />
-    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="TestTool::Y" toProperty="test_name" />
-    <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="x1" toProperty="process_" />
-    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="x1" toProperty="test_name" />
+    <link fromOperation="Y" fromProperty="y_out_1" toOperation="output connector" toProperty="Y.y_out_1" />
+    <link fromOperation="input connector" fromProperty="(x1._process+x2._process+Y._process)" toOperation="Y" toProperty="_process" />
+    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+Y.test_name)" toOperation="Y" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="Y._step_label" toOperation="Y" toProperty="_step_label" />
+    <link fromOperation="input connector" fromProperty="(x1._process+x2._process+Y._process)" toOperation="x1" toProperty="_process" />
+    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+Y.test_name)" toOperation="x1" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="x1._step_label" toOperation="x1" toProperty="_step_label" />
     <link fromOperation="input connector" fromProperty="x1.x_in_1" toOperation="x1" toProperty="x_in_1" />
-    <link fromOperation="input connector" fromProperty="(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="x2" toProperty="process_" />
-    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="x2" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="(x1._process+x2._process+Y._process)" toOperation="x2" toProperty="_process" />
+    <link fromOperation="input connector" fromProperty="(x1.test_name+x2.test_name+Y.test_name)" toOperation="x2" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="x2._step_label" toOperation="x2" toProperty="_step_label" />
     <link fromOperation="input connector" fromProperty="x2.x_in_1" toOperation="x2" toProperty="x_in_1" />
-    <link fromOperation="x1" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_1" />
-    <link fromOperation="x2" fromProperty="x_out_1" toOperation="TestTool::Y" toProperty="y_in_2" />
+    <link fromOperation="x1" fromProperty="x_out_1" toOperation="Y" toProperty="y_in_1" />
+    <link fromOperation="x2" fromProperty="x_out_1" toOperation="Y" toProperty="y_in_2" />
   </operation>
-  <link fromOperation="TestTool::ProcessWithMultipleConstants" fromProperty="TestTool::Y.y_out_1" toOperation="output connector" toProperty="TestTool::ProcessWithMultipleConstants.TestTool::Y.y_out_1" />
-  <link fromOperation="input connector" fromProperty="TestTool::ProcessWithMultipleConstants.(x1.process_+x2.process_+TestTool::Y.process_)" toOperation="TestTool::ProcessWithMultipleConstants" toProperty="(x1.process_+x2.process_+TestTool::Y.process_)" />
-  <link fromOperation="input connector" fromProperty="TestTool::ProcessWithMultipleConstants.(x1.test_name+x2.test_name+TestTool::Y.test_name)" toOperation="TestTool::ProcessWithMultipleConstants" toProperty="(x1.test_name+x2.test_name+TestTool::Y.test_name)" />
-  <link fromOperation="input connector" fromProperty="TestTool::ProcessWithMultipleConstants.x1.x_in_1" toOperation="TestTool::ProcessWithMultipleConstants" toProperty="x1.x_in_1" />
-  <link fromOperation="input connector" fromProperty="TestTool::ProcessWithMultipleConstants.x2.x_in_1" toOperation="TestTool::ProcessWithMultipleConstants" toProperty="x2.x_in_1" />
+  <link fromOperation="ProcessWithMultipleConstants" fromProperty="Y.y_out_1" toOperation="output connector" toProperty="ProcessWithMultipleConstants.Y.y_out_1" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.(x1._process+x2._process+Y._process)" toOperation="ProcessWithMultipleConstants" toProperty="(x1._process+x2._process+Y._process)" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)" toOperation="ProcessWithMultipleConstants" toProperty="(x1.test_name+x2.test_name+Y.test_name)" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.Y._step_label" toOperation="ProcessWithMultipleConstants" toProperty="Y._step_label" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.x1._step_label" toOperation="ProcessWithMultipleConstants" toProperty="x1._step_label" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.x1.x_in_1" toOperation="ProcessWithMultipleConstants" toProperty="x1.x_in_1" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.x2._step_label" toOperation="ProcessWithMultipleConstants" toProperty="x2._step_label" />
+  <link fromOperation="input connector" fromProperty="ProcessWithMultipleConstants.x2.x_in_1" toOperation="ProcessWithMultipleConstants" toProperty="x2.x_in_1" />
 </operation>

@@ -10,7 +10,7 @@ process_definition: node(s)
 node: alias(?) type parallel_statement(?) with_statements(?)
         { $return = Compiler::AST::Node->create(
                 type => $item[2],
-                alias => $item[1][0] || $item[2],
+                alias => $item[1][0] || undef,
                 parallel => $item[3][0] || [],
                 explicit_links => $item[4][0]{links} || [],
                 explicit_constants => $item[4][0]{constants} || [],

@@ -1,5 +1,5 @@
-File::Bam::Unaligned::Paired	Aligner::Bwa::Paired.(first_reads.input_bam+second_reads.input_bam+Tool::Bwa::Sampe.unaligned_bam)	gms:///data/bc1285135b9d47f797b20e746eb57ee6?tag=bam
-File::Fasta	Tool::Bwa::Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
-Integer::Bwa::Aln::Threads	Aligner::Bwa::Paired.(first_reads.threads+second_reads.threads)	4
-Integer::Bwa::Aln::TrimmingQualityThreshold	Aligner::Bwa::Paired.(first_reads.trimming_quality_threshold+second_reads.trimming_quality_threshold)	5
-Integer::Bwa::Sampe::MaxInsertSize	Aligner::Bwa::Paired.Tool::Bwa::Sampe.max_insert_size	500
+File::Bam::Unaligned::Paired	Paired.(aln_first_reads.input_bam+aln_second_reads.input_bam+Sampe.unaligned_bam)	gms:///data/bc1285135b9d47f797b20e746eb57ee6?tag=bam
+File::Fasta	Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
+Integer::Bwa::Aln::Threads	Paired.(aln_first_reads.threads+aln_second_reads.threads)	4
+Integer::Bwa::Aln::TrimmingQualityThreshold	Paired.(aln_first_reads.trimming_quality_threshold+aln_second_reads.trimming_quality_threshold)	5
+Integer::Bwa::Sampe::MaxInsertSize	Paired.Sampe.max_insert_size	500

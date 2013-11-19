@@ -1,0 +1,7 @@
+STEP_LABEL_9	ProcessWithMultipleConstants.x1._step_label	ProcessWithMultipleConstants.x1._step_label
+STEP_LABEL_11	ProcessWithMultipleConstants.Y._step_label	ProcessWithMultipleConstants.Y._step_label
+STEP_LABEL_10	ProcessWithMultipleConstants.x2._step_label	ProcessWithMultipleConstants.x2._step_label
+TEST_NAME	ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)
+PROCESS	ProcessWithMultipleConstants.(x1._process+x2._process+Y._process)
+X::Input1	ProcessWithMultipleConstants.x1.x_in_1	42
+X::Input1	ProcessWithMultipleConstants.x2.x_in_1	77
