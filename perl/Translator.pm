@@ -32,10 +32,6 @@ sub _resolve_url {
     my $self = shift;
     my $url = shift;
 
-    unless ($url->scheme) {
-        confess sprintf("No scheme specified in '%s'", $url);
-    }
-
     my $handler = $self->_get_handler($url->scheme);
     return $handler->resolve($url);
 }

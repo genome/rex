@@ -9,12 +9,6 @@ use URI::URL qw();
 use_ok('Translator');
 
 
-subtest empty_schema_dies => sub {
-    my $translator = Translator->new();
-    my $url = new URI::URL '/foo/bar/baz';
-    dies_ok {$translator->_resolve_url($url)} 'dies with empty schema';
-};
-
 subtest unknown_schema_dies => sub {
     my $translator = Translator->new();
     my $url = new URI::URL 'unknown:///foo/bar/baz';
