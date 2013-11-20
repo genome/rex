@@ -1,22 +1,19 @@
 package Translator::GMS;
 
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
-use UR;
 use Carp qw(confess);
 use File::Spec qw();
 use Manifest::Reader;
 use Process;
-
-class Translator::GMS {};
 
 sub scheme {
     return 'gms';
 }
 
 sub resolve {
-    my ($class, $url) = @_;
+    my ($self, $url) = @_;
 
     if ($url->netloc) {
         confess sprintf(
@@ -25,7 +22,7 @@ sub resolve {
     }
 
     my $type = _extract_type($url);
-    return $class->$type($url)
+    return $self->$type($url)
 }
 
 sub _extract_type {
@@ -45,13 +42,13 @@ sub _split_path {
 }
 
 sub echo {
-    my ($class, $url) = @_;
+    my ($self, $url) = @_;
     my ($type, $args) = _split_path($url->path);
     return File::Spec->join('', @$args);
 }
 
 sub data {
-    my ($class, $url) = @_;
+    my ($self, $url) = @_;
 
     my $allocation_id = _extract_allocation_id($url);
     my %query_form = $url->query_form;
@@ -73,7 +70,7 @@ sub _extract_allocation_id {
 }
 
 sub process {
-    my ($class, $url) = @_;
+    my ($self, $url) = @_;
 
     my $process_id = _extract_process_id($url);
     return Process->get(id => $process_id);

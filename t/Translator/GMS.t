@@ -14,8 +14,14 @@ use Manifest::Writer;
 use Genome::Disk::Allocation;
 use File::Basename qw();
 
+use_ok('Translator');
 use_ok('Translator::GMS');
 
+subtest gms_is_a_valid_scheme_handler => sub {
+    my $translator = Translator->new();
+    is($translator->resolve_scalar_or_url('gms:///echo/12345'), '/12345',
+            'echo is resolved');
+};
 
 subtest specified_host_dies => sub {
     my $url = new URI::URL 'gms://host:port/data/12345?tag=bam';
