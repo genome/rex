@@ -11,8 +11,11 @@ use Process;
 
 class Translator::GMS {};
 
+sub scheme {
+    return 'gms';
+}
 
-sub fetch {
+sub resolve {
     my ($class, $url) = @_;
 
     if ($url->netloc) {

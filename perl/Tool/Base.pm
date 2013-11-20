@@ -253,8 +253,9 @@ sub _output_names {
 sub _translate_inputs {
     my $self = shift;
 
+    my $translator = Translator->new();
     for my $input_name (@_) {
-        $self->$input_name(Translator::url_to_scalar($self->$input_name));
+        $self->$input_name($translator->resolve_scalar_or_url($self->$input_name));
     }
 
     return;

@@ -1,16 +1,15 @@
 package Translator::File;
 
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
-use UR;
+sub scheme {
+    return 'file';
+}
 
-
-class Translator::File {};
-
-
-sub fetch {
-    my ($class, $url) = @_;
+sub resolve {
+    my $class = shift;
+    my $url = shift;
 
     return $url->path;
 }
