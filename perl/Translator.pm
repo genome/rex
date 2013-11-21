@@ -4,9 +4,8 @@ use Moose;
 use warnings FATAL => 'all';
 
 use Module::Pluggable
-    require => 1,
-    inner => 0,
     instantiate => 'new',
+    only => qr(Translator::[^:]+$),
     search_path => ['Translator'],
     sub_name => 'scheme_handlers';
 
