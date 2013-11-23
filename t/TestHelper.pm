@@ -54,10 +54,19 @@ sub diff_directories {
     my ($expected, $actual, $label) = @_;
 
     for my $filename (@_FILENAMES) {
+        my $expected_path = File::Spec->join($expected, $filename);
+        my $actual_path = File::Spec->join($actual, $filename);
+        ok(-e $expected_path, "found expected file: $expected_path") or next;
+        ok(-e $actual_path, "found actual file: $actual_path") or next;
+
         compare_ok(
-            File::Spec->join($expected, $filename),
-            File::Spec->join($actual, $filename),
-            sprintf('%s compares ok (%s)', $filename, $label));
+            $expected_path,
+            $actual_path,
+            sprintf('%s compares ok (%s)', $filename, $label),
+            filters => [
+                qr(STEP_LABEL_[^\t]*),
+            ],
+        ) or print `diff -u $expected $actual_path` . "\n";
 
     }
 

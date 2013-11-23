@@ -38,14 +38,14 @@ class Compiler {
 sub execute {
     my $self = shift;
 
-    my $ast = Compiler::Parser::parse_tree($self->input_file);
+    my $root_process = Compiler::Parser::new_process($self->input_file, 'root');
 
     $self->make_output_directory;
 
-    my @inputs = $ast->inputs;
-    $self->save_inputs_with_constants(\@inputs, $ast->constants);
+    my @inputs = $root_process->inputs;
+    $self->save_inputs_with_constants(\@inputs, $root_process->constants);
 
-    $self->save_data('workflow.xml', $ast->workflow_builder('root')->get_xml);
+    $self->save_data('workflow.xml', $root_process->dag->get_xml);
     $self->format_xml('workflow.xml');
 
     return 1;

@@ -1,153 +1,139 @@
 package Compiler::AST::Node;
 
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
-use UR;
 use Carp qw(confess);
+use Compiler::AST::DataEndPoint;
 use Memoize qw();
 
-use Compiler::AST::Detail::DataEndPoint;
+has source_path => (
+    is => 'rw',
+    isa => 'Str',
+);
+has parallel => (
+    is => 'rw',
+    isa => 'ArrayRef[Str]',
+    default => sub {[]},
+);
+has couplers => (
+    is => 'rw',
+    isa => 'ArrayRef[Compiler::AST::Coupler]',
+    default => sub {[]},
+);
 
+has alias => (
+    is => 'rw',
+    isa => 'Str',
+);
+has inputs => (
+    is => 'rw',
+    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
+    default => sub {[]},
+);
+has outputs => (
+    is => 'rw',
+    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
+    default => sub {[]},
+);
+has constants => (
+    is => 'rw',
+    isa => 'HashRef[Value]',
+    default => sub {{}},
+);
 
-class Compiler::AST::Node {
-    id_generator => '-uuid',
+sub dag {
+    confess 'Abstract method!';
+}
 
-    has => [
-        type => {
-            is => 'Text',
-        },
-
-        alias => {
-            is => 'Text',
-            is_optional => 1,
-        },
-
-        parallel => {
-            is => 'Text',
-            is_many => 1,
-            is_optional => 1,
-        },
-
-        explicit_links => {
-            is => 'Compiler::AST::Link',
-            is_many => 1,
-            is_optional => 1,
-        },
-        explicit_constants => {
-            is => 'Compiler::AST::Link::Constant',
-            is_many => 1,
-            is_optional => 1,
-        },
-    ],
-};
-
-
-sub definition {
+sub constant_couplers {
     my $self = shift;
 
-    require Compiler::Importer;
-    return Compiler::Importer::import_file($self->type);
+    return grep {$_->is_constant} @{$self->couplers};
 }
-Memoize::memoize('definition');
 
-sub workflow_builder {
+sub internal_couplers {
     my $self = shift;
 
-    return $self->definition->workflow_builder($self->alias);
+    return grep {$_->is_internal} @{$self->couplers};
 }
 
-sub inputs {
+
+sub source_path_components {
     my $self = shift;
 
-    return $self->definition->inputs;
-}
-
-sub outputs {
-    my $self = shift;
-
-    return $self->definition->outputs;
-}
-
-sub constants {
-    my $self = shift;
-
-    return $self->definition->constants;
-}
-
-sub inputs_of {
-    my ($self, $data_type) = @_;
-
-    my @result;
-    for my $input ($self->inputs) {
-        if ($input->type eq $data_type) {
-            push @result, Compiler::AST::Detail::DataEndPoint->create(
-                node => $self, property_name => $input->name);
-        }
-    }
-
-    return @result;
-}
-Memoize::memoize('inputs_of');
-
-sub outputs_of {
-    my ($self, $data_type) = @_;
-
-    my @result;
-    for my $output ($self->outputs) {
-        if ($output->type eq $data_type) {
-            push @result, Compiler::AST::Detail::DataEndPoint->create(
-                node => $self, property_name => $output->name);
-        }
-    }
-
-    return @result;
-}
-Memoize::memoize('outputs_of');
-
-sub explicit_internal_links {
-    my $self = shift;
-
-    return grep {$_->is_internal} $self->explicit_links;
-}
-
-sub explicit_inputs {
-    my $self = shift;
-
-    return $self->explicit_constants;
-}
-
-sub unique_output_of_type {
-    my ($self, $data_type) = @_;
-
-    my @results = grep {$_->type eq $data_type} $self->outputs;
-    unless (scalar(@results) == 1) {
-        confess sprintf("Didn't find exactly 1 output with type %s on node %s",
-            $data_type, $self->alias);
-    }
-
-    return $results[0]->name;
-}
-
-sub type_of {
-    my ($self, $property_name) = @_;
-
-    my @results = grep {$_->name eq $property_name}
-        ($self->inputs, $self->outputs);
-    unless (scalar(@results) == 1) {
-        confess sprintf("Didn't find exactly 1 input/output property with the "
-            . "name (%s) on node %s", $property_name, $self->alias);
-    }
-
-    return $results[0]->type;
-}
-
-sub type_path {
-    my $self = shift;
-
-    my @parts = split /::/, $self->type;
+    my @parts = split /::/, $self->source_path;
     my @reversed_parts = reverse @parts;
     return \@reversed_parts;
+}
+
+sub unique_output {
+    my ($self, $type) = @_;
+
+    my $outputs_hash = $self->_outputs_hash;
+
+    if (exists $outputs_hash->{$type}) {
+        my %outputs_of_type = %{$outputs_hash->{$type}};
+
+        if (scalar(keys %outputs_of_type) == 1) {
+            return (values %outputs_of_type)[0];
+        } else {
+            confess sprintf('Node %s (%s) has more than one output of type (%s): %s',
+                $self->source_path, $self->alias || '', $type, join(', ', keys %outputs_of_type),
+            );
+        }
+    } else {
+        confess sprintf('Node %s (%s) has no output with type (%s).',
+            $self->source_path, $self->alias || '', $type,
+        );
+    }
+}
+
+sub _outputs_hash {
+    my $self = shift;
+
+    my %result;
+    return \%result unless $self->outputs;
+
+    for my $output (@{$self->outputs}) {
+        $result{$output->type}{$output->name} = $output;
+    }
+    return \%result;
+}
+Memoize::memoize('_outputs_hash');
+
+sub input_named {
+    my ($self, $name) = @_;
+
+    my $inputs_hash = $self->_inputs_hash;
+
+    if (exists $inputs_hash->{$name}) {
+        return $inputs_hash->{$name};
+    } else {
+        confess sprintf('Tool %s (%s) has no input with name (%s).',
+            $self->source_path, $self->alias || '', $name,
+        );
+    }
+}
+
+sub _inputs_hash {
+    my $self = shift;
+
+    my %result;
+    return \%result unless $self->inputs;
+
+    for my $input (@{$self->inputs}) {
+        $result{$input->name} = $input;
+    }
+    return \%result;
+}
+Memoize::memoize('_inputs_hash');
+
+
+sub _create_data_end_point {
+    my $self  = shift;
+
+    return Compiler::AST::DataEndPoint->new(node => $self, @_);
 }
 
 

@@ -7,24 +7,20 @@ use Carp qw(confess);
 use File::Spec qw();
 
 use Compiler::Parser;
-use Compiler::AST::Definition::Tool;
-use Compiler::AST::IO::Input;
-use Compiler::AST::IO::Output;
 
 use constant EXTENSION => '.gms';
 
 
 sub import_file {
-    my $name = shift;
+    my $source_path = shift;
 
-    my $process_definition_path = resolve_path($name);
+    my $process_definition_path = resolve_path($source_path);
     if ($process_definition_path) {
         return Compiler::Parser::parse_tree($process_definition_path);
     } else {
         return create_tool_definition($name);
     }
 }
-
 
 sub resolve_path {
     my $name = shift;
@@ -47,62 +43,5 @@ sub search_path {
     }
     return 'definitions';
 }
-
-
-sub create_tool_definition {
-    my $tool_class_name = shift;
-
-    eval "use $tool_class_name";
-    if ($@) {
-        confess sprintf("Couldn't use tool '%s': %s", $tool_class_name, $@);
-    }
-    my $inputs = _create_tool_inputs($tool_class_name);
-    my $outputs = _create_tool_outputs($tool_class_name);
-
-    return Compiler::AST::Definition::Tool->create(command => $tool_class_name,
-        inputs => $inputs, outputs => $outputs);
-}
-
-sub _create_tool_inputs {
-    my $tool_class_name = shift;
-
-    my $input_hash = $tool_class_name->ast_inputs;
-    my @result;
-    for my $name (keys %$input_hash) {
-        my $type = _resolve_type($input_hash->{$name});
-        push @result, Compiler::AST::IO::Input->create(name => $name,
-            type => $type);
-    }
-
-    return \@result;
-}
-
-my $_STEP_COUNTER = 0;
-sub _resolve_type {
-    my $original_type = shift;
-
-    if ($original_type =~ /STEP_LABEL/) {
-        my $new_type = sprintf("%s_%d", $original_type, $_STEP_COUNTER);
-        $_STEP_COUNTER++;
-        return $new_type;
-
-    } else {
-        return $original_type;
-    }
-}
-
-sub _create_tool_outputs {
-    my $tool_class_name = shift;
-
-    my $output_hash = $tool_class_name->ast_outputs;
-    my @result;
-    for my $name (keys %$output_hash) {
-        push @result, Compiler::AST::IO::Output->create(name => $name,
-            type => $output_hash->{$name});
-    }
-
-    return \@result;
-}
-
 
 1;

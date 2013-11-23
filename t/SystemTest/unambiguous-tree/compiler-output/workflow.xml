@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>B._step_label</inputproperty>
-    <inputproperty>C.D.di1</inputproperty>
-    <inputproperty>A._step_label</inputproperty>
-    <inputproperty>C.D._step_label</inputproperty>
     <inputproperty>(A._process+B._process+C.(D._process+E.F._process))</inputproperty>
     <inputproperty>(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))</inputproperty>
+    <inputproperty>A._step_label</inputproperty>
+    <inputproperty>A.ai1</inputproperty>
+    <inputproperty>B._step_label</inputproperty>
+    <inputproperty>C.D._step_label</inputproperty>
+    <inputproperty>C.D.di1</inputproperty>
     <inputproperty>C.E.F._step_label</inputproperty>
     <inputproperty>C.E.F.fi1</inputproperty>
-    <inputproperty>A.ai1</inputproperty>
     <outputproperty>B.bo1</outputproperty>
   </operationtype>
   <operation name="A">
@@ -36,11 +36,11 @@
   </operation>
   <operation name="C">
     <operationtype typeClass="Workflow::OperationType::Model">
-      <inputproperty>(D.test_name+E.F.test_name)</inputproperty>
-      <inputproperty>E.F._step_label</inputproperty>
-      <inputproperty>D.di1</inputproperty>
-      <inputproperty>D._step_label</inputproperty>
       <inputproperty>(D._process+E.F._process)</inputproperty>
+      <inputproperty>(D.test_name+E.F.test_name)</inputproperty>
+      <inputproperty>D._step_label</inputproperty>
+      <inputproperty>D.di1</inputproperty>
+      <inputproperty>E.F._step_label</inputproperty>
       <inputproperty>E.F.fi1</inputproperty>
       <outputproperty>D.do1</outputproperty>
       <outputproperty>E.F.fo1</outputproperty>
@@ -57,10 +57,10 @@
     </operation>
     <operation name="E">
       <operationtype typeClass="Workflow::OperationType::Model">
-        <inputproperty>F.test_name</inputproperty>
         <inputproperty>F._process</inputproperty>
-        <inputproperty>F.fi1</inputproperty>
         <inputproperty>F._step_label</inputproperty>
+        <inputproperty>F.fi1</inputproperty>
+        <inputproperty>F.test_name</inputproperty>
         <outputproperty>F.fo1</outputproperty>
       </operationtype>
       <operation name="F">

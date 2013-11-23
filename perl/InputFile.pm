@@ -9,6 +9,7 @@ use List::MoreUtils qw();
 use IO::File qw();
 
 use InputFile::Entry;
+use Data::Dumper;
 
 
 class InputFile {
@@ -49,8 +50,9 @@ sub create_from_inputs_and_constants {
     my ($class, $inputs, $constants) = @_;
 
     my @entries;
+    my @inputs = @{$inputs->[0]};
     push @entries, map {InputFile::Entry->create(name => $_->name,
-            type => $_->type, value => $constants->{$_->name})} @$inputs;
+            type => $_->type, value => $constants->{$_->name})} @inputs;
 
     for my $entry (@entries) {
         if ($entry->type =~ /STEP_LABEL/) {
@@ -76,7 +78,7 @@ sub write_to_filename {
 sub write {
     my ($self, $file_handle) = @_;
 
-    for my $entry ($self->entries) {
+    for my $entry (sort {$a->as_sortable_string cmp $b->as_sortable_string} $self->entries) {
         $entry->write($file_handle);
     }
 

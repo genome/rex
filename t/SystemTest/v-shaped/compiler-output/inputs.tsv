@@ -1,6 +1,6 @@
-STEP_LABEL_6	Y._step_label	Y._step_label
-STEP_LABEL_4	x1._step_label	x1._step_label
-STEP_LABEL_5	x2._step_label	x2._step_label
-TEST_NAME	(x1.test_name+x2.test_name+Y.test_name)
 PROCESS	(x1._process+x2._process+Y._process)
+STEP_LABEL_e2d2d194-c1a9-42ad-a2d7-4aec45dc2170	Y._step_label	Y._step_label
+STEP_LABEL_a66af709-d5f9-491c-ab3a-534539e9b877	x1._step_label	x1._step_label
+STEP_LABEL_42316bbe-11c4-4097-a968-9d204ff9e4dd	x2._step_label	x2._step_label
+TEST_NAME	(x1.test_name+x2.test_name+Y.test_name)
 X::Input1	(x1.x_in_1+x2.x_in_1)

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>ProcessWithMultipleConstants.x2._step_label</inputproperty>
-    <inputproperty>ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
-    <inputproperty>ProcessWithMultipleConstants.x1._step_label</inputproperty>
-    <inputproperty>ProcessWithMultipleConstants.x2.x_in_1</inputproperty>
-    <inputproperty>ProcessWithMultipleConstants.x1.x_in_1</inputproperty>
     <inputproperty>ProcessWithMultipleConstants.(x1._process+x2._process+Y._process)</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
     <inputproperty>ProcessWithMultipleConstants.Y._step_label</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x1._step_label</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x1.x_in_1</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x2._step_label</inputproperty>
+    <inputproperty>ProcessWithMultipleConstants.x2.x_in_1</inputproperty>
     <outputproperty>ProcessWithMultipleConstants.Y.y_out_1</outputproperty>
   </operationtype>
   <operation name="ProcessWithMultipleConstants">
     <operationtype typeClass="Workflow::OperationType::Model">
-      <inputproperty>(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
-      <inputproperty>x2._step_label</inputproperty>
-      <inputproperty>x2.x_in_1</inputproperty>
-      <inputproperty>Y._step_label</inputproperty>
       <inputproperty>(x1._process+x2._process+Y._process)</inputproperty>
+      <inputproperty>(x1.test_name+x2.test_name+Y.test_name)</inputproperty>
+      <inputproperty>Y._step_label</inputproperty>
       <inputproperty>x1._step_label</inputproperty>
       <inputproperty>x1.x_in_1</inputproperty>
+      <inputproperty>x2._step_label</inputproperty>
+      <inputproperty>x2.x_in_1</inputproperty>
       <outputproperty>Y.y_out_1</outputproperty>
     </operationtype>
     <operation name="Y">

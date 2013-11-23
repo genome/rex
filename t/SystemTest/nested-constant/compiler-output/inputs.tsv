@@ -1,4 +1,4 @@
+PROCESS	ProcessWithConstant.A._process
+STEP_LABEL_9e5fa154-41ce-455d-b0c7-9e4ae7d0a385	ProcessWithConstant.A._step_label	ProcessWithConstant.A._step_label
 T1	ProcessWithConstant.A.ai1	42
 TEST_NAME	ProcessWithConstant.A.test_name
-STEP_LABEL_8	ProcessWithConstant.A._step_label	ProcessWithConstant.A._step_label
-PROCESS	ProcessWithConstant.A._process

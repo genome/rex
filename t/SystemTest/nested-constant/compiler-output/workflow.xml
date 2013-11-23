@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>ProcessWithConstant.A._step_label</inputproperty>
-    <inputproperty>ProcessWithConstant.A.test_name</inputproperty>
-    <inputproperty>ProcessWithConstant.A.ai1</inputproperty>
     <inputproperty>ProcessWithConstant.A._process</inputproperty>
+    <inputproperty>ProcessWithConstant.A._step_label</inputproperty>
+    <inputproperty>ProcessWithConstant.A.ai1</inputproperty>
+    <inputproperty>ProcessWithConstant.A.test_name</inputproperty>
     <outputproperty>ProcessWithConstant.A.ao1</outputproperty>
   </operationtype>
   <operation name="ProcessWithConstant">
     <operationtype typeClass="Workflow::OperationType::Model">
-      <inputproperty>A.test_name</inputproperty>
       <inputproperty>A._process</inputproperty>
       <inputproperty>A._step_label</inputproperty>
       <inputproperty>A.ai1</inputproperty>
+      <inputproperty>A.test_name</inputproperty>
       <outputproperty>A.ao1</outputproperty>
     </operationtype>
     <operation name="A">

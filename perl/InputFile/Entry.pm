@@ -43,15 +43,29 @@ my $_CSV = Text::CSV->new({binary => 1, sep_char => "\t"});
 sub write {
     my ($self, $file_handle) = @_;
 
+    printf $file_handle "%s\n", $self->as_string;
+
+    return;
+}
+
+sub as_string {
+    my $self = shift;
+
     my @columns = ($self->type, $self->name);
     if (defined($self->value)) {
         push @columns, $self->value;
     }
 
     $_CSV->combine(@columns);
-    printf $file_handle "%s\n", $_CSV->string;
+    return $_CSV->string;
+}
+Memoize::memoize('as_string');
 
-    return;
+sub as_sortable_string {
+    my $self = shift;
+
+    (my $sortable_string = $self->as_string) =~ s/STEP_LABEL_[^\t]*/STEP_LABEL_1/;
+    return $sortable_string;
 }
 
 sub create_from_line {
