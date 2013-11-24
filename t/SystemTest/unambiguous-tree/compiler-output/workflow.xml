@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <operation name="root">
   <operationtype typeClass="Workflow::OperationType::Model">
-    <inputproperty>(A._process+B._process+C.(D._process+E.F._process))</inputproperty>
-    <inputproperty>(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))</inputproperty>
+    <inputproperty>A._process</inputproperty>
     <inputproperty>A._step_label</inputproperty>
     <inputproperty>A.ai1</inputproperty>
+    <inputproperty>A.test_name</inputproperty>
+    <inputproperty>B._process</inputproperty>
     <inputproperty>B._step_label</inputproperty>
+    <inputproperty>B.test_name</inputproperty>
+    <inputproperty>C.D._process</inputproperty>
     <inputproperty>C.D._step_label</inputproperty>
     <inputproperty>C.D.di1</inputproperty>
+    <inputproperty>C.D.test_name</inputproperty>
+    <inputproperty>C.E.F._process</inputproperty>
     <inputproperty>C.E.F._step_label</inputproperty>
     <inputproperty>C.E.F.fi1</inputproperty>
+    <inputproperty>C.E.F.test_name</inputproperty>
     <outputproperty>B.bo1</outputproperty>
   </operationtype>
   <operation name="A">
@@ -36,12 +42,14 @@
   </operation>
   <operation name="C">
     <operationtype typeClass="Workflow::OperationType::Model">
-      <inputproperty>(D._process+E.F._process)</inputproperty>
-      <inputproperty>(D.test_name+E.F.test_name)</inputproperty>
+      <inputproperty>D._process</inputproperty>
       <inputproperty>D._step_label</inputproperty>
       <inputproperty>D.di1</inputproperty>
+      <inputproperty>D.test_name</inputproperty>
+      <inputproperty>E.F._process</inputproperty>
       <inputproperty>E.F._step_label</inputproperty>
       <inputproperty>E.F.fi1</inputproperty>
+      <inputproperty>E.F.test_name</inputproperty>
       <outputproperty>D.do1</outputproperty>
       <outputproperty>E.F.fo1</outputproperty>
     </operationtype>
@@ -81,30 +89,32 @@
     </operation>
     <link fromOperation="D" fromProperty="do1" toOperation="output connector" toProperty="D.do1" />
     <link fromOperation="E" fromProperty="F.fo1" toOperation="output connector" toProperty="E.F.fo1" />
-    <link fromOperation="input connector" fromProperty="(D._process+E.F._process)" toOperation="D" toProperty="_process" />
-    <link fromOperation="input connector" fromProperty="(D.test_name+E.F.test_name)" toOperation="D" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="D._process" toOperation="D" toProperty="_process" />
     <link fromOperation="input connector" fromProperty="D._step_label" toOperation="D" toProperty="_step_label" />
     <link fromOperation="input connector" fromProperty="D.di1" toOperation="D" toProperty="di1" />
-    <link fromOperation="input connector" fromProperty="(D._process+E.F._process)" toOperation="E" toProperty="F._process" />
-    <link fromOperation="input connector" fromProperty="(D.test_name+E.F.test_name)" toOperation="E" toProperty="F.test_name" />
+    <link fromOperation="input connector" fromProperty="D.test_name" toOperation="D" toProperty="test_name" />
+    <link fromOperation="input connector" fromProperty="E.F._process" toOperation="E" toProperty="F._process" />
     <link fromOperation="input connector" fromProperty="E.F._step_label" toOperation="E" toProperty="F._step_label" />
     <link fromOperation="input connector" fromProperty="E.F.fi1" toOperation="E" toProperty="F.fi1" />
+    <link fromOperation="input connector" fromProperty="E.F.test_name" toOperation="E" toProperty="F.test_name" />
   </operation>
   <link fromOperation="A" fromProperty="ao1" toOperation="B" toProperty="bi3" />
   <link fromOperation="B" fromProperty="bo1" toOperation="output connector" toProperty="B.bo1" />
   <link fromOperation="C" fromProperty="D.do1" toOperation="B" toProperty="bi1" />
   <link fromOperation="C" fromProperty="E.F.fo1" toOperation="B" toProperty="bi2" />
-  <link fromOperation="input connector" fromProperty="(A._process+B._process+C.(D._process+E.F._process))" toOperation="A" toProperty="_process" />
-  <link fromOperation="input connector" fromProperty="(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))" toOperation="A" toProperty="test_name" />
+  <link fromOperation="input connector" fromProperty="A._process" toOperation="A" toProperty="_process" />
   <link fromOperation="input connector" fromProperty="A._step_label" toOperation="A" toProperty="_step_label" />
   <link fromOperation="input connector" fromProperty="A.ai1" toOperation="A" toProperty="ai1" />
-  <link fromOperation="input connector" fromProperty="(A._process+B._process+C.(D._process+E.F._process))" toOperation="B" toProperty="_process" />
-  <link fromOperation="input connector" fromProperty="(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))" toOperation="B" toProperty="test_name" />
+  <link fromOperation="input connector" fromProperty="A.test_name" toOperation="A" toProperty="test_name" />
+  <link fromOperation="input connector" fromProperty="B._process" toOperation="B" toProperty="_process" />
   <link fromOperation="input connector" fromProperty="B._step_label" toOperation="B" toProperty="_step_label" />
-  <link fromOperation="input connector" fromProperty="(A._process+B._process+C.(D._process+E.F._process))" toOperation="C" toProperty="(D._process+E.F._process)" />
-  <link fromOperation="input connector" fromProperty="(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))" toOperation="C" toProperty="(D.test_name+E.F.test_name)" />
+  <link fromOperation="input connector" fromProperty="B.test_name" toOperation="B" toProperty="test_name" />
+  <link fromOperation="input connector" fromProperty="C.D._process" toOperation="C" toProperty="D._process" />
   <link fromOperation="input connector" fromProperty="C.D._step_label" toOperation="C" toProperty="D._step_label" />
   <link fromOperation="input connector" fromProperty="C.D.di1" toOperation="C" toProperty="D.di1" />
+  <link fromOperation="input connector" fromProperty="C.D.test_name" toOperation="C" toProperty="D.test_name" />
+  <link fromOperation="input connector" fromProperty="C.E.F._process" toOperation="C" toProperty="E.F._process" />
   <link fromOperation="input connector" fromProperty="C.E.F._step_label" toOperation="C" toProperty="E.F._step_label" />
   <link fromOperation="input connector" fromProperty="C.E.F.fi1" toOperation="C" toProperty="E.F.fi1" />
+  <link fromOperation="input connector" fromProperty="C.E.F.test_name" toOperation="C" toProperty="E.F.test_name" />
 </operation>

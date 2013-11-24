@@ -1,9 +1,15 @@
-PROCESS	(A._process+B._process+C.(D._process+E.F._process))
-STEP_LABEL_40f28638-d1df-4f6d-b487-ced424cbe88f	A._step_label	A._step_label
-STEP_LABEL_4f52f546-5462-4859-82df-e2cfd2752b66	B._step_label	B._step_label
-STEP_LABEL_9f1d003b-a4e9-4246-b499-6670913b0301	C.D._step_label	C.D._step_label
-STEP_LABEL_95c649e5-9710-4659-819a-5276c0dc5181	C.E.F._step_label	C.E.F._step_label
+PROCESS	A._process
+PROCESS	B._process
+PROCESS	C.D._process
+PROCESS	C.E.F._process
+STEP_LABEL_82889013-38ec-4102-a2c1-fe7e43c2ae55	A._step_label	A._step_label
+STEP_LABEL_c460492b-14cf-4b25-934d-3352eae29d73	B._step_label	B._step_label
+STEP_LABEL_33c0fc32-861c-47e9-851d-1ec79bfc6bc3	C.D._step_label	C.D._step_label
+STEP_LABEL_d0410fc6-2aee-44e2-8014-faabcb5bd265	C.E.F._step_label	C.E.F._step_label
 T1	A.ai1
 T2	C.D.di1
 T3	C.E.F.fi1
-TEST_NAME	(A.test_name+B.test_name+C.(D.test_name+E.F.test_name))
+TEST_NAME	A.test_name
+TEST_NAME	B.test_name
+TEST_NAME	C.D.test_name
+TEST_NAME	C.E.F.test_name

@@ -172,7 +172,7 @@ sub _set_constants {
         my %node_constants = %{$node->constants};
         for my $name (keys %node_constants) {
             my $data_end_point = $node->input_named($name);
-            my $local_name = $self->_automatic_property_name([$data_end_point]);
+            my $local_name = $self->_automatic_property_name($data_end_point);
             my $value = $node_constants{$name};
             $constants{$local_name} = $value;
 
@@ -230,11 +230,11 @@ sub _resolve_automatic_inputs {
         my $consumers = $self->_unused_consumers($type);
         next unless scalar(@$consumers);
 
-        my $source = $self->_add_input(
-            name => $self->_automatic_property_name($consumers),
-            type => $type,
-        );
         for my $consumer (@$consumers) {
+            my $source = $self->_add_input(
+                name => $self->_automatic_property_name($consumer),
+                type => $type,
+            );
             $self->_link(source => $source, destination => $consumer);
         }
     }
@@ -259,7 +259,7 @@ sub _resolve_automatic_outputs {
 
         for my $producer (@$producers) {
             my $destination = $self->_add_output(
-                name => $self->_automatic_property_name([$producer]),
+                name => $self->_automatic_property_name($producer),
                 type => $type,
             );
             $self->_link(source => $producer, destination => $destination);
@@ -344,25 +344,7 @@ sub _find_leaf {
 
 
 sub _automatic_property_name {
-    my ($self, $data_end_points) = @_;
-
-    if (scalar(@$data_end_points) > 1) {
-        return sprintf("(%s)", join("+",
-                map {$self->_automatic_property_name_component($_)}
-                @$data_end_points));
-    } elsif (scalar(@$data_end_points) == 1) {
-        return $self->_automatic_property_name_component($data_end_points->[0]);
-    } else {
-        confess "Require at least one data end point to compute input name";
-    }
-}
-
-sub _automatic_property_name_component {
     my ($self, $data_end_point) = @_;
-
-    unless (defined($data_end_point)) {
-        confess "Got undefined value for data_end_point";
-    }
 
     return sprintf("%s.%s", $data_end_point->node->alias,
         $data_end_point->name);

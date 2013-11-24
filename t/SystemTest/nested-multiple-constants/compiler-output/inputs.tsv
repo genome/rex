@@ -1,7 +1,11 @@
-PROCESS	ProcessWithMultipleConstants.(x1._process+x2._process+Y._process)
-STEP_LABEL_f5629ff8-c0da-44e7-b4bd-29f09dbc6efb	ProcessWithMultipleConstants.Y._step_label	ProcessWithMultipleConstants.Y._step_label
-STEP_LABEL_30d63d11-f302-4917-b605-cdbf36d9d62a	ProcessWithMultipleConstants.x1._step_label	ProcessWithMultipleConstants.x1._step_label
-STEP_LABEL_1dc14e73-247f-4753-9016-f6f40dfb6f11	ProcessWithMultipleConstants.x2._step_label	ProcessWithMultipleConstants.x2._step_label
-TEST_NAME	ProcessWithMultipleConstants.(x1.test_name+x2.test_name+Y.test_name)
+PROCESS	ProcessWithMultipleConstants.Y._process
+PROCESS	ProcessWithMultipleConstants.x1._process
+PROCESS	ProcessWithMultipleConstants.x2._process
+STEP_LABEL_fc69cf4b-970d-4fba-bf3e-ee7ebd6f444d	ProcessWithMultipleConstants.Y._step_label	ProcessWithMultipleConstants.Y._step_label
+STEP_LABEL_3171b530-4c6c-452e-bacc-a8e325c1e0c9	ProcessWithMultipleConstants.x1._step_label	ProcessWithMultipleConstants.x1._step_label
+STEP_LABEL_ccbce73c-ba4e-4ea8-867e-899250133324	ProcessWithMultipleConstants.x2._step_label	ProcessWithMultipleConstants.x2._step_label
+TEST_NAME	ProcessWithMultipleConstants.Y.test_name
+TEST_NAME	ProcessWithMultipleConstants.x1.test_name
+TEST_NAME	ProcessWithMultipleConstants.x2.test_name
 X::Input1	ProcessWithMultipleConstants.x1.x_in_1	42
 X::Input1	ProcessWithMultipleConstants.x2.x_in_1	77
