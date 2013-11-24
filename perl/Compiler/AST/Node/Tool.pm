@@ -5,7 +5,6 @@ use warnings FATAL => 'all';
 
 use Carp qw(confess);
 use Memoize;
-use Data::UUID;
 use Genome;
 
 use Compiler::AST::Node;
@@ -48,30 +47,13 @@ sub _set_inputs {
     my $tool_class = $self->source_path;
     my $input_hash = $tool_class->ast_inputs;
 
-    my @inputs;
+    my %inputs;
     for my $name (keys %$input_hash) {
-        my $type = _resolve_type($input_hash->{$name});
-        push @inputs, $self->_create_data_end_point(name => $name,
-            type => $type);
+        $inputs{$name} = $self->_create_data_end_point(name => $name,
+            tags => $input_hash->{$name});
     }
-    $self->inputs(\@inputs);
+    $self->inputs(\%inputs);
     return;
-}
-
-sub _resolve_type {
-    my $original_type = shift;
-
-    if ($original_type =~ /STEP_LABEL/) {
-        return sprintf("%s_%s", $original_type, _new_uuid());
-    } else {
-        return $original_type;
-    }
-}
-
-sub _new_uuid {
-    my $ug = Data::UUID->new();
-    my $uuid = $ug->create();
-    return $ug->to_string($uuid);
 }
 
 sub _set_outputs {
@@ -80,12 +62,12 @@ sub _set_outputs {
     my $tool_class = $self->source_path;
     my $output_hash = $tool_class->ast_outputs;
 
-    my @outputs;
+    my %outputs;
     for my $name (keys %$output_hash) {
-        push @outputs, $self->_create_data_end_point(name => $name,
-            type => $output_hash->{$name});
+        $outputs{$name} = $self->_create_data_end_point(name => $name,
+            tags => $output_hash->{$name});
     }
-    $self->outputs(\@outputs);
+    $self->outputs(\%outputs);
     return;
 }
 

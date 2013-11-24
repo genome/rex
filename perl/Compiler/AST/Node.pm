@@ -28,13 +28,13 @@ has alias => (
 );
 has inputs => (
     is => 'rw',
-    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
-    default => sub {[]},
+    isa => 'HashRef[Compiler::AST::DataEndPoint]',
+    default => sub {{}},
 );
 has outputs => (
     is => 'rw',
-    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
-    default => sub {[]},
+    isa => 'HashRef[Compiler::AST::DataEndPoint]',
+    default => sub {{}},
 );
 has constants => (
     is => 'rw',
@@ -68,25 +68,37 @@ sub source_path_components {
 }
 
 sub unique_output {
-    my ($self, $type) = @_;
+    my ($self, $tags) = @_;
 
     my $outputs_hash = $self->_outputs_hash;
 
-    if (exists $outputs_hash->{$type}) {
-        my %outputs_of_type = %{$outputs_hash->{$type}};
-
-        if (scalar(keys %outputs_of_type) == 1) {
-            return (values %outputs_of_type)[0];
+    my @output_name_sets;
+    for my $tag (@$tags) {
+        if (exists $outputs_hash->{$tag}) {
+            push @output_name_sets, $outputs_hash->{$tag};
         } else {
-            confess sprintf('Node %s (%s) has more than one output of type (%s): %s',
-                $self->source_path, $self->alias || '', $type, join(', ', keys %outputs_of_type),
-            );
+            confess sprintf("Node %s (%s) has no output with tag (%s)",
+                $self->source_path, $self->alias, $tag);
         }
-    } else {
-        confess sprintf('Node %s (%s) has no output with type (%s).',
-            $self->source_path, $self->alias || '', $type,
-        );
     }
+
+    my @potential_output_names = _intersection(@output_name_sets)->members;
+    if (scalar(@potential_output_names) == 0) {
+        confess sprintf("Node %s (%s) has no output with tags [%s]",
+            $self->source_path, $self->alias, join(', ', @$tags));
+    } elsif (scalar(@potential_output_names) == 1) {
+        return $self->outputs->{$potential_output_names[0]};
+    } else {
+        confess sprintf("Node %s (%s) has more than one output with tags [%s]: %s",
+            $self->source_path, $self->alias, join(', ', @$tags),
+            join(', ', @potential_output_names));
+    }
+}
+
+sub _intersection {
+    my ($first, @rest) = @_;
+
+    return $first->intersection(@rest);
 }
 
 sub _outputs_hash {
@@ -95,40 +107,19 @@ sub _outputs_hash {
     my %result;
     return \%result unless $self->outputs;
 
-    for my $output (@{$self->outputs}) {
-        $result{$output->type}{$output->name} = $output;
+    for my $output (values %{$self->outputs}) {
+        for my $tag (@{$output->tags}) {
+            my $bin = $result{$tag};
+            unless (defined $bin) {
+                $bin = Set::Scalar->new;
+                $result{$tag} = $bin;
+            }
+            $bin->insert($output->name);
+        }
     }
     return \%result;
 }
 Memoize::memoize('_outputs_hash');
-
-sub input_named {
-    my ($self, $name) = @_;
-
-    my $inputs_hash = $self->_inputs_hash;
-
-    if (exists $inputs_hash->{$name}) {
-        return $inputs_hash->{$name};
-    } else {
-        confess sprintf('Tool %s (%s) has no input with name (%s).',
-            $self->source_path, $self->alias || '', $name,
-        );
-    }
-}
-
-sub _inputs_hash {
-    my $self = shift;
-
-    my %result;
-    return \%result unless $self->inputs;
-
-    for my $input (@{$self->inputs}) {
-        $result{$input->name} = $input;
-    }
-    return \%result;
-}
-Memoize::memoize('_inputs_hash');
-
 
 sub _create_data_end_point {
     my $self  = shift;

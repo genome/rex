@@ -11,19 +11,19 @@ class TestTool::B {
 
     has_input => [
         bi1 => {
-            dsl_type => 'T4',
+            dsl_tags => ['T4'],
         },
         bi2 => {
-            dsl_type => 'T5',
+            dsl_tags => ['T5'],
         },
         bi3 => {
-            dsl_type => 'T6',
+            dsl_tags => ['T6'],
         },
     ],
 
     has_output => [
         bo1 => {
-            dsl_type => 'T7',
+            dsl_tags => ['T7'],
         },
     ],
 };

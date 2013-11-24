@@ -11,13 +11,13 @@ class TestTool::A {
 
     has_input => [
         ai1 => {
-            dsl_type => 'T1',
+            dsl_tags => ['T1'],
         },
     ],
 
     has_output => [
         ao1 => {
-            dsl_type => 'T6',
+            dsl_tags => ['T6'],
         },
     ],
 };

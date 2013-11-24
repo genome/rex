@@ -6,6 +6,7 @@ use warnings FATAL => 'all';
 use Carp qw(confess);
 use List::MoreUtils qw(first_index);
 use Params::Validate qw();
+use Set::Scalar;
 use Memoize;
 use Genome;
 
@@ -27,13 +28,23 @@ has links => (
 );
 has producers => (
     is => 'rw',
-    isa => 'HashRef[ArrayRef[Compiler::AST::DataEndPoint]]',
+    isa => 'HashRef[ArrayRef[Set::Scalar]]',
     default => sub {{}},
 );
 has consumers => (
     is => 'rw',
-    isa => 'HashRef[ArrayRef[Compiler::AST::DataEndPoint]]',
+    isa => 'HashRef[ArrayRef[Set::Scalar]]',
     default => sub {{}},
+);
+has flat_producers => (
+    is => 'rw',
+    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
+    default => sub {[]},
+);
+has flat_consumers => (
+    is => 'rw',
+    isa => 'ArrayRef[Compiler::AST::DataEndPoint]',
+    default => sub {[]},
 );
 
 sub BUILD {
@@ -94,14 +105,17 @@ sub _set_producers {
     my $self = shift;
 
     for my $node (@{$self->nodes}) {
-        for my $output (@{$node->outputs}) {
-            my $bin = $self->producers->{$output->type};
-            unless (defined $bin) {
-                $bin = [];
-                $self->producers->{$output->type} = $bin;
+        for my $output (values %{$node->outputs}) {
+            push @{$self->flat_producers}, $output;
+            for my $tag (@{$output->tags}) {
+                my $bin = $self->producers->{$tag};
+                unless (defined $bin) {
+                    $bin = Set::Scalar->new;
+                    $self->producers->{$tag} = $bin;
+                }
+                $output->is_used(0);
+                $bin->insert($output);
             }
-            $output->is_used(0);
-            push @$bin, $output;
         }
     }
     return;
@@ -111,18 +125,59 @@ sub _set_consumers {
     my $self = shift;
 
     for my $node (@{$self->nodes}) {
-        for my $input (@{$node->inputs}) {
-            my $bin = $self->consumers->{$input->type};
-            unless (defined $bin) {
-                $bin = [];
-                $self->consumers->{$input->type} = $bin;
+        for my $input (values %{$node->inputs}) {
+            push @{$self->flat_consumers}, $input;
+            for my $tag (@{$input->tags}) {
+                my $bin = $self->consumers->{$tag};
+                unless (defined $bin) {
+                    $bin = Set::Scalar->new;
+                    $self->consumers->{$tag} = $bin;
+                }
+                $input->is_used(0);
+                $bin->insert($input);
             }
-            $input->is_used(0);
-            push @$bin, $input;
         }
     }
     return;
 }
+
+sub _set_constants {
+    my $self = shift;
+
+    my %constants;
+    for my $node (@{$self->nodes}) {
+        my %node_constants = %{$node->constants};
+        for my $name (keys %node_constants) {
+            my $data_end_point = $node->inputs->{$name};
+            my $local_name = $self->_automatic_property_name($data_end_point);
+            my $value = $node_constants{$name};
+            $constants{$local_name} = $value;
+
+            # inherited constants should become inputs
+            my $source = $self->_add_input(name => $local_name, tags => $data_end_point->tags);
+            $self->_link(source => $source, destination => $data_end_point);
+        }
+    }
+
+    # this may not be allowed by the compiler!
+    # since name must start with lower_case, and the way we autogenerate input names
+    # uses the tool/process source_path to start them, we cannot generate a valid
+    # constant on a process. (We'll have a defaults file instead?)
+    for my $coupler ($self->constant_couplers) {
+        $constants{$coupler->name} = $coupler->value;
+    }
+
+    $self->constants(\%constants);
+}
+
+sub _add_input {
+    my $self = shift;
+
+    my $input = $self->_create_data_end_point(@_);
+    $self->inputs->{$input->name} = $input;
+    return $input;
+}
+
 
 sub _make_explicit_links {
     my $self = shift;
@@ -130,10 +185,10 @@ sub _make_explicit_links {
     my @links;
     for my $destination_node (@{$self->nodes}) {
         for my $coupler ($destination_node->internal_couplers) {
-            my $destination_end_point = $destination_node->input_named($coupler->name);
+            my $destination_end_point = $destination_node->inputs->{$coupler->name};
 
             my $source_node = $self->_node_aliased($coupler->source_node_alias);
-            my $source_end_point = $source_node->unique_output($destination_end_point->type);
+            my $source_end_point = $source_node->unique_output($destination_end_point->tags);
             $self->_link(source => $source_end_point, destination => $destination_end_point);
         }
     }
@@ -164,125 +219,80 @@ sub _link {
     ($params{destination})->is_used(1);
 }
 
-sub _set_constants {
-    my $self = shift;
-
-    my %constants;
-    for my $node (@{$self->nodes}) {
-        my %node_constants = %{$node->constants};
-        for my $name (keys %node_constants) {
-            my $data_end_point = $node->input_named($name);
-            my $local_name = $self->_automatic_property_name($data_end_point);
-            my $value = $node_constants{$name};
-            $constants{$local_name} = $value;
-
-            # inherited constants should become inputs
-            my $source = $self->_add_input(name => $local_name, type => $data_end_point->type);
-            $self->_link(source => $source, destination => $data_end_point);
-        }
-    }
-
-    # this may not be allowed by the compiler!
-    # since name must start with lower_case, and the way we autogenerate input names
-    # uses the tool/process source_path to start them, we cannot generate a valid
-    # constant on a process. (We'll have a defaults file instead?)
-    for my $coupler ($self->constant_couplers) {
-        $constants{$coupler->name} = $coupler->value;
-    }
-
-    $self->constants(\%constants);
-}
-
-sub _add_input {
-    my $self = shift;
-
-    my $input = $self->_create_data_end_point(@_);
-    push @{$self->inputs}, $input;
-    return $input;
-}
-
 sub _resolve_automatic_links {
     my $self = shift;
 
-    for my $type (keys %{$self->consumers}) {
-        for my $consumer (@{$self->consumers->{$type}}) {
-            next if $consumer->is_used;
+    CONSUMER: for my $consumer (@{$self->flat_consumers}) {
+        next CONSUMER if $consumer->is_used;
 
-            my $producers = $self->producers->{$type};
-            next unless $producers;
+        my @producer_set;
+        for my $tag (@{$consumer->tags}) {
+            my $producers = $self->producers->{$tag};
+            next CONSUMER unless defined $producers; # automatic input
+            push @producer_set, $producers;
+        }
 
-            my @distinct_producers = grep {$_->node != $consumer->node} @$producers;
-            if (scalar @distinct_producers == 1) {
-                $self->_link(source => $distinct_producers[0], destination => $consumer);
-            } elsif (scalar @distinct_producers > 1) {
-                confess sprintf('Found multiple producers for type %s: %s',
-                    $type, join(', ', map {$_->node->alias . '.' . $_->name} @distinct_producers),
-                );
-            }
+        my $potential_producers = _intersection(@producer_set);
+        my $distinct_potential_producers = $potential_producers -
+            Set::Scalar->new(values %{$consumer->node->outputs});
+
+        if ($distinct_potential_producers->size == 1) {
+            $self->_link(source => ($distinct_potential_producers->members)[0],
+                destination => $consumer);
+        } elsif ($distinct_potential_producers->size > 1) {
+            confess sprintf('Found multiple producers for tags [%s]: %s while finding producer for %s.%s',
+                join(', ', @{$consumer->tags}),
+                join(', ', map {$_->node->alias . '.' . $_->name}
+                    $distinct_potential_producers->members),
+                $consumer->node->alias, $consumer->name
+            );
         }
     }
+    return;
+}
+
+sub _intersection {
+    my ($first, @rest) = @_;
+
+    return $first->intersection(@rest);
 }
 
 sub _resolve_automatic_inputs {
     my $self = shift;
 
-    for my $type (keys %{$self->consumers}) {
-        my $consumers = $self->_unused_consumers($type);
-        next unless scalar(@$consumers);
+    for my $consumer (@{$self->flat_consumers}) {
+        next if $consumer->is_used;
 
-        for my $consumer (@$consumers) {
-            my $source = $self->_add_input(
-                name => $self->_automatic_property_name($consumer),
-                type => $type,
-            );
-            $self->_link(source => $source, destination => $consumer);
-        }
+        my $source = $self->_add_input(
+            name => $self->_automatic_property_name($consumer),
+            tags => $consumer->tags,
+        );
+        $self->_link(source => $source, destination => $consumer);
     }
-}
-
-sub _unused_consumers {
-    my $self = shift;
-    my $type = shift;
-
-    my @result;
-    for my $consumer (@{$self->consumers->{$type}}) {
-        push @result, $consumer unless $consumer->is_used;
-    }
-    return \@result;
+    return;
 }
 
 sub _resolve_automatic_outputs {
     my $self = shift;
 
-    for my $type (keys %{$self->producers}) {
-        my $producers = $self->_unused_producers($type);
+    for my $producer (@{$self->flat_producers}) {
+        next if $producer->is_used;
 
-        for my $producer (@$producers) {
-            my $destination = $self->_add_output(
-                name => $self->_automatic_property_name($producer),
-                type => $type,
-            );
-            $self->_link(source => $producer, destination => $destination);
-        }
+        my $destination = $self->_add_output(
+            name => $self->_automatic_property_name($producer),
+            tags => $producer->tags,
+        );
+        $self->_link(source => $producer, destination => $destination);
+
     }
-}
-
-sub _unused_producers {
-    my $self = shift;
-    my $type = shift;
-
-    my @result;
-    for my $producer (@{$self->producers->{$type}}) {
-        push @result, $producer unless $producer->is_used;
-    }
-    return \@result;
+    return;
 }
 
 sub _add_output {
     my $self = shift;
 
     my $output = $self->_create_data_end_point(@_);
-    push @{$self->outputs}, $output;
+    $self->outputs->{$output->name} = $output;
     return $output;
 }
 

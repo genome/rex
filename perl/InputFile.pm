@@ -50,12 +50,12 @@ sub create_from_inputs_and_constants {
     my ($class, $inputs, $constants) = @_;
 
     my @entries;
-    my @inputs = @{$inputs->[0]};
+    my @inputs = values %{$inputs};
     push @entries, map {InputFile::Entry->create(name => $_->name,
-            type => $_->type, value => $constants->{$_->name})} @inputs;
+            tags => $_->tags, value => $constants->{$_->name})} @inputs;
 
     for my $entry (@entries) {
-        if ($entry->type =~ /STEP_LABEL/) {
+        if ($entry->has_tag_like('STEP_LABEL')) {
             $entry->value($entry->name);
         }
     }
@@ -132,27 +132,16 @@ sub _validate_no_duplicate_names {
     return;
 }
 
-sub unique_input_name_for {
-    my ($self, $type) = @_;
-
-    my @found_entries = grep {$_->type eq $type
-                              && !defined($_->value)} $self->entries;
-    unless (scalar(@found_entries) == 1) {
-        confess sprintf("Found multiple entries of type '%s': [%s]",
-            $type, join(', ',
-                map {sprintf("'%s' => '%s'", $_->name, $_->value || '')}
-                @found_entries)
-        );
-    }
-
-    return $found_entries[0]->name;
-}
-
 sub set_process {
     my ($self, $url) = @_;
 
-    my $process_input_name = $self->unique_input_name_for('PROCESS');
-    $self->set_inputs($process_input_name => $url);
+    my %process_hash;
+    for my $entry ($self->entries) {
+        if ($entry->has_tag('PROCESS')) {
+            $process_hash{$entry->name} = $url;
+        }
+    }
+    $self->set_inputs(%process_hash);
 
     return;
 }
@@ -160,8 +149,13 @@ sub set_process {
 sub set_test_name {
     my ($self, $value) = @_;
 
-    my $test_name_name = $self->unique_input_name_for('TEST_NAME');
-    $self->set_inputs($test_name_name => $value);
+    my %test_name_hash;
+    for my $entry ($self->entries) {
+        if ($entry->has_tag('TEST_NAME')) {
+            $test_name_hash{$entry->name} = $value;
+        }
+    }
+    $self->set_inputs(%test_name_hash);
 
     return;
 }

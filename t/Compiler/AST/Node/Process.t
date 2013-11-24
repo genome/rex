@@ -45,7 +45,7 @@ subtest 'nested_constants' => sub {
     );
 
     # FIXME this line should go away after I impliment automatic link resolution.
-    $inside_process->_add_input(name => 'Example.input_2', type => ($tool->input_named('input_2'))->type);
+    $inside_process->_add_input(name => 'Example.input_2', tags => ($tool->inputs->{input_2})->tags);
 
     my $outside_process = Compiler::AST::Node::Process->new(
         source_path => 'Outside',

@@ -11,13 +11,13 @@ class TestTool::F {
 
     has_input => [
         fi1 => {
-            dsl_type => 'T3',
+            dsl_tags => ['T3'],
         },
     ],
 
     has_output => [
         fo1 => {
-            dsl_type => 'T5',
+            dsl_tags => ['T5'],
         },
     ],
 };

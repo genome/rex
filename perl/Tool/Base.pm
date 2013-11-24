@@ -11,6 +11,7 @@ use File::Spec qw();
 use Translator;
 use File::Temp qw();
 use File::Path qw();
+use Data::UUID;
 use Cwd qw();
 
 use Manifest::Reader;
@@ -37,8 +38,9 @@ class Tool::Base {
             is => 'Boolean',
             is_optional => 1,
         },
-        dsl_type => {
+        dsl_tags => {
             is => 'Text',
+            is_many => 1,
 #            is_optional => 0,
         },
     ],
@@ -46,15 +48,15 @@ class Tool::Base {
     has_contextual_input => [
         _process => {
             is => 'File',
-            dsl_type => 'PROCESS',
+            dsl_tags => ['PROCESS'],
         },
         test_name => {
             is => 'Text',
-            dsl_type => 'TEST_NAME',
+            dsl_tags => ['TEST_NAME'],
         },
         _step_label => {
             is => 'Text',
-            dsl_type => 'STEP_LABEL',
+            dsl_tags => ['STEP_LABEL'],
         },
 
     ],
@@ -138,37 +140,56 @@ sub execute {
 sub ast_inputs {
     my $class = shift;
 
-    return $class->_property_type_hash(is_input => 1);
+    return $class->_property_tags_hash(is_input => 1);
 }
 
 sub ast_outputs {
     my $class = shift;
 
-    my $outputs = $class->_property_type_hash(is_output => 1);
+    my $outputs = $class->_property_tags_hash(is_output => 1);
 
     delete $outputs->{result};  #  result is legacy baggage
     return $outputs;
 }
 
-sub _property_type_hash {
+sub _property_tags_hash {
     my $class = shift;
 
     my %result;
     for my $property ($class->__meta__->properties(@_)) {
-        $result{$property->property_name} = $class->_get_dsl_type($property);
+        $result{$property->property_name} = $class->_get_dsl_tags($property);
     }
 
     return \%result;
 }
 
-sub _get_dsl_type {
+sub _get_dsl_tags {
     my ($class, $property) = @_;
 
     my $meta = $class->__meta__->property_meta_for_name(
         $property->property_name);
-    my $result = $meta->{dsl_type};
 
-    return $result;
+    my @tags;
+    for my $tag (@{$meta->{dsl_tags}}) { # why does ur suck so much with is_many?
+        push @tags, _annotate_tag($tag);
+    }
+    return \@tags;
+}
+
+sub _annotate_tag {
+    my $tag = shift;
+
+    if ($tag =~ /STEP_LABEL/) {
+        return sprintf("%s_%s", $tag, _new_uuid());
+    } else {
+        return $tag;
+    }
+}
+
+sub _new_uuid {
+    my $ug = Data::UUID->new();
+    my $uuid = $ug->create();
+    return $ug->to_string($uuid);
 }
 
 

@@ -11,13 +11,13 @@ class TestTool::X {
 
     has_input => [
         x_in_1 => {
-            dsl_type => 'X::Input1',
+            dsl_tags => ['X::Input1'],
         },
     ],
 
     has_output => [
         x_out_1 => {
-            dsl_type => 'X::Output1',
+            dsl_tags => ['X::Output1'],
         },
     ],
 };

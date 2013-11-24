@@ -11,17 +11,16 @@ subtest outputs => sub {
     my $tool = Compiler::AST::Node::Tool->new(
         source_path => 'TestTool::Example',
     );
-    is($tool->unique_output('Beta')->name, 'output_3', 'found unique output');
-    dies_ok {$tool->unique_output('Alpha');} 'more than one output dies';
-    dies_ok {$tool->unique_output('bad');} 'unknown type dies';
+    is($tool->unique_output(['Beta'])->name, 'output_3', 'found unique output');
+    dies_ok {$tool->unique_output(['Alpha']);} 'more than one output dies';
+    dies_ok {$tool->unique_output(['bad']);} 'unknown type dies';
 };
 
 subtest inputs => sub {
     my $tool = Compiler::AST::Node::Tool->new(
         source_path => 'TestTool::Example',
     );
-    is($tool->input_named('input_1')->type, 'Alpha', 'found input by name');
-    dies_ok {$tool->input_named('bad')} 'unknown name dies';
+    is_deeply($tool->inputs->{input_1}->tags, ['Alpha'], 'found input by name');
 };
 
 subtest constants => sub {

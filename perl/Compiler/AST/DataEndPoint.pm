@@ -13,9 +13,9 @@ has 'name' => (
     isa => 'Str',
     required => 1,
 );
-has 'type' => (
+has 'tags' => (
     is => 'ro',
-    isa => 'Str',
+    isa => 'ArrayRef[Str]',
     required => 1,
 );
 has 'is_used' => (

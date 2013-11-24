@@ -11,13 +11,13 @@ class TestTool::D {
 
     has_input => [
         di1 => {
-            dsl_type => 'T2',
+            dsl_tags => ['T2'],
         },
     ],
 
     has_output => [
         do1 => {
-            dsl_type => 'T4',
+            dsl_tags => ['T4'],
         },
     ],
 };

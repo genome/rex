@@ -7,6 +7,7 @@ use UR;
 use Carp qw(confess);
 
 use Text::CSV qw();
+use Memoize qw();
 
 
 class InputFile::Entry {
@@ -16,8 +17,8 @@ class InputFile::Entry {
         name => {
             is => 'Text',
         },
-        type => {
-            is => 'Text',
+        tags => {
+            is => 'ARRAY',
         },
 
         value => {
@@ -27,13 +28,38 @@ class InputFile::Entry {
     ],
 };
 
+sub has_tag {
+    my ($self, $tag) = @_;
+
+    my $result = 0;
+    for my $entry_tag (@{$self->tags}) {
+        if ($tag eq $entry_tag) {
+            $result = 1;
+            last;
+        }
+    }
+    return $result;
+}
+
+sub has_tag_like {
+    my ($self, $regex) = @_;
+
+    my $result = 0;
+    for my $entry_tag (@{$self->tags}) {
+        if ($entry_tag =~ /$regex/) {
+            $result = 1;
+            last;
+        }
+    }
+    return $result;
+}
 
 sub assert_has_value {
     my $self = shift;
 
     unless (defined($self->value)) {
-        confess sprintf("Input entry %s (%s) has no value",
-            $self->type, $self->name);
+        confess sprintf("Input entry %s tags=[%s] has no value",
+            $self->name, join(', ', @{$self->tags}));
     }
 
     return;
@@ -51,7 +77,7 @@ sub write {
 sub as_string {
     my $self = shift;
 
-    my @columns = ($self->type, $self->name);
+    my @columns = (join(',', @{$self->tags}), $self->name);
     if (defined($self->value)) {
         push @columns, $self->value;
     }
@@ -82,8 +108,10 @@ sub create_from_line {
             scalar(@columns), join(', ', map {sprintf("'%s'")} @columns));
     }
 
-    my ($type, $name, $value) = @columns;
-    return $class->create(name => $name, type => $type, value => $value);
+    my ($tags_part, $name, $value) = @columns;
+    my @tags = split(/,/, $tags_part);
+
+    return $class->create(name => $name, tags => \@tags, value => $value);
 }
 
 1;

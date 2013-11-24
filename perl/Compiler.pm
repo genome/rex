@@ -42,8 +42,7 @@ sub execute {
 
     $self->make_output_directory;
 
-    my @inputs = $root_process->inputs;
-    $self->save_inputs_with_constants(\@inputs, $root_process->constants);
+    $self->save_inputs_with_constants($root_process->inputs, $root_process->constants);
 
     $self->save_data('workflow.xml', $root_process->dag->get_xml);
     $self->format_xml('workflow.xml');
