@@ -6,5 +6,7 @@ use warnings;
 use Compiler;
 use Tool;
 
+my $compiler = Compiler->new_with_options();
+$compiler->execute();
 
-Compiler->execute_with_shell_params_and_exit();
+1;

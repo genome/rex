@@ -23,9 +23,9 @@ use Compiler;
 sub compile {
     my ($input_file, $output_directory, $label) = @_;
 
-    my $cmd = Compiler->create(
-        input_file => $input_file,
-        output_directory => $output_directory,
+    my $cmd = Compiler->new(
+        'input-file' => $input_file,
+        'output-directory' => $output_directory,
     );
 
     ok($cmd->execute, sprintf('command ran (%s)', $label)) || die;
