@@ -1,9 +1,8 @@
 package InputFile;
 
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
-use UR;
 use Carp qw(confess);
 use List::MoreUtils qw();
 use IO::File qw();
@@ -11,16 +10,11 @@ use IO::File qw();
 use InputFile::Entry;
 use Data::Dumper;
 
-
-class InputFile {
-    has => [
-        entries => {
-            is => 'InputFile::Entry',
-            is_many => 1,
-        },
-    ],
-};
-
+has entries => (
+    is => 'rw',
+    isa => 'ArrayRef[InputFile::Entry]',
+    default => sub {[]},
+);
 
 sub create_from_filename {
     my ($class, $filename) = @_;
@@ -51,7 +45,7 @@ sub create_from_inputs_and_constants {
 
     my @entries;
     my @inputs = values %{$inputs};
-    push @entries, map {InputFile::Entry->create(name => $_->name,
+    push @entries, map {InputFile::Entry->new(name => $_->name,
             tags => $_->tags, value => $constants->{$_->name})} @inputs;
 
     for my $entry (@entries) {
@@ -60,7 +54,7 @@ sub create_from_inputs_and_constants {
         }
     }
 
-    my $self = $class->create(entries => \@entries);
+    my $self = $class->new(entries => \@entries);
 
     return $self;
 }
@@ -78,7 +72,7 @@ sub write_to_filename {
 sub write {
     my ($self, $file_handle) = @_;
 
-    for my $entry (sort {$a->as_sortable_string cmp $b->as_sortable_string} $self->entries) {
+    for my $entry (sort {$a->as_sortable_string cmp $b->as_sortable_string} @{$self->entries}) {
         $entry->write($file_handle);
     }
 
@@ -110,7 +104,7 @@ sub validate_completeness {
 sub _validate_no_missing_values {
     my $self = shift;
 
-    for my $entry ($self->entries) {
+    for my $entry (@{$self->entries}) {
         $entry->assert_has_value;
     }
 
@@ -121,7 +115,7 @@ sub _validate_no_duplicate_names {
     my $self = shift;
 
     my %names;
-    for my $entry ($self->entries) {
+    for my $entry (@{$self->entries}) {
         if (exists $names{$entry->name}) {
             confess sprintf("Duplciate input found for '%s'", $entry->name);
         } else {
@@ -136,7 +130,7 @@ sub set_process {
     my ($self, $url) = @_;
 
     my %process_hash;
-    for my $entry ($self->entries) {
+    for my $entry (@{$self->entries}) {
         if ($entry->has_tag('PROCESS')) {
             $process_hash{$entry->name} = $url;
         }
@@ -150,7 +144,7 @@ sub set_test_name {
     my ($self, $value) = @_;
 
     my %test_name_hash;
-    for my $entry ($self->entries) {
+    for my $entry (@{$self->entries}) {
         if ($entry->has_tag('TEST_NAME')) {
             $test_name_hash{$entry->name} = $value;
         }
@@ -180,14 +174,14 @@ sub entry_named {
 
     $self->_validate_no_duplicate_names;
 
-    return List::MoreUtils::first_value {$_->name eq $name} $self->entries;
+    return List::MoreUtils::first_value {$_->name eq $name} @{$self->entries};
 }
 
 
 sub update {
     my ($self, $other) = @_;
 
-    for my $other_entry ($other->entries) {
+    for my $other_entry (@{$other->entries}) {
         my $self_entry = $self->entry_named($other_entry->name);
         $self_entry->value($other_entry->value);
     }

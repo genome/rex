@@ -1,32 +1,27 @@
 package InputFile::Entry;
 
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
-use UR;
 use Carp qw(confess);
 
 use Text::CSV qw();
 use Memoize qw();
 
-
-class InputFile::Entry {
-    id_generator => '-uuid',
-
-    has => [
-        name => {
-            is => 'Text',
-        },
-        tags => {
-            is => 'ARRAY',
-        },
-
-        value => {
-            is => 'Text',
-            is_optional => 1,
-        },
-    ],
-};
+has name => (
+    is => 'ro',
+    isa => 'Str',
+    required => 1,
+);
+has tags => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
+    required => 1,
+);
+has value => (
+    is => 'rw',
+    isa => 'Value|Undef',
+);
 
 sub has_tag {
     my ($self, $tag) = @_;
