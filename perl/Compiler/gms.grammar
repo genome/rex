@@ -8,6 +8,7 @@ process_definition: node(s)
                 source_path => $root_source_path, # defined in a startup_action
                 nodes => $item[1] );
         }
+    | <error>
 
 node: alias(?) type parallel_statement(?) with_statements(?)
         { $return = Compiler::AST::NodeFactory::new_node(
@@ -17,6 +18,7 @@ node: alias(?) type parallel_statement(?) with_statements(?)
                 couplers => $item[4][0] || [],
             );
         }
+    | <error>
 
 alias: name "is"
         { $return = $item[1]; }
@@ -29,11 +31,17 @@ with_statements: "with" coupler(s /,/)
         { $return = $item[2]; }
     | <error>
 
-coupler: internal_statement
-        {$return = $item[1]; }
+coupler: fully_specified_internal_statement
+        { $return = $item[1]; }
+    | internal_statement
+        { $return = $item[1]; }
     | constant_statement
         { $return = $item[1]; }
     | <error>
+
+fully_specified_internal_statement: name "from" fully_specified_identifier
+        { $return = Compiler::AST::Coupler::FullySpecifiedInternal->new(
+                name => $item[1], fully_specified_source => $item[3]); }
 
 internal_statement: name "from" identifier
         { $return = Compiler::AST::Coupler::Internal->new(
@@ -58,6 +66,9 @@ identifier: name
 name: /[a-z][A-Za-z0-9_]*/
         { $return = $item[1]; }
 type: /[A-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*/
+        { $return = $item[1]; }
+
+fully_specified_identifier: /[a-zA-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*\.[a-z][A-Za-z0-9_]*/
         { $return = $item[1]; }
 
 eof: /^\Z/

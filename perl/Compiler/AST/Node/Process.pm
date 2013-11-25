@@ -188,7 +188,17 @@ sub _make_explicit_links {
             my $destination_end_point = $destination_node->inputs->{$coupler->name};
 
             my $source_node = $self->_node_aliased($coupler->source_node_alias);
-            my $source_end_point = $source_node->unique_output($destination_end_point->tags);
+            my $source_end_point;
+            if ($coupler->can('source_name')) {
+                if ($source_node->outputs->{$coupler->source_name}) {
+                    $source_end_point = $source_node->outputs->{$coupler->source_name};
+                } else {
+                    confess sprintf("No output named (%s) on node %s (%s)",
+                        $coupler->source_name, $source_node->source_path, $source_node->alias);
+                }
+            } else {
+                $source_end_point = $source_node->unique_output($destination_end_point->tags);
+            }
             $self->_link(source => $source_end_point, destination => $destination_end_point);
         }
     }
@@ -202,6 +212,9 @@ sub _node_aliased {
     for my $node (@{$self->nodes}) {
         return $node if $node->alias eq $alias;
     }
+    confess sprintf("No node found with alias (%s): [%s]",
+        $alias, join(', ', map {sprintf("%s (%s)", $_->source_path, $_->alias)} @{$self->nodes}),
+    );
 }
 
 sub _link {
