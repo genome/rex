@@ -10,12 +10,11 @@ process_definition: node(s)
         }
     | <error>
 
-node: alias(?) type parallel_statement(?) with_statements(?)
+node: alias(?) type coupler_statements(?)
         { $return = Compiler::AST::NodeFactory::new_node(
                 source_path => $item[2],
                 alias => $item[1][0] || '',
-                parallel => $item[3][0] || [],
-                couplers => $item[4][0] || [],
+                couplers => $item[3][0] || [],
             );
         }
     | <error>
@@ -24,10 +23,7 @@ alias: name "is"
         { $return = $item[1]; }
     | <error>
 
-parallel_statement: "parallel" name(s /\*/)
-        { $return = $item[2]; }
-
-with_statements: coupler(s /,/)
+coupler_statements: coupler(s /,/)
         { $return = $item[1]; }
     | <error>
 
