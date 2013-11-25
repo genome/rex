@@ -13,6 +13,7 @@ use Parse::RecDescent qw();
 use Compiler::AST::NodeFactory;
 use Compiler::AST::Node::Process;
 use Compiler::AST::Coupler::Input;
+use Compiler::AST::Coupler::Output;
 use Compiler::AST::Coupler::FullySpecifiedInternal;
 use Compiler::AST::Coupler::Internal;
 use Compiler::AST::Coupler::Constant;

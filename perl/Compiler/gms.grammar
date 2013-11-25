@@ -28,6 +28,7 @@ coupler_statements: coupler(s /,/)
 coupler: fully_specified_internal_statement
     | internal_statement
     | input_statement
+    | output_statement
     | constant_statement
     | <error>
 
@@ -39,9 +40,13 @@ internal_statement: name "from" identifier
         { $return = Compiler::AST::Coupler::Internal->new(
                 name => $item[1], source_node_alias => $item[3]); }
 
-input_statement: name "from" input
+input_statement: name "from" io_specifier
         { $return = Compiler::AST::Coupler::Input->new(
                 name => $item[1], input_name => $item[3]); }
+
+output_statement: name "to" io_specifier
+        { $return = Compiler::AST::Coupler::Output->new(
+                name => $item[1], output_name => $item[3]); }
 
 constant_statement: name "=" constant
         { $return = Compiler::AST::Coupler::Constant->new(
@@ -60,7 +65,7 @@ identifier: name
 name: /[a-z][A-Za-z0-9_]*/
 type: /[A-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*/
 
-input: "@" name
+io_specifier: "@" name
         { $return = $item[2]; }
 
 fully_specified_identifier: /[a-zA-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*\.[a-z][A-Za-z0-9_]*/

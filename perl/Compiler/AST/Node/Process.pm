@@ -58,6 +58,7 @@ sub BUILD {
     $self->_set_constants;
 
     $self->_make_explicit_inputs;
+    $self->_make_explicit_outputs;
     $self->_make_explicit_links;
     $self->_resolve_automatic_links;
     $self->_resolve_automatic_inputs;
@@ -233,6 +234,22 @@ sub _find_or_add_input {
     return $existing_input;
 }
 
+sub _make_explicit_outputs {
+    my $self = shift;
+
+    my @links;
+    for my $source_node (@{$self->nodes}) {
+        for my $coupler ($source_node->output_couplers) {
+            my $source_end_point = $source_node->outputs->{$coupler->name};
+
+            my $destination_end_point = $self->_add_output(name => $coupler->output_name,
+                tags => $source_end_point->tags);
+            $self->_link(source => $source_end_point, destination => $destination_end_point);
+        }
+    }
+    push @{$self->links}, @links;
+}
+
 
 sub _node_aliased {
     my $self = shift;
@@ -334,7 +351,12 @@ sub _add_output {
     my $self = shift;
 
     my $output = $self->_create_data_end_point(@_);
-    $self->outputs->{$output->name} = $output;
+    if (exists $self->outputs->{$output->name}) {
+        confess sprintf("Tried to create output named (%s) that already exists on node %s (%s)",
+            $output->name, $self->source_path, $self->alias);
+    } else {
+        $self->outputs->{$output->name} = $output;
+    }
     return $output;
 }
 
