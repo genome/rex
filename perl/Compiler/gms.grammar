@@ -25,17 +25,20 @@ alias: name "is"
 parallel_statement: "parallel" name(s /\*/)
         { $return = $item[2]; }
 
-with_statements: "with" link_statement(s /,/) "," constant_statement(s /,/)
-        { $return = [@$item[2], @$item[4]]; }
-    | "with" link_statement(s /,/)
-        { $return = $item[2]; }
-    | "with" constant_statement(s /,/)
+with_statements: "with" coupler(s /,/)
         { $return = $item[2]; }
     | <error>
 
-link_statement: name "from" identifier
+coupler: internal_statement
+        {$return = $item[1]; }
+    | constant_statement
+        { $return = $item[1]; }
+    | <error>
+
+internal_statement: name "from" identifier
         { $return = Compiler::AST::Coupler::Internal->new(
                 name => $item[1], source_node_alias => $item[3]); }
+
 constant_statement: name "=" constant
         { $return = Compiler::AST::Coupler::Constant->new(
                 name => $item[1], value => $item[3]); }
