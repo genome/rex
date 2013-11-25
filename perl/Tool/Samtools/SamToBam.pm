@@ -15,14 +15,14 @@ class Tool::Samtools::SamToBam {
     has_input => [
         input_sam => {
             is => "File",
-            dsl_type => 'File::Sam::Aligned',
+            dsl_tags => [qw(file sam aligned)],
         },
     ],
 
     has_output => [
         output_bam => {
             is => "File",
-            dsl_type => 'File::Bam::Aligned',
+            dsl_tags => [qw(file bam aligned)],
         },
     ],
 };

@@ -32,7 +32,7 @@ sub update_tags {
 
     my $unioned_tags = $new_tags + $old_tags;
 
-    $self->tags(@{$unioned_tags->members});
+    $self->tags([$unioned_tags->members]);
     return;
 }
 

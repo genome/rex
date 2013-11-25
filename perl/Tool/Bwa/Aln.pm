@@ -17,32 +17,32 @@ class Tool::Bwa::Aln {
     has_input => [
         input_bam => {
             is => "File",
-            dsl_type => 'File::Bam::Unaligned::Paired',
+            dsl_tags => [qw(file bam unaligned paired)],
         },
         alignment_index => {
             is => "File",
-            dsl_type => 'File::AlignerIndex::Bwa',
+            dsl_tags => [qw(file index bwa)],
         },
         read_mode => {
             is => "Number",
-            dsl_type => 'Integer::Bwa::Aln::ReadMode',
+            dsl_tags => [qw(integer param bwa aln read_mode)],
             valid_values => [0,1,2],
         },
 
         threads => {
             is => "Number",
-            dsl_type => 'Integer::Bwa::Aln::Threads',
+            dsl_tags => [qw(integer param bwa aln threads)],
         },
         trimming_quality_threshold => {
             is => "Number",
-            dsl_type => 'Integer::Bwa::Aln::TrimmingQualityThreshold',
+            dsl_tags => [qw(integer param bwa aln trimming_quality_threshold)],
         },
     ],
 
     has_output => [
         output_file => {
             is => "File",
-            dsl_type => 'File::Sai',
+            dsl_tags => [qw(file sai)],
         },
     ],
 };

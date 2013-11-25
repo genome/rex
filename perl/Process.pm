@@ -121,7 +121,7 @@ sub save_inputs {
 sub url {
     my $self = shift;
 
-    return sprintf('gms:///process/%s', $self->id);
+    return sprintf('gms:///process?id=%s', $self->id);
 }
 
 sub steps {

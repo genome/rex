@@ -106,7 +106,7 @@ sub create_from_line {
     my ($tags_part, $name, $value) = @columns;
     my @tags = split(/,/, $tags_part);
 
-    return $class->create(name => $name, tags => \@tags, value => $value);
+    return $class->new(name => $name, tags => \@tags, value => $value);
 }
 
 1;

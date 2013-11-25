@@ -84,7 +84,7 @@ sub lookup {
     my $lookup_hash = calculate_lookup_hash($params{inputs});
     $class->status_message("Attempting lookup for tool '%s' "
         . "with lookup_hash '%s' and test_name '%s'",
-        $params{tool_class_name}, $params{test_name}, $lookup_hash);
+        $params{tool_class_name}, $lookup_hash, $params{test_name});
 
     my $force_scalar = $class->get(tool_class_name => $params{tool_class_name},
         lookup_hash => $lookup_hash, test_name => $params{test_name});

@@ -34,7 +34,7 @@ sub create_from_file_handle {
         push @entries, InputFile::Entry->create_from_line($line);
     }
 
-    my $self = $class->create(entries => \@entries);
+    my $self = $class->new(entries => \@entries);
 
     return $self;
 }
@@ -85,7 +85,7 @@ sub as_hash {
     $self->validate_completeness;
 
     my %result;
-    for my $entry ($self->entries) {
+    for my $entry (@{$self->entries}) {
         $result{$entry->name} = $entry->value;
     }
 

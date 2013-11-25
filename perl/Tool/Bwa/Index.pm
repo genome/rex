@@ -17,14 +17,14 @@ class Tool::Bwa::Index {
     has_input => [
         input_fasta => {
             is => "File",
-            dsl_type => 'File::Fasta',
+            dsl_tags => [qw(file fasta)],
         },
     ],
 
     has_output => [
         output_fasta => {
             is => "File",
-            dsl_type => 'File::AlignerIndex::Bwa',
+            dsl_tags => [qw(file index bwa)],
         },
     ],
 

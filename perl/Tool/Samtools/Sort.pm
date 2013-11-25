@@ -17,14 +17,14 @@ class Tool::Samtools::Sort {
     has_input => [
         input_bam => {
             is => "File",
-            dsl_type => 'File::Bam::Aligned',
+            dsl_tags => [qw(file bam aligned)],
         },
     ],
 
     has_output => [
         output_bam => {
             is => "File",
-            dsl_type => 'File::Bam::Aligned',
+            dsl_tags => [qw(file bam aligned chormosome_sorted)],
         },
     ],
 };

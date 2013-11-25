@@ -50,8 +50,8 @@ sub execute {
 sub compile {
     my $self = shift;
 
-    my $compiler = Compiler->create(input_file => $self->definition,
-        output_directory => $self->_tempdir);
+    my $compiler = Compiler->new('input-file' => $self->definition,
+        'output-directory' => $self->_tempdir);
     $compiler->execute;
 
     return;

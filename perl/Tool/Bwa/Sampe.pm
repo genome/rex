@@ -13,31 +13,31 @@ class Tool::Bwa::Sampe {
     has_input => [
         alignment_index => {
             is => "File",
-            dsl_type => 'File::AlignerIndex::Bwa',
+            dsl_tags => [qw(file index bwa)],
         },
         unaligned_bam => {
             is => "File",
-            dsl_type => 'File::Bam::Unaligned::Paired',
+            dsl_tags => [qw(file bam unaligned paired)],
         },
         first_sai => {
             is => "File",
-            dsl_type => 'File::Sai',
+            dsl_tags => [qw(file sai)],
         },
         second_sai => {
             is => "File",
-            dsl_type => 'File::Sai',
+            dsl_tags => [qw(file sai)],
         },
 
         max_insert_size => {
             is => "Number",
-            dsl_type => 'Integer::Bwa::Sampe::MaxInsertSize',
+            dsl_tags => [qw(integer param bwa sampe max_insert_size)],
         },
     ],
 
     has_output => [
         output_file => {
             is => "File",
-            dsl_type => 'File::Sam::Aligned',
+            dsl_tags => [qw(file sam aligned paired)],
         },
     ],
 };
