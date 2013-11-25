@@ -24,17 +24,11 @@ alias: name "is"
     | <error>
 
 coupler_statements: coupler(s /,/)
-        { $return = $item[1]; }
-    | <error>
 
 coupler: fully_specified_internal_statement
-        { $return = $item[1]; }
     | internal_statement
-        { $return = $item[1]; }
     | input_statement
-        { $return = $item[1]; }
     | constant_statement
-        { $return = $item[1]; }
     | <error>
 
 fully_specified_internal_statement: name "from" fully_specified_identifier
@@ -60,20 +54,15 @@ constant: /'(\\'|.)*'/
     | <error>
 
 identifier: name
-        { $return = $item[1]; }
     | type
-        { $return = $item[1]; }
     | <error>
 
 name: /[a-z][A-Za-z0-9_]*/
-        { $return = $item[1]; }
 type: /[A-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*/
-        { $return = $item[1]; }
 
 input: "@" name
         { $return = $item[2]; }
 
 fully_specified_identifier: /[a-zA-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*\.[a-z][A-Za-z0-9_]*/
-        { $return = $item[1]; }
 
 eof: /^\Z/
