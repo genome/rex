@@ -1,1 +1,1 @@
-TestTool::A with ai1 = 42
+TestTool::A ai1 = 42
