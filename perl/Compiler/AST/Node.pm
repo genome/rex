@@ -58,6 +58,12 @@ sub internal_couplers {
     return grep {$_->is_internal} @{$self->couplers};
 }
 
+sub input_couplers {
+    my $self = shift;
+
+    return grep {$_->is_input && !$_->is_constant} @{$self->couplers};
+}
+
 
 sub source_path_components {
     my $self = shift;

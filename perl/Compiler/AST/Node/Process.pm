@@ -57,6 +57,7 @@ sub BUILD {
 
     $self->_set_constants;
 
+    $self->_make_explicit_inputs;
     $self->_make_explicit_links;
     $self->_resolve_automatic_links;
     $self->_resolve_automatic_inputs;
@@ -204,6 +205,34 @@ sub _make_explicit_links {
     }
     push @{$self->links}, @links;
 }
+
+sub _make_explicit_inputs {
+    my $self = shift;
+
+    my @links;
+    for my $destination_node (@{$self->nodes}) {
+        for my $coupler ($destination_node->input_couplers) {
+            my $destination_end_point = $destination_node->inputs->{$coupler->name};
+
+            my $source_end_point = $self->_find_or_add_input($coupler->input_name, $destination_end_point->tags);
+            $self->_link(source => $source_end_point, destination => $destination_end_point);
+        }
+    }
+    push @{$self->links}, @links;
+}
+
+sub _find_or_add_input {
+    my ($self, $name, $tags) = @_;
+
+    my $existing_input = $self->inputs->{$name};
+    if (defined $existing_input) {
+        $existing_input->update_tags($tags);
+    } else {
+        $existing_input = $self->_add_input(name => $name, tags => $tags);
+    }
+    return $existing_input;
+}
+
 
 sub _node_aliased {
     my $self = shift;
