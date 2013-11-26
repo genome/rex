@@ -1,6 +1,4 @@
-file,fasta	SomaticSniper.Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
-file,fasta	normal_alignment.Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
-file,fasta	tumor_alignment.Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
+file,fasta	Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
 integer,param,bwa,aln,threads	normal_alignment.Paired.aln_first_reads.threads	4
 integer,param,bwa,aln,threads	normal_alignment.Paired.aln_second_reads.threads	4
 integer,param,bwa,aln,threads	tumor_alignment.Paired.aln_first_reads.threads	4
@@ -13,4 +11,4 @@ integer,param,bwa,sampe,max_insert_size	normal_alignment.Paired.Sampe.max_insert
 integer,param,bwa,sampe,max_insert_size	tumor_alignment.Paired.Sampe.max_insert_size	500
 paired,bam,unaligned,file	normal_bam	gms:///data/8c89370a0be34c679a864d84b16b452f?tag=bam
 paired,bam,unaligned,file	tumor_bam	gms:///data/bc1285135b9d47f797b20e746eb57ee6?tag=bam
-string,param,version,somaticsniper	SomaticSniper.SomaticSniper.version	1.0.2
+string,param,version,somaticsniper	SomaticSniper.version	1.0.2
