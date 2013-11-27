@@ -6,6 +6,8 @@ use warnings FATAL => 'all';
 use Manifest::Reader;
 use Manifest::Writer;
 use File::Spec qw();
+use File::Basename qw();
+use File::Path qw();
 use Params::Validate qw();
 
 use Factory::Allocation;
@@ -22,8 +24,9 @@ sub from_manifest {
             'manifest.xml'));
     for my $entry ($reader->entries) {
 
-        Genome::Sys->copy_file($reader->path_to($entry->{tag}),
-            File::Spec->join($writer->base_path, $entry->{path}));
+        my $dest_path = File::Spec->join($writer->base_path, $entry->{path});
+        _make_path_to($dest_path);
+        Genome::Sys->copy_file($reader->path_to($entry->{tag}), $dest_path);
 
         $writer->add_file(%$entry);
     }
@@ -33,5 +36,16 @@ sub from_manifest {
 
     return $allocation;
 }
+
+sub _make_path_to {
+    my $full_path = shift;
+
+    my ($file, $path) = File::Basename::fileparse($full_path);
+
+    File::Path::make_path($path);
+
+    return;
+}
+
 
 1;
