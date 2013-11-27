@@ -150,10 +150,11 @@ sub _run_makefile {
 sub _set_output_paths {
     my $self = shift;
 
-    $self->snv_output('strelkaAnalysis/results/somatic.snvs.vcf');
-    $self->indel_output('strelkaAnalysis/results/somatic.indels.vcf');
+    $self->snv_output('strelkaAnalysis/results/all.somatic.snvs.vcf');
+    $self->indel_output('strelkaAnalysis/results/all.somatic.indels.vcf');
     $self->passed_snv_output('strelkaAnalysis/results/passed.somatic.snvs.vcf');
-    $self->passed_indel_output('strelkaAnalysis/results/passed.somatic.indels.vcf');
+    $self->passed_indel_output(
+        'strelkaAnalysis/results/passed.somatic.indels.vcf');
 
     return;
 }
