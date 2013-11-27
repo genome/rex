@@ -7,3 +7,5 @@ Tool::SomaticSniper normal_bam from normal_alignment,
                     tumor_bam  from tumor_alignment
 Tool::Mutect normal_bam from normal_alignment,
              tumor_bam  from tumor_alignment
+Tool::Strelka normal_bam from normal_alignment,
+              tumor_bam  from tumor_alignment
