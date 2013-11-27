@@ -230,7 +230,7 @@ sub _verify_outputs_in_workspace { }
 sub _setup_workspace {
     my $self = shift;
 
-    $self->_workspace_path(File::Temp::tempdir(CLEANUP => 0));
+    $self->_workspace_path(File::Temp::tempdir(CLEANUP => 1));
     $self->_original_working_directory(Cwd::cwd());
     chdir $self->_workspace_path;
 
