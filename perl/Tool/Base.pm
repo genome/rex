@@ -331,6 +331,8 @@ sub _create_output_manifest {
         if (-e $path) {
             $writer->add_file(path => $path, kilobytes => -s $path,
                 tag => $output_name);
+        } else {
+            confess sprintf("Failed to save output '%s'", $path);
         }
     }
     $writer->save;
