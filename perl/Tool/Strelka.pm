@@ -37,6 +37,10 @@ class Tool::Strelka {
             is => 'Number',
             dsl_tags => [qw(integer param threads strelka)],
         },
+        skip_depth_filters => {
+            is => 'Boolean',
+            dsl_tags => [qw(boolean param skip_depth_filters strelka)],
+        },
     ],
 
     has_output => [
@@ -98,7 +102,11 @@ sub _strelka_version_root {
 }
 
 sub _set_params {
-    my $self = shift;
+    my ($self, $config_file) = @_;
+
+    if ($self->skip_depth_filters) {
+        $config_file->setval('user', 'isSkipDepthFilters', 1);
+    }
 
     return;
 }
