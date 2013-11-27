@@ -17,11 +17,11 @@ class Tool::SomaticSniper {
     has_input => [
         normal_bam => {
             is => "File",
-            dsl_tags => [qw(file bam aligned chromosome_sorted)],
+            dsl_tags => [qw(file bam aligned position_sorted)],
         },
         tumor_bam => {
             is => "File",
-            dsl_tags => [qw(file bam aligned chromosome_sorted)],
+            dsl_tags => [qw(file bam aligned position_sorted)],
         },
         alignment_index => {
             is => "File",

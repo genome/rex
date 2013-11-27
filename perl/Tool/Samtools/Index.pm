@@ -17,14 +17,14 @@ class Tool::Samtools::Index {
     has_input => [
         input_bam => {
             is => "File",
-            dsl_tags => [qw(file bam aligned chromosome_sorted)],
+            dsl_tags => [qw(file bam aligned position_sorted)],
         },
     ],
 
     has_output => [
         output_bam => {
             is => "File",
-            dsl_tags => [qw(file bam aligned chromosome_sorted indexed)],
+            dsl_tags => [qw(file bam aligned position_sorted indexed)],
         },
     ],
 

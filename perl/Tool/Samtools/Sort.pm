@@ -24,7 +24,7 @@ class Tool::Samtools::Sort {
     has_output => [
         output_bam => {
             is => "File",
-            dsl_tags => [qw(file bam aligned chromosome_sorted)],
+            dsl_tags => [qw(file bam aligned position_sorted)],
         },
     ],
 };
