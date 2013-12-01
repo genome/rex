@@ -5,6 +5,7 @@ use warnings FATAL => 'all';
 
 use Carp qw(confess);
 use Compiler::AST::DataEndPoint;
+use Data::UUID;
 use Memoize qw();
 
 has source_path => (
@@ -41,8 +42,28 @@ has constants => (
     isa => 'HashRef[Value]',
     default => sub {{}},
 );
+has uuid => (
+    is => 'rw',
+    isa => 'Str',
+);
+
+sub _new_uuid {
+    my $ug = Data::UUID->new();
+    my $uuid = $ug->create();
+    return 'n' . substr($ug->to_hexstring($uuid), 2, 12);
+}
 
 sub dag {
+    confess 'Abstract method!';
+}
+
+sub dot_nodes {
+    confess 'Abstract method!';
+}
+sub dot_links {
+    confess 'Abstract method!';
+}
+sub dot_cluster {
     confess 'Abstract method!';
 }
 

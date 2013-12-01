@@ -14,6 +14,8 @@ extends 'Compiler::AST::Node';
 sub BUILD {
     my $self = shift;
 
+    $self->uuid($self->_new_uuid);
+
     _use_source_path($self->source_path);
     $self->_set_inputs;
     $self->_set_outputs;
@@ -30,6 +32,20 @@ sub dag {
     );
 }
 Memoize::memoize('dag');
+
+sub dot_nodes {
+    my $self = shift;
+
+    return [sprintf('%s [label="%s"];', $self->uuid, $self->alias)];
+}
+
+sub dot_links {
+    return [];
+}
+
+sub dot_cluster {
+    return;
+}
 
 sub _use_source_path {
     my $source_path = shift;

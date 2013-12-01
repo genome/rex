@@ -41,6 +41,8 @@ sub execute {
 
     $self->save_data('workflow.xml', $root_process->dag->get_xml);
     $self->format_xml('workflow.xml');
+
+    $self->save_data('workflow.dot', $root_process->dot);
     return 1;
 }
 
