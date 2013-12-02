@@ -60,12 +60,18 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - difficult to know what happened during a process
     - much work is "untracked"
 
+## Weaknesses This Does Not Address
+- tool versioning
+    - this does expose the problem in a different way (different versions are
+      different tools with their own interfaces)
+
 ## User Stories
 ### Alignment
-- multiple bams as input
+- multiple bams as input (single bam as output)
+- split bam by read groups
 - aln twice (read 1 and 2) for each bam
 - sampe for each sai pair
-- re-header sam file
+- re-header sam file (including re-assigning read-group)
 - sam to bam
 - sort bam
 - merge sorted bams
@@ -74,7 +80,7 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 - mixture of tumor and normal bams as input
 - run mutltiple callers
 - filter results of each caller
-- set operations on result
+- set operations on results (intersect, union, etc.)
 - filter combined results
 
 ### ReferenceAlignment
