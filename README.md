@@ -21,11 +21,10 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - improve parsing error messages (probably with <reject> and <error>)
     - fix string escaping regular expressions (grammar and syntax)
     - improve syntax hilighting of errors
-    - resolve "ambiguity" of each link separately, that way filters don't try
-      to use their own outputs
+    - add array input/output support
+    - reconsider non-concrete tags for outputs
 - add workspace input to Tool
 - add locking to Tool
-- add array input/output support
 - add process template
 
 ## Legacy System Weaknesses
