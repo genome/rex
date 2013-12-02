@@ -9,6 +9,7 @@ syn match dsl_type /[A-Z][A-Za-z0-9_]*\(::[A-Z][A-Za-z0-9_]*\)*/
 syn match dsl_name /[a-z][A-Za-z0-9_]*/
 
 syn keyword dsl_pair_link from
+syn keyword dsl_pair_link to
 syn match dsl_external_io /@[a-z][A-Za-z0-9_]*/
 syn match dsl_pair_link /=/
 syn match dsl_separator /,/
