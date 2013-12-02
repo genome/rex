@@ -13,48 +13,17 @@ has name => (
     isa => 'Str',
     required => 1,
 );
-has tags => (
-    is => 'ro',
-    isa => 'ArrayRef[Str]',
-    required => 1,
-);
 has value => (
     is => 'rw',
     isa => 'Value|Undef',
 );
 
-sub has_tag {
-    my ($self, $tag) = @_;
-
-    my $result = 0;
-    for my $entry_tag (@{$self->tags}) {
-        if ($tag eq $entry_tag) {
-            $result = 1;
-            last;
-        }
-    }
-    return $result;
-}
-
-sub has_tag_like {
-    my ($self, $regex) = @_;
-
-    my $result = 0;
-    for my $entry_tag (@{$self->tags}) {
-        if ($entry_tag =~ /$regex/) {
-            $result = 1;
-            last;
-        }
-    }
-    return $result;
-}
-
 sub assert_has_value {
     my $self = shift;
 
     unless (defined($self->value)) {
-        confess sprintf("Input entry %s tags=[%s] has no value",
-            $self->name, join(', ', @{$self->tags}));
+        confess sprintf("Input entry %s has no value",
+            $self->name);
     }
 
     return;
@@ -72,7 +41,7 @@ sub write {
 sub as_string {
     my $self = shift;
 
-    my @columns = (join(',', @{$self->tags}), $self->name);
+    my @columns = ($self->name);
     if (defined($self->value)) {
         push @columns, $self->value;
     }
@@ -103,10 +72,9 @@ sub create_from_line {
             scalar(@columns), join(', ', map {sprintf("'%s'")} @columns));
     }
 
-    my ($tags_part, $name, $value) = @columns;
-    my @tags = split(/,/, $tags_part);
+    my ($name, $value) = @columns;
 
-    return $class->new(name => $name, tags => \@tags, value => $value);
+    return $class->new(name => $name, value => $value);
 }
 
 1;

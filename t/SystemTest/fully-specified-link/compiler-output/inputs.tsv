@@ -1,8 +1,0 @@
-Alpha,Beta	first.input_1	constant
-Alpha,Beta	first.input_2	"also constant"
-PROCESS	first._process
-PROCESS	second._process
-STEP_LABEL_3bbc88da-4871-4a8a-b66f-4fdeccb2f8a9	first._step_label	first._step_label
-STEP_LABEL_af7c77aa-a147-4067-8d31-3a1e19224c17	second._step_label	second._step_label
-TEST_NAME	first.test_name
-TEST_NAME	second.test_name

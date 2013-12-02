@@ -1,6 +1,11 @@
 use strict;
 use warnings FATAL => 'all';
 
+$SIG{__DIE__} = sub {
+    local $Carp::CarpLevel = 0;
+    &Carp::confess;
+};
+
 use Test::More;
 
 use File::Find::Rule qw();

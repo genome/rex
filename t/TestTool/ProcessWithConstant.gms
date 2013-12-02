@@ -1,1 +1,1 @@
-TestTool::A ai1 = 42
+TestTool::HasParam p1 = 42

@@ -40,19 +40,27 @@ sub create_from_file_handle {
 }
 
 
-sub create_from_inputs_and_constants {
-    my ($class, $inputs, $constants) = @_;
+sub create_from_process {
+    my ($class, $process) = @_;
 
     my @entries;
-    my @inputs = values %{$inputs};
-    push @entries, map {InputFile::Entry->new(name => $_->name,
-            tags => $_->tags, value => $constants->{$_->name})} @inputs;
-
-    for my $entry (@entries) {
-        if ($entry->has_tag_like('STEP_LABEL')) {
-            $entry->value($entry->name);
-        }
+    for my $param_name (keys %{$process->params}) {
+        push @entries, InputFile::Entry->new(
+            name => $param_name,
+            value => $process->constants->{$param_name},
+        );
     }
+    for my $input_name (keys %{$process->inputs}) {
+        push @entries, InputFile::Entry->new(
+            name => $input_name,
+        );
+    }
+
+#    for my $entry (@entries) {
+#        if ($entry->has_tag_like('STEP_LABEL')) {
+#            $entry->value($entry->name);
+#        }
+#    }
 
     my $self = $class->new(entries => \@entries);
 

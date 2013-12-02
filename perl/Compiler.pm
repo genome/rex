@@ -37,7 +37,7 @@ sub execute {
 
     $self->make_output_directory;
 
-    $self->save_inputs_with_constants($root_process->inputs, $root_process->constants);
+    $self->save_inputs_file($root_process);
 
     $self->save_data('workflow.xml', $root_process->dag->get_xml);
     $self->format_xml('workflow.xml');
@@ -46,11 +46,10 @@ sub execute {
     return 1;
 }
 
-sub save_inputs_with_constants {
-    my ($self, $inputs, $constants) = @_;
+sub save_inputs_file {
+    my ($self, $process) = @_;
 
-    my $input_file = InputFile->create_from_inputs_and_constants(
-        $inputs, $constants);
+    my $input_file = InputFile->create_from_process($process);
 
     $input_file->write_to_filename($self->output_path('inputs.tsv'));
     return;

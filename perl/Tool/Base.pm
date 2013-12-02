@@ -46,7 +46,7 @@ class Tool::Base {
         },
     ],
 
-    has_contextual_input => [
+    has_contextual_param => [
         _process => {
             is => 'File',
             dsl_tags => ['PROCESS'],
@@ -151,46 +151,6 @@ sub outputs {
 sub params {
     my $class = shift;
     return Set::Scalar->new($class->_param_names);
-}
-
-
-sub ast_inputs {
-    my $class = shift;
-
-    return $class->_property_tags_hash(is_input => 1);
-}
-
-sub ast_outputs {
-    my $class = shift;
-
-    my $outputs = $class->_property_tags_hash(is_output => 1);
-
-    delete $outputs->{result};  #  result is legacy baggage
-    return $outputs;
-}
-
-sub _property_tags_hash {
-    my $class = shift;
-
-    my %result;
-    for my $property ($class->__meta__->properties(@_)) {
-        $result{$property->property_name} = $class->_get_dsl_tags($property);
-    }
-
-    return \%result;
-}
-
-sub _get_dsl_tags {
-    my ($class, $property) = @_;
-
-    my $meta = $class->__meta__->property_meta_for_name(
-        $property->property_name);
-
-    my @tags;
-    for my $tag (@{$meta->{dsl_tags}}) { # why does ur suck so much with is_many?
-        push @tags, _annotate_tag($tag);
-    }
-    return \@tags;
 }
 
 sub _annotate_tag {

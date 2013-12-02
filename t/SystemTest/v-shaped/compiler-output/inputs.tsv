@@ -1,11 +1,11 @@
-PROCESS	Y._process
-PROCESS	x1._process
-PROCESS	x2._process
-STEP_LABEL_65a5ce1c-5b37-4ab9-9280-24ff296423d9	Y._step_label	Y._step_label
-STEP_LABEL_e3c5672a-acf7-4b23-bc7e-54efb604c73d	x1._step_label	x1._step_label
-STEP_LABEL_6bc9b4a0-4b68-41c3-9aa9-9fc38f0bcab7	x2._step_label	x2._step_label
-TEST_NAME	Y.test_name
-TEST_NAME	x1.test_name
-TEST_NAME	x2.test_name
-X::Input1	x1.x_in_1
-X::Input1	x2.x_in_1
+Y._process
+Y._step_label
+Y.test_name
+x1
+x1._process
+x1._step_label
+x1.test_name
+x2
+x2._process
+x2._step_label
+x2.test_name

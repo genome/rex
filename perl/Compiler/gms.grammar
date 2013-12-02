@@ -26,7 +26,6 @@ alias: name "is"
 coupler_statements: coupler(s /,/)
 
 coupler: fully_specified_internal_statement
-    | internal_statement
     | input_statement
     | output_statement
     | constant_statement
@@ -35,10 +34,6 @@ coupler: fully_specified_internal_statement
 fully_specified_internal_statement: name "from" fully_specified_identifier
         { $return = Compiler::AST::Coupler::FullySpecifiedInternal->new(
                 name => $item[1], fully_specified_source => $item[3]); }
-
-internal_statement: name "from" identifier
-        { $return = Compiler::AST::Coupler::Internal->new(
-                name => $item[1], source_node_alias => $item[3]); }
 
 input_statement: name "from" io_specifier
         { $return = Compiler::AST::Coupler::Input->new(

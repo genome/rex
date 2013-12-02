@@ -19,6 +19,7 @@ sub BUILD {
     _use_source_path($self->source_path);
     $self->_set_inputs;
     $self->_set_outputs;
+    $self->_set_params;
     $self->_set_constants;
     return;
 }
@@ -61,14 +62,9 @@ sub _set_inputs {
     my $self = shift;
 
     my $tool_class = $self->source_path;
-    my $input_hash = $tool_class->ast_inputs;
-
-    my %inputs;
-    for my $name (keys %$input_hash) {
-        $inputs{$name} = $self->_create_data_end_point(name => $name,
-            tags => $input_hash->{$name});
+    for my $name ($tool_class->inputs->members) {
+        $self->_add_input(name => $name);
     }
-    $self->inputs(\%inputs);
     return;
 }
 
@@ -76,14 +72,19 @@ sub _set_outputs {
     my $self = shift;
 
     my $tool_class = $self->source_path;
-    my $output_hash = $tool_class->ast_outputs;
-
-    my %outputs;
-    for my $name (keys %$output_hash) {
-        $outputs{$name} = $self->_create_data_end_point(name => $name,
-            tags => $output_hash->{$name});
+    for my $name ($tool_class->outputs->members) {
+        $self->_add_output(name => $name);
     }
-    $self->outputs(\%outputs);
+    return;
+}
+
+sub _set_params {
+    my $self = shift;
+
+    my $tool_class = $self->source_path;
+    for my $name ($tool_class->params->members) {
+        $self->_add_param(name => $name);
+    }
     return;
 }
 
