@@ -13,6 +13,7 @@ use File::Temp qw();
 use File::Path qw();
 use Data::UUID;
 use Cwd qw();
+use Set::Scalar qw();
 
 use Manifest::Reader;
 use Manifest::Writer;
@@ -136,6 +137,22 @@ sub execute {
 
     return 1;
 }
+
+sub inputs {
+    my $class = shift;
+    return Set::Scalar->new($class->_input_names);
+}
+
+sub outputs {
+    my $class = shift;
+    return Set::Scalar->new($class->_output_names);
+}
+
+sub params {
+    my $class = shift;
+    return Set::Scalar->new($class->_param_names);
+}
+
 
 sub ast_inputs {
     my $class = shift;
@@ -264,10 +281,22 @@ sub _non_contextual_input_names {
         is_contextual => 0);
 }
 
+sub _input_names {
+    my $self = shift;
+
+    return $self->_property_names(is_input => 1);
+}
+
 sub _output_names {
     my $self = shift;
 
     return grep {'result' ne $_} $self->_property_names(is_output => 1);
+}
+
+sub _param_names {
+    my $self = shift;
+
+    return $self->_property_names(is_param => 1);
 }
 
 
