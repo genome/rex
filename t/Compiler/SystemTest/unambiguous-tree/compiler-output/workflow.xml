@@ -18,13 +18,13 @@
     <inputproperty>fi1</inputproperty>
   </operationtype>
   <operation name="A">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::A">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="A">
       <inputproperty>ai1</inputproperty>
       <outputproperty>ao1</outputproperty>
     </operationtype>
   </operation>
   <operation name="B">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::B">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="B">
       <inputproperty>bi1</inputproperty>
       <inputproperty>bi2</inputproperty>
       <inputproperty>bi3</inputproperty>
@@ -45,7 +45,7 @@
       <outputproperty>fo1</outputproperty>
     </operationtype>
     <operation name="D">
-      <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::D">
+      <operationtype typeClass="Workflow::OperationType::Command" commandClass="D">
         <inputproperty>di1</inputproperty>
         <outputproperty>do1</outputproperty>
       </operationtype>
@@ -59,7 +59,7 @@
         <outputproperty>fo1</outputproperty>
       </operationtype>
       <operation name="F">
-        <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::F">
+        <operationtype typeClass="Workflow::OperationType::Command" commandClass="F">
           <inputproperty>fi1</inputproperty>
           <outputproperty>fo1</outputproperty>
         </operationtype>

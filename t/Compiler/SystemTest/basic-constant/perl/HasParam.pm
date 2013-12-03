@@ -1,10 +1,8 @@
-package Compiler::TestTool::F;
+package HasParam;
 use Tool;
 use warnings FATAL => 'all';
 
-
-has_input 'fi1';
-has_output 'fo1';
+has_param 'p1';
 
 
 __PACKAGE__->meta->make_immutable;

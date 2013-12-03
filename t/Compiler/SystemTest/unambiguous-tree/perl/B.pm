@@ -1,4 +1,4 @@
-package Compiler::TestTool::B;
+package B;
 use Tool;
 use warnings FATAL => 'all';
 

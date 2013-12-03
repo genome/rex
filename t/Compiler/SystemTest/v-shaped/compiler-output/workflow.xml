@@ -14,20 +14,20 @@
     <inputproperty>x2.test_name</inputproperty>
   </operationtype>
   <operation name="Y">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::Y">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Y">
       <inputproperty>y_in_1</inputproperty>
       <inputproperty>y_in_2</inputproperty>
       <outputproperty>y_out_1</outputproperty>
     </operationtype>
   </operation>
   <operation name="x1">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::X">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="X">
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>
   </operation>
   <operation name="x2">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::X">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="X">
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>

@@ -8,7 +8,7 @@
     <outputproperty>out_1</outputproperty>
   </operationtype>
   <operation name="A">
-    <operationtype typeClass="Workflow::OperationType::Command" commandClass="Compiler::TestTool::A">
+    <operationtype typeClass="Workflow::OperationType::Command" commandClass="A">
       <inputproperty>ai1</inputproperty>
       <outputproperty>ao1</outputproperty>
     </operationtype>

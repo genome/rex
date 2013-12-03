@@ -1,9 +1,10 @@
-package Compiler::TestTool::A;
+package D;
 use Tool;
 use warnings FATAL => 'all';
 
-has_input 'ai1';
-has_output 'ao1';
+
+has_input 'di1';
+has_output 'do1';
 
 
 __PACKAGE__->meta->make_immutable;

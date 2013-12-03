@@ -35,12 +35,19 @@ sub compiler_expected_result {
 sub compile {
     my ($test_dir, $output_directory, $label) = @_;
 
+    unshift @INC, File::Spec->join($test_dir, 'perl');
+    my $old_gms_path = $ENV{GMSPATH};
+    $ENV{GMSPATH} = File::Spec->join($test_dir, 'definitions');
+
     my $cmd = Compiler->new(
         'input-file' => source_file($test_dir),
         'output-directory' => $output_directory,
     );
 
     ok($cmd->execute, sprintf('command ran (%s)', $label)) || die;
+
+    $ENV{GMSPATH} = $old_gms_path;
+    shift @INC;
     return;
 }
 

@@ -1,1 +1,1 @@
-Compiler::TestTool::HasParam p1 = 6
+HasParam p1 = 6
