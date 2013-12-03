@@ -13,18 +13,30 @@ our @EXPORT_OK = qw(
 
 use Carp qw(confess);
 use Test::More;
-use File::Temp;
+use File::Spec qw();
 
 use Genome::Utility::Test qw(compare_ok);
 
 use UR;
 use Compiler;
 
+
+sub source_file {
+    my $test_dir = shift;
+    return File::Spec->join($test_dir, 'root.gms');
+}
+
+sub compiler_expected_result {
+    my $test_dir = shift;
+    return File::Spec->join($test_dir, 'compiler-output');
+}
+
+
 sub compile {
-    my ($input_file, $output_directory, $label) = @_;
+    my ($test_dir, $output_directory, $label) = @_;
 
     my $cmd = Compiler->new(
-        'input-file' => $input_file,
+        'input-file' => source_file($test_dir),
         'output-directory' => $output_directory,
     );
 
@@ -51,8 +63,8 @@ sub update_directory {
 }
 
 sub diff_directories {
-    my ($expected, $actual, $label) = @_;
-
+    my ($test_dir, $actual, $label) = @_;
+    my $expected = compiler_expected_result($test_dir);
     for my $filename (@_FILENAMES) {
         my $expected_path = File::Spec->join($expected, $filename);
         my $actual_path = File::Spec->join($actual, $filename);

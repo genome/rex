@@ -28,16 +28,6 @@ sub test_dirs {
     return @a;
 }
 
-sub source_file {
-    my $test_dir = shift;
-    return File::Spec->join($test_dir, 'root.gms');
-}
-
-sub compiler_expected_result {
-    my $test_dir = shift;
-    return File::Spec->join($test_dir, 'compiler-output');
-}
-
 sub label {
     my $test_dir = shift;
 
@@ -54,16 +44,15 @@ sub should_update_directory {
 for my $test_dir (test_dirs()) {
     subtest $test_dir => sub {
         my $output_directory = File::Temp::tempdir(CLEANUP => 1);
-        Compiler::TestHelper::compile(source_file($test_dir), $output_directory,
+        Compiler::TestHelper::compile($test_dir, $output_directory,
             label($test_dir));
 
-        Compiler::TestHelper::diff_directories(
-            compiler_expected_result($test_dir),
+        Compiler::TestHelper::diff_directories($test_dir,
             $output_directory, label($test_dir));
 
         if (defined(should_update_directory())) {
             Compiler::TestHelper::update_directory(
-                compiler_expected_result($test_dir), $output_directory);
+                $test_dir, $output_directory);
         }
     };
 }
