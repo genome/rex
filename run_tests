@@ -1,3 +1,3 @@
 #! /bin/bash
 
-PERL5LIB=t:perl:$PERL5LIB GMSPATH=t:definitions prove -r -v t $@
+prove -r -v t $@
