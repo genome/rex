@@ -11,7 +11,9 @@ use Compiler::Parser;
 use Compiler::AST::Node::Process;
 use Compiler::AST::Node::Tool;
 
-use constant EXTENSION => '.gms';
+use Readonly qw();
+
+Readonly::Scalar my $EXTENSION => '.gms';
 
 
 $::RD_HINT = 1;
@@ -38,7 +40,7 @@ sub new_node {
 
 sub resolve_path {
     my $name = shift;
-    my $relative_path = $name . EXTENSION();
+    my $relative_path = $name . $EXTENSION;
 
     for my $base_path (search_path()) {
         my $absolute_path = File::Spec->rel2abs(File::Spec->join(
