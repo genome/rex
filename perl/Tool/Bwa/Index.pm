@@ -1,51 +1,20 @@
 package Tool::Bwa::Index;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
-
-use UR;
 
 use Carp qw(confess);
 use File::Basename qw();
 use File::Spec qw();
 use IPC::Run qw();
 
+has_input 'input_fasta';
 
-class Tool::Bwa::Index {
-    is => 'Tool::Base',
-
-    has_input => [
-        input_fasta => {
-            is => "File",
-            dsl_tags => [qw(file fasta)],
-        },
-    ],
-
-    has_output => [
-        output_fasta => {
-            is => "File",
-            dsl_tags => [qw(file index bwa)],
-        },
-    ],
-
-    has_optional_saved => [
-        amb_file => {
-            is => "File",
-        },
-        ann_file => {
-            is => "File",
-        },
-        bwt_file => {
-            is => "File",
-        },
-        pac_file => {
-            is => "File",
-        },
-        sa_file => {
-            is => "File",
-        },
-    ],
-};
+has_output 'output_fasta';
+has_output 'amb_file';
+has_output 'ann_file';
+has_output 'bwa_file';
+has_output 'pac_file';
+has_output 'sa_file';
 
 
 sub execute_tool {
@@ -91,5 +60,4 @@ sub command_line {
 }
 
 
-1;
-
+__PACKAGE__->meta->make_immutable;

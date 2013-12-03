@@ -7,7 +7,7 @@ use Compiler;
 use Tool;
 
 $SIG{__DIE__} = sub {
-    local $Carp::CarpLevel = 0;
+    local $Carp::CarpLevel = 1;
     &Carp::confess;
 };
 

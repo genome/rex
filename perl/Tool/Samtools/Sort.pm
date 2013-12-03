@@ -1,9 +1,6 @@
 package Tool::Samtools::Sort;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
-
-use UR;
 
 use Carp qw(confess);
 use File::Basename qw();
@@ -11,23 +8,8 @@ use File::Spec qw();
 use IPC::Run qw();
 
 
-class Tool::Samtools::Sort {
-    is => 'Tool::Base',
-
-    has_input => [
-        input_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned)],
-        },
-    ],
-
-    has_output => [
-        output_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted)],
-        },
-    ],
-};
+has_input 'input_bam';
+has_output 'output_bam';
 
 
 sub execute_tool {
@@ -61,4 +43,4 @@ sub _output_prefix {
 }
 
 
-1;
+__PACKAGE__->meta->make_immutable;

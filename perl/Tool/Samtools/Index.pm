@@ -1,9 +1,6 @@
 package Tool::Samtools::Index;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
-
-use UR;
 
 use Carp qw(confess);
 use File::Basename qw();
@@ -11,29 +8,9 @@ use File::Spec qw();
 use IPC::Run qw();
 
 
-class Tool::Samtools::Index {
-    is => 'Tool::Base',
-
-    has_input => [
-        input_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted)],
-        },
-    ],
-
-    has_output => [
-        output_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted indexed)],
-        },
-    ],
-
-    has_optional_saved => [
-        bam_index => {
-            is => 'File',
-        },
-    ],
-};
+has_input 'input_bam';
+has_output 'output_bam';
+has_output 'bam_index';
 
 
 sub execute_tool {
@@ -75,4 +52,4 @@ sub _index_bam {
 }
 
 
-1;
+__PACKAGE__->meta->make_immutable;

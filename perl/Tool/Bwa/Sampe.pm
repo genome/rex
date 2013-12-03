@@ -1,52 +1,25 @@
 package Tool::Bwa::Sampe;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
 
-use UR;
 use IPC::Run qw();
 
 
-class Tool::Bwa::Sampe {
-    is => 'Tool::Base',
+has_input 'alignment_index';
+has_input 'first_sai';
+has_input 'second_sai';
+has_input 'unaligned_bam';
 
-    has_input => [
-        alignment_index => {
-            is => "File",
-            dsl_tags => [qw(file index bwa)],
-        },
-        unaligned_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam unaligned paired)],
-        },
-        first_sai => {
-            is => "File",
-            dsl_tags => [qw(file sai)],
-        },
-        second_sai => {
-            is => "File",
-            dsl_tags => [qw(file sai)],
-        },
+has_param 'max_insert_size';
 
-        max_insert_size => {
-            is => "Number",
-            dsl_tags => [qw(integer param bwa sampe max_insert_size)],
-        },
-    ],
+has_output 'aligned_sam';
 
-    has_output => [
-        output_file => {
-            is => "File",
-            dsl_tags => [qw(file sam aligned paired)],
-        },
-    ],
-};
 
 sub execute_tool {
     my $self = shift;
 
-    $self->output_file($self->_create_output_filename);
-    IPC::Run::run($self->command_line, '>', $self->output_file);
+    $self->aligned_sam($self->_create_output_filename);
+    IPC::Run::run($self->command_line, '>', $self->aligned_sam);
 
     return;
 }
@@ -70,4 +43,4 @@ sub _create_output_filename {
 }
 
 
-1;
+__PACKAGE__->meta->make_immutable;
