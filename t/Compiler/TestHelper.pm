@@ -61,7 +61,7 @@ sub update_directory {
     for my $filename (@_FILENAMES) {
         my $result = File::Copy::copy(
             File::Spec->join($new, $filename),
-            File::Spec->join($old, $filename),
+            File::Spec->join(compiler_expected_result($old), $filename),
         );
         confess 'failed to copy file' unless $result;
     }
