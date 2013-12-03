@@ -49,7 +49,7 @@ sub execute {
 sub save_inputs_file {
     my ($self, $process) = @_;
 
-    my $input_file = InputFile->create_from_process($process);
+    my $input_file = InputFile->create_from_process_node($process);
 
     $input_file->write_to_filename($self->output_path('inputs.tsv'));
     return;

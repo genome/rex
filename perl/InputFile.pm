@@ -40,7 +40,7 @@ sub create_from_file_handle {
 }
 
 
-sub create_from_process {
+sub create_from_process_node {
     my ($class, $process) = @_;
 
     my @entries;
@@ -55,12 +55,6 @@ sub create_from_process {
             name => $input_name,
         );
     }
-
-#    for my $entry (@entries) {
-#        if ($entry->has_tag_like('STEP_LABEL')) {
-#            $entry->value($entry->name);
-#        }
-#    }
 
     my $self = $class->new(entries => \@entries);
 
