@@ -9,4 +9,5 @@ Tool::Samtools::SamToBam
 Tool::Samtools::Sort
     input_bam from SamToBam.bam_file
 Tool::Samtools::Index
-    input_bam from Sort.output_bam
+    input_bam from Sort.output_bam,
+    output_bam to @aligned_bam
