@@ -66,10 +66,10 @@ sub create_from_line {
     }
     my @columns = $_CSV->fields;
 
-    unless (scalar(@columns) > 1 && scalar(@columns) < 4) {
+    unless (scalar(@columns) > 0 && scalar(@columns) < 3) {
         confess sprintf(
-            "Bad number of columns (%s) in line, expected 2 or 3: [%s]",
-            scalar(@columns), join(', ', map {sprintf("'%s'")} @columns));
+            "Bad number of columns (%s) in line, expected 1 or 2: [%s]",
+            scalar(@columns), join(', ', map {sprintf("'%s'", $_)} @columns));
     }
 
     my ($name, $value) = @columns;
