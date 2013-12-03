@@ -19,15 +19,21 @@
   </operationtype>
   <operation name="A">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="A">
+      <inputproperty>_process</inputproperty>
+      <inputproperty>_step_label</inputproperty>
       <inputproperty>ai1</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <outputproperty>ao1</outputproperty>
     </operationtype>
   </operation>
   <operation name="B">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="B">
+      <inputproperty>_process</inputproperty>
+      <inputproperty>_step_label</inputproperty>
       <inputproperty>bi1</inputproperty>
       <inputproperty>bi2</inputproperty>
       <inputproperty>bi3</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <outputproperty>bo1</outputproperty>
     </operationtype>
   </operation>
@@ -46,7 +52,10 @@
     </operationtype>
     <operation name="D">
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="D">
+        <inputproperty>_process</inputproperty>
+        <inputproperty>_step_label</inputproperty>
         <inputproperty>di1</inputproperty>
+        <inputproperty>test_name</inputproperty>
         <outputproperty>do1</outputproperty>
       </operationtype>
     </operation>
@@ -60,7 +69,10 @@
       </operationtype>
       <operation name="F">
         <operationtype typeClass="Workflow::OperationType::Command" commandClass="F">
+          <inputproperty>_process</inputproperty>
+          <inputproperty>_step_label</inputproperty>
           <inputproperty>fi1</inputproperty>
+          <inputproperty>test_name</inputproperty>
           <outputproperty>fo1</outputproperty>
         </operationtype>
       </operation>

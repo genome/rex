@@ -15,6 +15,9 @@
   </operationtype>
   <operation name="Y">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="Y">
+      <inputproperty>_process</inputproperty>
+      <inputproperty>_step_label</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>y_in_1</inputproperty>
       <inputproperty>y_in_2</inputproperty>
       <outputproperty>y_out_1</outputproperty>
@@ -22,12 +25,18 @@
   </operation>
   <operation name="x1">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="X">
+      <inputproperty>_process</inputproperty>
+      <inputproperty>_step_label</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>
   </operation>
   <operation name="x2">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="X">
+      <inputproperty>_process</inputproperty>
+      <inputproperty>_step_label</inputproperty>
+      <inputproperty>test_name</inputproperty>
       <inputproperty>x_in_1</inputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>
