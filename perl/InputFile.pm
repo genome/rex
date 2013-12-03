@@ -131,28 +131,22 @@ sub _validate_no_duplicate_names {
 sub set_process {
     my ($self, $url) = @_;
 
-    my %process_hash;
     for my $entry (@{$self->entries}) {
-        if ($entry->has_tag('PROCESS')) {
-            $process_hash{$entry->name} = $url;
+        if ($entry->name =~ m/^.*\._process$/) {
+            $self->set_inputs($entry->name, $url);
         }
     }
-    $self->set_inputs(%process_hash);
-
     return;
 }
 
 sub set_test_name {
-    my ($self, $value) = @_;
+    my ($self, $test_name) = @_;
 
-    my %test_name_hash;
     for my $entry (@{$self->entries}) {
-        if ($entry->has_tag('TEST_NAME')) {
-            $test_name_hash{$entry->name} = $value;
+        if ($entry->name =~ m/^.*\.test_name$/) {
+            $self->set_inputs($entry->name, $test_name);
         }
     }
-    $self->set_inputs(%test_name_hash);
-
     return;
 }
 

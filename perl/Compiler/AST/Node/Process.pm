@@ -41,6 +41,18 @@ sub BUILD {
     return;
 }
 
+sub set_step_labels {
+    my $self = shift;
+
+    for my $param (values %{$self->params}) {
+        if ($param->name =~ m/^(.*)\._step_label$/) {
+            my $step_label = $1;
+            $self->constants->{$param->name} = $step_label;
+        }
+    }
+    return;
+}
+
 sub dag {
     my $self = shift;
 

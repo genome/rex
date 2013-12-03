@@ -34,6 +34,7 @@ sub execute {
     my $self = shift;
 
     my $root_process = Compiler::Parser::new_process($self->input_file, 'root');
+    $root_process->set_step_labels();
 
     $self->make_output_directory;
 

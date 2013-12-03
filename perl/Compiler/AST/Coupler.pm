@@ -16,5 +16,4 @@ sub is_input { confess 'Abstract method'; }
 sub is_output { confess 'Abstract method'; }
 sub is_constant { confess 'Abstract method'; }
 
-
 1;
