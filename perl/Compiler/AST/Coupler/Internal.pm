@@ -8,14 +8,15 @@ extends 'Compiler::AST::Coupler';
 has source_node_alias => (
     is => 'ro',
     isa => 'Str',
-    required => 1,
 );
-
+has source_name => (
+    is => 'ro',
+    isa => 'Str',
+);
 
 sub is_internal { return 1; }
 sub is_input { return 0; }
 sub is_output { return 0; }
 sub is_constant { return 0; }
-
 
 1;

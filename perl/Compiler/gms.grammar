@@ -25,19 +25,32 @@ alias: name "is"
 
 coupler_statements: coupler(s /,/)
 
-coupler: fully_specified_internal_statement
+coupler: internal_statement
     | input_statement
     | output_statement
     | constant_statement
     | <error>
 
-fully_specified_internal_statement: name "from" fully_specified_identifier
-        { $return = Compiler::AST::Coupler::FullySpecifiedInternal->new(
-                name => $item[1], fully_specified_source => $item[3]); }
+internal_statement: name "from" identifier
+        { $return = Compiler::AST::Coupler::Internal->new(
+                name => $item[1],
+                source_node_alias => $item[3]->[0],
+                source_name => $item[3]->[1],
+            );
+        }
+
+identifier: name "." name
+        { $return = [$item[1], $item[3]] }
+    | type "." name
+        { $return = [$item[1], $item[3]] }
+    | <error>
 
 input_statement: name "from" io_specifier
         { $return = Compiler::AST::Coupler::Input->new(
                 name => $item[1], input_name => $item[3]); }
+
+io_specifier: "@" name
+        { $return = $item[2]; }
 
 output_statement: name "to" io_specifier
         { $return = Compiler::AST::Coupler::Output->new(
@@ -53,16 +66,8 @@ constant: /'(\\'|.)*'/
         { $return = $item[1]; }
     | <error>
 
-identifier: name
-    | type
-    | <error>
 
 name: /[a-z][A-Za-z0-9_]*/
 type: /[A-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*/
-
-io_specifier: "@" name
-        { $return = $item[2]; }
-
-fully_specified_identifier: /[a-zA-Z][A-Za-z0-9_]*(::[A-Z][A-Za-z0-9_]*)*\.[a-z][A-Za-z0-9_]*/
 
 eof: /^\Z/
