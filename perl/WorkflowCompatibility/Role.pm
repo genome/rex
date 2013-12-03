@@ -63,5 +63,12 @@ sub _param_properties {
     return \@result;
 }
 
+sub dump_debug_messages {}
+sub dump_error_messages {}
+sub dump_status_messages {}
+sub dump_warning_messages {}
+
+sub __errors__ {}
+
 
 1;

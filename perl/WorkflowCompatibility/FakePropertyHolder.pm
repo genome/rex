@@ -106,5 +106,10 @@ sub property_meta_for_name {
     return $self->properties(property_name => $name);
 }
 
+sub property {
+    my ($self, $name) = @_;
+    return $self->property_meta_for_name($name);
+}
+
 
 __PACKAGE__->meta->make_immutable;
