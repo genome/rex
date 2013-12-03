@@ -11,7 +11,6 @@
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::A">
       <inputproperty>ai1</inputproperty>
       <outputproperty>ao1</outputproperty>
-      <outputproperty>result</outputproperty>
     </operationtype>
   </operation>
   <link fromOperation="A" fromProperty="ao1" toOperation="output connector" toProperty="out_1" />

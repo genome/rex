@@ -17,21 +17,18 @@
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::Y">
       <inputproperty>y_in_1</inputproperty>
       <inputproperty>y_in_2</inputproperty>
-      <outputproperty>result</outputproperty>
       <outputproperty>y_out_1</outputproperty>
     </operationtype>
   </operation>
   <operation name="x1">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
       <inputproperty>x_in_1</inputproperty>
-      <outputproperty>result</outputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>
   </operation>
   <operation name="x2">
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::X">
       <inputproperty>x_in_1</inputproperty>
-      <outputproperty>result</outputproperty>
       <outputproperty>x_out_1</outputproperty>
     </operationtype>
   </operation>

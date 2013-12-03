@@ -14,9 +14,7 @@
       <inputproperty>HasParam.test_name</inputproperty>
     </operationtype>
     <operation name="HasParam">
-      <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::HasParam">
-        <outputproperty>result</outputproperty>
-      </operationtype>
+      <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::HasParam" />
     </operation>
     <link fromOperation="input connector" fromProperty="HasParam._process" toOperation="HasParam" toProperty="_process" />
     <link fromOperation="input connector" fromProperty="HasParam._step_label" toOperation="HasParam" toProperty="_step_label" />

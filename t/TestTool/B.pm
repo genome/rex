@@ -1,32 +1,11 @@
 package TestTool::B;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
 
-use UR;
-use TestTool::Base;
-
-class TestTool::B {
-    is => 'TestTool::Base',
-
-    has_input => [
-        bi1 => {
-            dsl_tags => ['T4'],
-        },
-        bi2 => {
-            dsl_tags => ['T5'],
-        },
-        bi3 => {
-            dsl_tags => ['T6'],
-        },
-    ],
-
-    has_output => [
-        bo1 => {
-            dsl_tags => ['T7'],
-        },
-    ],
-};
+has_input 'bi1';
+has_input 'bi2';
+has_input 'bi3';
+has_output 'bo1';
 
 
-1;
+__PACKAGE__->meta->make_immutable;

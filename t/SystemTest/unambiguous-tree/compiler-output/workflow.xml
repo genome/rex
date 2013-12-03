@@ -21,7 +21,6 @@
     <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::A">
       <inputproperty>ai1</inputproperty>
       <outputproperty>ao1</outputproperty>
-      <outputproperty>result</outputproperty>
     </operationtype>
   </operation>
   <operation name="B">
@@ -30,7 +29,6 @@
       <inputproperty>bi2</inputproperty>
       <inputproperty>bi3</inputproperty>
       <outputproperty>bo1</outputproperty>
-      <outputproperty>result</outputproperty>
     </operationtype>
   </operation>
   <operation name="C">
@@ -50,7 +48,6 @@
       <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::D">
         <inputproperty>di1</inputproperty>
         <outputproperty>do1</outputproperty>
-        <outputproperty>result</outputproperty>
       </operationtype>
     </operation>
     <operation name="E">
@@ -65,7 +62,6 @@
         <operationtype typeClass="Workflow::OperationType::Command" commandClass="TestTool::F">
           <inputproperty>fi1</inputproperty>
           <outputproperty>fo1</outputproperty>
-          <outputproperty>result</outputproperty>
         </operationtype>
       </operation>
       <link fromOperation="F" fromProperty="fo1" toOperation="output connector" toProperty="fo1" />

@@ -62,7 +62,7 @@ sub _set_inputs {
     my $self = shift;
 
     my $tool_class = $self->source_path;
-    for my $name ($tool_class->inputs->members) {
+    for my $name ($tool_class->inputs) {
         $self->_add_input(name => $name);
     }
     return;
@@ -72,7 +72,7 @@ sub _set_outputs {
     my $self = shift;
 
     my $tool_class = $self->source_path;
-    for my $name ($tool_class->outputs->members) {
+    for my $name ($tool_class->outputs) {
         $self->_add_output(name => $name);
     }
     return;
@@ -82,7 +82,7 @@ sub _set_params {
     my $self = shift;
 
     my $tool_class = $self->source_path;
-    for my $name ($tool_class->params->members) {
+    for my $name ($tool_class->params) {
         $self->_add_param(name => $name);
     }
     return;
