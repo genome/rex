@@ -8,6 +8,7 @@ use Moose::Exporter qw();
 use Tool::Detail::Input;
 use Tool::Detail::Output;
 use Tool::Detail::Param;
+use Tool::Detail::Contextual;
 
 
 sub has_input {
@@ -57,10 +58,27 @@ sub has_params {
     }
 }
 
+sub has_contextual_param {
+    my $meta = shift;
+    my $name = shift;
+
+    Moose::has($meta, $name, is => 'rw', traits => ['Param', 'Contextual'],
+        required => 1, @_);
+}
+
+sub has_contextual_params {
+    my $meta = shift;
+    my $params = shift;
+    for my $param_name (keys %$params) {
+        has_contextual_param($meta, $param_name, %{$params->{$param_name}});
+    }
+}
+
 Moose::Exporter->setup_import_methods(
     with_meta => [qw(has_input has_inputs
                      has_output has_outputs
-                     has_param has_params)],
+                     has_param has_params
+                     has_contextual_param has_contextual_params)],
 );
 
 
