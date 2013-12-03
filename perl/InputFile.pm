@@ -143,7 +143,7 @@ sub set_test_name {
     my ($self, $test_name) = @_;
 
     for my $entry (@{$self->entries}) {
-        if ($entry->name =~ m/^.*\.test_name$/) {
+        if ($entry->name =~ m/^.*\.test_name$/ and !defined($entry->value)) {
             $self->set_inputs($entry->name, $test_name);
         }
     }
