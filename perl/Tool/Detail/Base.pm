@@ -41,7 +41,7 @@ has _step_label => (
 
 has _raw_inputs => (
     is => 'rw',
-    isa => 'Hashref',
+    isa => 'HashRef',
 );
 has _original_working_directory => (
     is => 'rw',
