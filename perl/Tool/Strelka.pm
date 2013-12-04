@@ -97,15 +97,6 @@ sub _run_makefile {
 
     IPC::Run::run(['make', '-j', $self->threads, '-C', 'strelkaAnalysis']);
 
-
-    print "--- Begin Strelka STDOUT ---\n";
-    print `find strelkaAnalysis -name "*.stdout" | xargs cat`;
-    print "--- End Strelka STDOUT ---\n";
-
-    print STDERR "--- Begin Strelka STDERR ---\n";
-    print STDERR `find strelkaAnalysis -name "*.stderr" | xargs cat`;
-    print STDERR "--- End Strelka STDERR ---\n";
-
     return;
 }
 
