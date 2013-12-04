@@ -7,6 +7,7 @@ use File::Path qw();
 use File::Temp qw();
 use Log::Log4perl qw();
 use Manifest::Writer;
+use Memoize qw();
 use Result::Input;
 use Result::Output;
 use Result;
@@ -53,23 +54,28 @@ has _workspace_path => (
 
 
 sub inputs {
+    my $class = shift;
+
     return map {$_->name} grep {$_->does('Input')}
-        $self->meta->get_all_attributes;
+        $class->meta->get_all_attributes;
 }
+Memoize::memoize('inputs');
 
 sub outputs {
-    my $self = shift;
+    my $class = shift;
 
     return map {$_->name} grep {$_->does('Output')}
-        $self->meta->get_all_attributes;
+        $class->meta->get_all_attributes;
 }
+Memoize::memoize('outputs');
 
 sub params {
-    my $self = shift;
+    my $class = shift;
 
     return map {$_->name} grep {$_->does('Param')}
-        $self->meta->get_all_attributes;
+        $class->meta->get_all_attributes;
 }
+Memoize::memoize('params');
 
 
 sub shortcut {
@@ -117,6 +123,7 @@ sub _non_contextual_params {
     return map {$_->name} grep {$_->does('Param') && !$_->does('Contextual')}
         $self->meta->get_all_attributes;
 }
+Memoize::memoize('_non_contextual_params');
 
 
 sub _property_names {
