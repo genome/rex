@@ -195,7 +195,7 @@ sub _setup {
 
     $self->_setup_workspace;
     $self->_cache_raw_inputs;
-    $self->_translate_inputs($self->_translatable_input_names);
+    $self->_translate_inputs($self->inputs, $self->_contextual_params);
 
     return;
 }
@@ -218,16 +218,12 @@ sub _cache_raw_inputs {
     return;
 }
 
-my @_TRANSLATABLE_TYPES = (
-    'File',
-    'Process',
-);
-sub _translatable_input_names {
+sub _contextual_params {
     my $self = shift;
-
-    return map {$self->_property_names(is_input => 1, data_type => $_)}
-        @_TRANSLATABLE_TYPES;
+    return map {$_->name} grep {$_->does('Contextual')}
+        $self->meta->get_all_attributes;
 }
+
 
 sub execute_tool {
     die 'Abstract method';
@@ -264,7 +260,7 @@ sub _save_outputs {
     my $allocation = Factory::ManifestAllocation::from_manifest(
         $self->_workspace_manifest_path);
 
-    $logger->info("Saved outputs from tool '", $self->class,
+    $logger->info("Saved outputs from tool '", ref $self,
         "' to allocation (", $allocation->id, ")");
     $allocation->reallocate;
 
@@ -277,8 +273,6 @@ sub _create_output_manifest {
     my $writer = Manifest::Writer->create(
         manifest_file => $self->_workspace_manifest_path);
     for my $output_name ($self->_saved_file_names) {
-        next if $output_name eq 'result';  # legacy baggage
-
         my $path = $self->$output_name || '';
         if (-e $path) {
             $writer->add_file(path => $path, kilobytes => -s $path,
@@ -298,18 +292,16 @@ sub _workspace_manifest_path {
 }
 
 sub _saved_file_names {
-    my $self = shift;
+    my $class = shift;
 
-    # XXX Broken
-    return List::MoreUtils::uniq(
-        $self->_property_names(is_output => 1, data_type => 'File'),
-        $self->_property_names(is_saved => 1));
+    return map {$_->name} grep {$_->does('Output') && $_->save}
+        $class->meta->get_all_attributes;
 }
 
 sub _translate_outputs {
     my ($self, $allocation) = @_;
 
-    for my $output_file_name ($self->_translatable_output_names) {
+    for my $output_file_name ($self->_saved_file_names) {
         $self->$output_file_name(
             _translate_output($allocation->id, $output_file_name)
         );
@@ -318,18 +310,16 @@ sub _translate_outputs {
     return;
 }
 
-sub _translatable_output_names {
-    my $self = shift;
+sub _translate_output {
+    my ($allocation_id, $tag) = @_;
 
-    # XXX Broken
-    return map {$self->_property_names(is_output => 1, data_type => $_)}
-        @_TRANSLATABLE_TYPES;
+    return sprintf('gms:///data/%s?tag=%s', $allocation_id, $tag);
 }
 
 sub _create_checkpoint {
     my ($self, $allocation) = @_;
 
-    my $result = Result->create(tool_class_name => $self->class,
+    my $result = Result->create(tool_class_name => ref $self,
         test_name => $self->test_name, allocation => $allocation,
         owner => $self->_process);
 
