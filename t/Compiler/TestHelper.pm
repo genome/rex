@@ -14,10 +14,11 @@ our @EXPORT_OK = qw(
 use Carp qw(confess);
 use Test::More;
 use File::Spec qw();
+use File::Temp qw();
+use File::Basename qw();
 
 use Genome::Utility::Test qw(compare_ok);
 
-use UR;
 use Compiler;
 
 
@@ -33,7 +34,7 @@ sub compiler_expected_result {
 
 
 sub compile {
-    my ($test_dir, $output_directory, $label) = @_;
+    my ($test_dir, $output_directory) = @_;
 
     unshift @INC, File::Spec->join($test_dir, 'perl');
     my $old_gms_path = $ENV{GMSPATH};
@@ -44,7 +45,7 @@ sub compile {
         'output-directory' => $output_directory,
     );
 
-    ok($cmd->execute, sprintf('command ran (%s)', $label)) || die;
+    ok($cmd->execute, 'command ran') || die;
 
     $ENV{GMSPATH} = $old_gms_path;
     shift @INC;
@@ -70,7 +71,7 @@ sub update_directory {
 }
 
 sub diff_directories {
-    my ($test_dir, $actual, $label) = @_;
+    my ($test_dir, $actual) = @_;
     my $expected = compiler_expected_result($test_dir);
     for my $filename (@_FILENAMES) {
         my $expected_path = File::Spec->join($expected, $filename);
@@ -81,7 +82,7 @@ sub diff_directories {
         compare_ok(
             $expected_path,
             $actual_path,
-            sprintf('%s compares ok (%s)', $filename, $label),
+            sprintf('%s compares ok', $filename),
             filters => [
                 qr(STEP_LABEL_[^\t]*),
             ],
@@ -90,4 +91,25 @@ sub diff_directories {
     }
 
     return;
+}
+
+sub should_update_directory {
+    return $ENV{UPDATE_TEST_DATA} || undef;
+}
+
+sub run_system_test {
+    my $test_file = shift;
+
+    my ($junk, $test_dir) = File::Basename::fileparse($test_file);
+
+    my $output_directory = File::Temp::tempdir(CLEANUP => 1);
+    compile($test_dir, $output_directory);
+
+    diff_directories($test_dir, $output_directory);
+
+    if (defined(should_update_directory())) {
+        update_directory(
+            $test_dir, $output_directory);
+    }
+    done_testing();
 }
