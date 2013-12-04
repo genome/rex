@@ -159,9 +159,7 @@ sub set_inputs {
 
     for my $name (keys %params) {
         my $entry = $self->entry_named($name);
-        # NOTE: We cannot use $entry->value($params{$name}), because UR
-        #       erroneously says that undef and '' are the same.
-        $entry->{value} = $params{$name};
+        $entry->value($params{$name});
         $entry->assert_has_value;
     }
 
