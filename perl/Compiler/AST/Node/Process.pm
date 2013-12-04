@@ -58,6 +58,7 @@ sub dag {
 
     my $dag = Genome::WorkflowBuilder::DAG->create(
         name => $self->alias,
+        parallel_by => $self->parallel,
     );
 
     for my $node (@{$self->nodes}) {
