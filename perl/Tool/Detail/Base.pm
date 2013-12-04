@@ -2,6 +2,7 @@ package Tool::Detail::Base;
 use Moose;
 use warnings FATAL => 'all';
 
+use Log::Log4perl qw();
 use Result;
 use Result::Input;
 use Result::Output;
@@ -10,6 +11,11 @@ use Translator;
 use Tool::Detail::AttributeSetter;
 use Tool::Detail::Contextual;
 with 'WorkflowCompatibility::Role';
+
+
+Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
+
+my $logger = Log::Log4perl->get_logger();
 
 
 has test_name => (
@@ -30,33 +36,26 @@ has _step_label => (
     required => 1,
 );
 
-sub status_message {
-    my $self = shift;
-    my $str = shift;
-
-    printf($str . "\n", @_);
-    return;
-}
 
 sub shortcut {
     my $self = shift;
 
-    $self->status_message('Attempting to shortcut %s with test name (%s)',
-        ref $self, $self->test_name);
+    $logger->info("Attempting to shortcut ", ref $self,
+        " with test name (", $self->test_name, ")");
 
     my $result = Result->lookup(inputs => $self->_inputs_as_hashref,
         tool_class_name => ref $self, test_name => $self->test_name);
 
     if ($result) {
-        $self->status_message('Found matching result with lookup hash (%s)',
-            $result->lookup_hash);
+        $logger->info("Found matching result with lookup hash (",
+            $result->lookup_hash, ")");
         $self->_set_outputs_from_result($result);
 
         $self->_create_process_step($result);
         return 1;
 
     } else {
-        $self->status_message('No matching result found for shortcut');
+        $logger->info("No matching result found for shortcut");
         return;
     }
 }
