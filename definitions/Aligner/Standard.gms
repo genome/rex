@@ -1,7 +1,5 @@
-bwa_index is Tool::Bwa::Index test_name = 'REFERENCE',
-    input_fasta from @reference_fasta
 Aligner::Bwa::Paired
-    alignment_index from bwa_index.output_fasta,
+    alignment_index from @alignment_index,
     unaligned_bam from @unaligned_bam
 
 Tool::Samtools::SamToBam

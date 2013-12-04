@@ -1,18 +1,18 @@
-boolean,param,skip_depth_filters,strelka	Strelka.skip_depth_filters	1
-file,fasta	Index.input_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
-integer,param,bwa,aln,threads	normal_alignment.Paired.aln_first_reads.threads	4
-integer,param,bwa,aln,threads	normal_alignment.Paired.aln_second_reads.threads	4
-integer,param,bwa,aln,threads	tumor_alignment.Paired.aln_first_reads.threads	4
-integer,param,bwa,aln,threads	tumor_alignment.Paired.aln_second_reads.threads	4
-integer,param,bwa,aln,trimming_quality_threshold	normal_alignment.Paired.aln_first_reads.trimming_quality_threshold	5
-integer,param,bwa,aln,trimming_quality_threshold	normal_alignment.Paired.aln_second_reads.trimming_quality_threshold	5
-integer,param,bwa,aln,trimming_quality_threshold	tumor_alignment.Paired.aln_first_reads.trimming_quality_threshold	5
-integer,param,bwa,aln,trimming_quality_threshold	tumor_alignment.Paired.aln_second_reads.trimming_quality_threshold	5
-integer,param,bwa,sampe,max_insert_size	normal_alignment.Paired.Sampe.max_insert_size	500
-integer,param,bwa,sampe,max_insert_size	tumor_alignment.Paired.Sampe.max_insert_size	500
-integer,param,threads,strelka	Strelka.threads	4
-paired,bam,unaligned,file	normal_bam	gms:///data/ae7d9972a09e4ef7896b1e0afa291b6b?tag=bam
-paired,bam,unaligned,file	tumor_bam	gms:///data/08e6665985e04fb196fd142ba01b997f?tag=bam
-string,param,version,mutect	Mutect.version	1.1.4
-string,param,version,somaticsniper	SomaticSniper.version	1.0.2
-string,param,version,strelka	Strelka.version	1.0.11
+Mutect.version	1.1.4
+SomaticSniper.version	1.0.2
+Strelka.skip_depth_filters	1
+Strelka.threads	4
+Strelka.version	1.0.11
+normal_alignment.Paired.Sampe.max_insert_size	500
+normal_alignment.Paired.aln_first_reads.threads	4
+normal_alignment.Paired.aln_first_reads.trimming_quality_threshold	5
+normal_alignment.Paired.aln_second_reads.threads	4
+normal_alignment.Paired.aln_second_reads.trimming_quality_threshold	5
+normal_bam	gms:///data/ae7d9972a09e4ef7896b1e0afa291b6b?tag=bam
+reference_fasta	gms:///data/b5ebe5f324db49b1a3f9ae585eafd6e5?tag=fa
+tumor_alignment.Paired.Sampe.max_insert_size	500
+tumor_alignment.Paired.aln_first_reads.threads	4
+tumor_alignment.Paired.aln_first_reads.trimming_quality_threshold	5
+tumor_alignment.Paired.aln_second_reads.threads	4
+tumor_alignment.Paired.aln_second_reads.trimming_quality_threshold	5
+tumor_bam	gms:///data/08e6665985e04fb196fd142ba01b997f?tag=bam

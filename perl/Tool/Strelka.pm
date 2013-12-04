@@ -1,70 +1,24 @@
 package Tool::Strelka;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
 
-use UR;
-
-use Carp qw(confess);
-use File::Basename qw();
 use File::Spec qw();
 use IPC::Run qw();
 use Config::IniFiles qw();
 
 
-class Tool::Strelka {
-    is => 'Tool::Base',
+has_input 'alignment_index';
+has_input 'normal_bam';
+has_input 'tumor_bam';
 
-    has_input => [
-        normal_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted indexed)],
-        },
-        tumor_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted indexed)],
-        },
-        alignment_index => {
-            is => "File",
-            dsl_tags => [qw(file index bwa)],
-        },
-        version => {
-            is => 'Text',
-            dsl_tags => [qw(string param version strelka)],
-        },
+has_param 'skip_depth_filters';
+has_param 'threads';
+has_param 'version';
 
-        threads => {
-            is => 'Number',
-            dsl_tags => [qw(integer param threads strelka)],
-        },
-        skip_depth_filters => {
-            is => 'Boolean',
-            dsl_tags => [qw(boolean param skip_depth_filters strelka)],
-        },
-    ],
-
-    has_output => [
-        snv_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf snv strelka)],
-        },
-        indel_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf indel strelka)],
-        },
-
-        passed_snv_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf snv strelka passed)],
-        },
-        passed_indel_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf indel strelka passed)],
-        },
-
-    ],
-};
-
+has_output 'indel_output';
+has_output 'snv_output';
+has_output 'passed_indel_output';
+has_output 'passed_snv_output';
 
 sub execute_tool {
     my $self = shift;
@@ -168,4 +122,4 @@ sub _set_output_paths {
 }
 
 
-1;
+__PACKAGE__->meta->make_immutable;

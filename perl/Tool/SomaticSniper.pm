@@ -1,45 +1,17 @@
 package Tool::SomaticSniper;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
 
-use UR;
-
-use Carp qw(confess);
-use File::Basename qw();
-use File::Spec qw();
 use IPC::Run qw();
 
 
-class Tool::SomaticSniper {
-    is => 'Tool::Base',
+has_input 'alignment_index';
+has_input 'normal_bam';
+has_input 'tumor_bam';
 
-    has_input => [
-        normal_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted)],
-        },
-        tumor_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned position_sorted)],
-        },
-        alignment_index => {
-            is => "File",
-            dsl_tags => [qw(file index bwa)],
-        },
-        version => {
-            is => 'Text',
-            dsl_tags => [qw(string param version somaticsniper)],
-        },
-    ],
+has_param 'version';
 
-    has_output => [
-        snv_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf snv somaticsniper)],
-        },
-    ],
-};
+has_output 'snv_output';
 
 
 sub execute_tool {
@@ -72,4 +44,4 @@ sub _executable {
 }
 
 
-1;
+__PACKAGE__->meta->make_immutable;

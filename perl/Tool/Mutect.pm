@@ -1,45 +1,17 @@
 package Tool::Mutect;
-
-use strict;
+use Tool;
 use warnings FATAL => 'all';
 
-use UR;
-
-use Carp qw(confess);
-use File::Basename qw();
 use File::Spec qw();
 use IPC::Run qw();
 
+has_input 'alignment_index';
+has_input 'normal_bam';
+has_input 'tumor_bam';
 
-class Tool::Mutect {
-    is => 'Tool::Base',
+has_param 'version';
 
-    has_input => [
-        normal_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned)],
-        },
-        tumor_bam => {
-            is => "File",
-            dsl_tags => [qw(file bam aligned)],
-        },
-        alignment_index => {
-            is => "File",
-            dsl_tags => [qw(file index bwa)],
-        },
-        version => {
-            is => 'Text',
-            dsl_tags => [qw(string param version mutect)],
-        },
-    ],
-
-    has_output => [
-        snv_output => {
-            is => "File",
-            dsl_tags => [qw(file vcf snv)],
-        },
-    ],
-};
+has_output 'snv_output';
 
 
 sub execute_tool {
@@ -77,4 +49,4 @@ sub _jar_path_base {
     return '/gscuser/dlarson/mutect';
 }
 
-1;
+__PACKAGE__->meta->make_immutable;
