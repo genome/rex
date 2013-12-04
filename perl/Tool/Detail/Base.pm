@@ -51,6 +51,7 @@ has _workspace_path => (
     isa => 'Str',
 );
 
+
 sub inputs {
     return map {$_->name} grep {$_->does('Input')}
         $self->meta->get_all_attributes;
@@ -69,6 +70,7 @@ sub params {
     return map {$_->name} grep {$_->does('Param')}
         $self->meta->get_all_attributes;
 }
+
 
 sub shortcut {
     my $self = shift;
@@ -154,6 +156,7 @@ sub _translate_inputs {
 
     return;
 }
+
 
 sub execute {
     my $self = shift;
