@@ -12,7 +12,7 @@ has_input 'input_fasta';
 has_output 'output_fasta';
 has_output 'amb_file';
 has_output 'ann_file';
-has_output 'bwa_file';
+has_output 'bwt_file';
 has_output 'pac_file';
 has_output 'sa_file';
 
