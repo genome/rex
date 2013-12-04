@@ -14,8 +14,7 @@ has source_path => (
 );
 has parallel => (
     is => 'rw',
-    isa => 'ArrayRef[Str]',
-    default => sub {[]},
+    isa => 'Str',
 );
 has couplers => (
     is => 'rw',

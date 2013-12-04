@@ -30,6 +30,7 @@ sub dag {
     return Genome::WorkflowBuilder::Command->create(
         name => $self->alias,
         command => $self->source_path,
+        parallel_by => $self->parallel,
     );
 }
 Memoize::memoize('dag');

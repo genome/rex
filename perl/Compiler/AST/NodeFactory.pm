@@ -20,10 +20,10 @@ $::RD_HINT = 1;
 
 sub new_node {
     my %params = Params::Validate::validate(@_, {
-        source_path => 1,
         alias => 0,
-        parallel => 0,
         couplers => 0,
+        parallel => 0,
+        source_path => 1,
     });
 
     my $definition_path = resolve_path($params{source_path});
