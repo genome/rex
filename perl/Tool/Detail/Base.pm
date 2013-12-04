@@ -5,6 +5,7 @@ use warnings FATAL => 'all';
 use Result;
 use Result::Input;
 use Result::Output;
+use Translator;
 
 use Tool::Detail::AttributeSetter;
 use Tool::Detail::Contextual;
@@ -74,9 +75,7 @@ sub _inputs_as_hashref {
 sub _non_contextual_input_names {
     my $self = shift;
 
-    return $self->_property_names(is_input => 1,
-        is_contextual => undef), $self->_property_names(is_input => 1,
-        is_contextual => 0);
+    return $self->_property_names(is_input => 1), $self->non_contextual_params;
 }
 
 sub _property_names {
@@ -102,6 +101,17 @@ sub _create_process_step {
     $self->_translate_inputs('_process', '_step_label');
     ProcessStep->create(process => $self->_process, result => $result,
         label => $self->_step_label);
+
+    return;
+}
+
+sub _translate_inputs {
+    my $self = shift;
+
+    my $translator = Translator->new();
+    for my $input_name (@_) {
+        $self->$input_name($translator->resolve_scalar_or_url($self->$input_name));
+    }
 
     return;
 }
@@ -133,13 +143,6 @@ sub params {
     my $self = shift;
 
     return map {$_->name} grep {$_->does('Param')}
-        $self->meta->get_all_attributes;
-}
-
-sub contextual_params {
-    my $self = shift;
-
-    return map {$_->name} grep {$_->does('Param') && $_->does('Contextual')}
         $self->meta->get_all_attributes;
 }
 
