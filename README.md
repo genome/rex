@@ -10,10 +10,15 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 * perl/Tool - Command objects used by Workflow XML
 * definitions - contains re-usable DSL files
 * vim - contains vim syntax hilighting files for the DSL
-* t/SystemTest - each subdirectory is a separate system test
+* t/Compiler/SystemTest - each subdirectory is a separate system test
 
 
 ## TODO
+1. get parallel by and converge working
+2. improve alignment to split by read-group & merge
+3. implement variant detection process with Mutect & others
+4. focus on community involvement
+
 - compiler
     - sugar for addressing "A::B::C" with "B::C" or "C"
         - this is partly implemented, it currently requires the shortest form
@@ -22,7 +27,6 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
     - fix string escaping regular expressions (grammar and syntax)
     - improve syntax hilighting of errors
     - add array input/output support
-    - reconsider non-concrete tags for outputs
 - add workspace input to Tool
 - add locking to Tool
 - add process template
