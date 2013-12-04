@@ -3,17 +3,17 @@ use Moose;
 use warnings FATAL => 'all';
 
 use Factory::ManifestAllocation;
-use File::Temp qw();
 use File::Path qw();
+use File::Temp qw();
 use Log::Log4perl qw();
 use Manifest::Writer;
-use Result;
 use Result::Input;
 use Result::Output;
-use Translator;
-
+use Result;
 use Tool::Detail::AttributeSetter;
 use Tool::Detail::Contextual;
+use Translator;
+
 with 'WorkflowCompatibility::Role';
 
 
