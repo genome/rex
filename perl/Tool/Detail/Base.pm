@@ -25,6 +25,7 @@ my $logger = Log::Log4perl->get_logger();
 
 has test_name => (
     is => 'rw',
+    isa => 'Str',
     traits => ['Param', 'Contextual'],
     required => 1,
 );
@@ -35,6 +36,7 @@ has _process => (
 );
 has _step_label => (
     is => 'rw',
+    isa => 'Str',
     traits => ['Param', 'Contextual'],
     required => 1,
 );
