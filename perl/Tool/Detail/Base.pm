@@ -7,12 +7,27 @@ use Result::Input;
 use Result::Output;
 
 use Tool::Detail::AttributeSetter;
+use Tool::Detail::Contextual;
 with 'WorkflowCompatibility::Role';
 
 
-has_contextual_param 'test_name';
-has_contextual_param '_process';
-has_contextual_param '_step_label';
+has test_name => (
+    is => 'rw',
+    traits => ['Param', 'Contextual'],
+    required => 1,
+);
+
+has _process => (
+    is => 'rw',
+    traits => ['Param', 'Contextual'],
+    required => 1,
+);
+
+has _step_label => (
+    is => 'rw',
+    traits => ['Param', 'Contextual'],
+    required => 1,
+);
 
 sub status_message {
     my $self = shift;
