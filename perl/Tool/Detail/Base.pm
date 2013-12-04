@@ -60,6 +60,31 @@ sub shortcut {
     }
 }
 
+sub _inputs_as_hashref {
+    my $self = shift;
+
+    my %inputs;
+    for my $input_name ($self->_non_contextual_input_names) {
+        $inputs{$input_name} = $self->$input_name;
+    }
+
+    return \%inputs;
+}
+
+sub _non_contextual_input_names {
+    my $self = shift;
+
+    return $self->_property_names(is_input => 1,
+        is_contextual => undef), $self->_property_names(is_input => 1,
+        is_contextual => 0);
+}
+
+sub _property_names {
+    my $self = shift;
+
+    return map {$_->property_name} $self->__meta__->properties(@_);
+}
+
 sub _set_outputs_from_result {
     my ($self, $result) = @_;
 
