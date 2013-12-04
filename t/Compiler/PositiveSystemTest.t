@@ -18,7 +18,7 @@ use Compiler::TestHelper qw();
 sub system_test_base_dir {
     my ($name, $path, $suffix) = File::Basename::fileparse(__FILE__, '.t');
 
-    return File::Spec->join($path, 'SystemTest');
+    return File::Spec->join($path, 'PositiveSystemTest');
 }
 
 sub test_dirs {
