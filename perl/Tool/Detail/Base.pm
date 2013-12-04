@@ -74,7 +74,7 @@ sub _inputs_as_hashref {
 sub _non_contextual_input_names {
     my $self = shift;
 
-    return $self->_property_names(is_input => 1), $self->non_contextual_params;
+    return $self->inputs, $self->non_contextual_params;
 }
 
 sub _property_names {
