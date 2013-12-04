@@ -15,7 +15,8 @@ has name => (
 );
 has value => (
     is => 'rw',
-    isa => 'Value|Undef',
+    isa => 'ArrayRef|Value|Undef',
+    predicate => 'has_value',
 );
 
 sub assert_has_value {
@@ -43,7 +44,11 @@ sub as_string {
 
     my @columns = ($self->name);
     if (defined($self->value)) {
-        push @columns, $self->value;
+        if (ref($self->value) eq 'ARRAY') {
+            push @columns, @{$self->value};
+        } else {
+            push @columns, $self->value;
+        }
     }
 
     $_CSV->combine(@columns);
@@ -66,15 +71,20 @@ sub create_from_line {
     }
     my @columns = $_CSV->fields;
 
-    unless (scalar(@columns) > 0 && scalar(@columns) < 3) {
+    unless (scalar(@columns) > 0) {
         confess sprintf(
-            "Bad number of columns (%s) in line, expected 1 or 2: [%s]",
+            "Bad number of columns (%s) in line, expected 1 or more: [%s]",
             scalar(@columns), join(', ', map {sprintf("'%s'", $_)} @columns));
     }
 
-    my ($name, $value) = @columns;
-
-    return $class->new(name => $name, value => $value);
+    my $name = shift @columns;
+    if (scalar(@columns) == 1) {
+        return $class->new(name => $name, value => $columns[0]);
+    } elsif (scalar(@columns) > 1) {
+        return $class->new(name => $name, value => \@columns);
+    } else {
+        return $class->new(name => $name);
+    }
 }
 
 1;

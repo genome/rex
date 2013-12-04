@@ -7,6 +7,10 @@ has 'property_name' => (
     is => 'ro',
     required => 1,
 );
+has 'is_many' => (
+    is => 'ro',
+    isa => 'Bool',
+);
 
 
 sub is_input {}
@@ -19,7 +23,6 @@ sub id_by { [] }
 sub default_value {}
 sub is_optional {}
 sub via {}
-sub is_many {}
 
 
 __PACKAGE__->meta->make_immutable;

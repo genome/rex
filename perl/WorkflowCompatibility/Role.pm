@@ -35,6 +35,7 @@ sub _input_properties {
     my @result;
     for my $attr_name ($class->inputs) {
         push @result, WorkflowCompatibility::FakeProperty::Input->new(
+            is_many => $class->meta->find_attribute_by_name($attr_name)->array,
             property_name => $attr_name);
     }
 
