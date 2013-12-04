@@ -18,6 +18,9 @@ This repo is an exploration of a general DSL for the Genome Modelling System.
 2. improve alignment to split by read-group & merge
 3. implement variant detection process with Mutect & others
 4. focus on community involvement
+    - split repo
+    - put repos on gerrit
+    - create bug list & desired feature list
 
 - compiler
     - sugar for addressing "A::B::C" with "B::C" or "C"
