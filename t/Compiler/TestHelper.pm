@@ -3,14 +3,6 @@ package Compiler::TestHelper;
 use strict;
 use warnings FATAL => 'all';
 
-require Exporter;
-our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(
-    run_basic_test
-    diff_ast_files
-    diff_xml_files
-);
-
 use Carp qw(confess);
 use Test::More;
 use File::Spec qw();
