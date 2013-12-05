@@ -180,7 +180,11 @@ sub update {
 
     for my $other_entry (@{$other->entries}) {
         my $self_entry = $self->entry_named($other_entry->name);
-        $self_entry->value($other_entry->value);
+        if (defined $self_entry) {
+            $self_entry->value($other_entry->value);
+        } else {
+            push @{$self->entries}, $other_entry;
+        }
     }
 
     return;

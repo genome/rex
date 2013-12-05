@@ -1,43 +1,43 @@
 package Runner;
-
-use strict;
+use Moose;
 use warnings FATAL => 'all';
 
 use UR;
 use Genome::WorkflowBuilder::DAG;
 
+use Carp qw(confess);
 use IO::File qw();
 use InputFile;
 use Factory::Process;
 
+use Log::Log4perl qw();
 
-class Runner {
-    is => 'Command::V2',
+my $logger = Log::Log4perl->get_logger();
 
-    has_input => [
-        workflow => {
-            is => 'Path',
-        },
 
-        inputs => {
-            is => 'Path',
-        },
-    ],
+has 'workflow' => (
+    is => 'ro',
+    isa => 'Str',
+    required => 1,
+);
 
-    has_optional_output => [
-        outputs => {
-            is => 'HASH',
-        },
-    ],
-};
+has 'inputs' => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
+    required => 1,
+);
 
 
 sub execute {
     my $self = shift;
 
+    unless (scalar(@{$self->inputs}) > 0) {
+        confess "No inputs files given to runner";
+    }
+
     my $process = Factory::Process::new();
-    $self->status_message('Launching Process %s (%s)', $process->hyphenated_id,
-        $process->log_directory);
+    $logger->info('Launching Process ', $process->hyphenated_id,
+        ' (', $process->log_directory, ')');
 
     my $inputs_file = $self->inputs_file($process);
 
@@ -49,20 +49,22 @@ sub execute {
     $process->save_inputs($inputs_file);
 
     UR::Context->commit;
-    $self->outputs($dag->execute($inputs_file->as_hash));
-
-    1;
+    return $dag->execute($inputs_file->as_hash);
 }
 
 sub inputs_file {
     my ($self, $process) = @_;
 
-    my $input_file = InputFile->create_from_filename($self->inputs);
+    my $combined_inputs = InputFile->new;
+    for my $input_path (@{$self->inputs}) {
+        my $input_file = InputFile->create_from_filename($input_path);
+        $combined_inputs->update($input_file);
+    }
 
-    $input_file->set_test_name(_test_name());
-    $input_file->set_process($process->url);
+    $combined_inputs->set_test_name(_test_name());
+    $combined_inputs->set_process($process->url);
 
-    return $input_file;
+    return $combined_inputs;
 }
 
 sub _test_name {
