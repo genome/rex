@@ -21,11 +21,6 @@ sub new_writer {
     return $writer;
 }
 
-subtest empty_manifest => sub {
-    my $writer = new_writer();
-    dies_ok { $writer->validate } 'empty manifest fails validation';
-};
-
 
 sub expected_simple_manifest {
     my ($name, $path) = File::Basename::fileparse(__FILE__);

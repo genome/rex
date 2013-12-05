@@ -5,7 +5,7 @@
     <xsd:complexType name="ManifestType">
         <xsd:sequence>
             <xsd:element name="file" type="FileType"
-                minOccurs="1" maxOccurs="unbounded"/>
+                minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
