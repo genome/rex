@@ -1,20 +1,20 @@
-package CLI::Process::Link;
+package Rex::CLI::Process::Link;
 
 use strict;
 use warnings FATAL => 'all';
 
 use UR;
 
-use Process;
+use Amber::Process;
 use Cwd qw();
 
 
-class CLI::Process::Link {
+class Rex::CLI::Process::Link {
     is => 'Command::V2',
 
     has => [
         process => {
-            is => 'Process',
+            is => 'Amber::Process',
             shell_args_position => 1,
         },
 
@@ -29,7 +29,7 @@ class CLI::Process::Link {
 sub execute {
     my $self = shift;
 
-    my $process = Process->get(id => $self->process);
+    my $process = Amber::Process->get(id => $self->process);
 
     for my $step ($process->steps) {
         $step->link($self->_target_absolute_path);

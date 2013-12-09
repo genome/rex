@@ -1,19 +1,19 @@
-package CLI::Process::View;
+package Rex::CLI::Process::View;
 
 use strict;
 use warnings;
 
 use Genome;
-use Process;
+use Amber::Process;
 
-class CLI::Process::View {
+class Rex::CLI::Process::View {
     is => [
         'Genome::Command::Viewer',
         'Genome::Command::WorkflowMixin',
     ],
     has => [
         process => {
-            is => 'Process',
+            is => 'Amber::Process',
             shell_args_position => 1,
             doc => 'Process you want to view',
         },
@@ -44,7 +44,7 @@ EOP
 sub write_report {
     my ($self, $width, $handle) = @_;
 
-    my $process = Process->get(id => $self->process);
+    my $process = Amber::Process->get(id => $self->process);
     $self->_display_process($handle, $process);
 
     if($self->workflow) {

@@ -1,20 +1,18 @@
-package CLI::Process::Start;
+package Rex::CLI::Process::Start;
 
 use strict;
 use warnings FATAL => 'all';
 
 use UR;
 
-use Tool;
-use Compiler;
-use Runner;
+use Procera::Compiler;
+use Procera::Runner;
 
 use File::Spec qw();
 use File::Temp qw();
-use IPC::Run qw();
 
 
-class CLI::Process::Start {
+class Rex::CLI::Process::Start {
     is => 'Command::V2',
 
     has => [
@@ -49,7 +47,7 @@ sub execute {
 sub compile {
     my $self = shift;
 
-    my $compiler = Compiler->new('input-file' => $self->definition,
+    my $compiler = Procera::Compiler->new('input-file' => $self->definition,
         'output-directory' => $self->_tempdir);
     $compiler->execute;
 
@@ -65,7 +63,7 @@ sub _compiler_inputs_tsv {
 sub run {
     my $self = shift;
 
-    my $runner = Runner->new(workflow => $self->_workflow_xml,
+    my $runner = Procera::Runner->new(workflow => $self->_workflow_xml,
         inputs => [$self->_compiler_inputs_tsv, $self->inputs]);
     return $runner->execute;
 }
