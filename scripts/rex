@@ -1,0 +1,1 @@
+carton exec perl -I lib -I $HOME/genome/lib/perl -I $HOME/genome/ur/lib -I $HOME/genome/workflow/lib bin/rex $@
