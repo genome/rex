@@ -50,7 +50,7 @@ sub write_report {
     $self->_display_process_info($handle, $process_info);
 
     if($self->workflow) {
-        my $workflow = _workflow_instance($self->process);
+        my $workflow = _workflow_instance($process_info->{workflow_name});
         $self->_display_workflow($handle, $workflow);
     }
 
@@ -92,10 +92,10 @@ EOS
 }
 
 sub _workflow_instance {
-    my $process = shift;
+    my $name = shift;
 
     my $force_scalar = Workflow::Operation::Instance->get(
-        name => "Process $process",
+        name => $name,
     );
     return $force_scalar;
 }
