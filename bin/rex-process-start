@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+
+use Rex::CLI::Process::Start;
+
+my $app = Rex::CLI::Process::Start->new_with_options();
+$app->run();

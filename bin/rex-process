@@ -4,13 +4,14 @@ set -o pipefail
 set -o errexit
 
 USAGE="\
-Usage: rex <subcommand>
+Usage: rex process <subcommand>
 
 Available subcommands are:
-    info
-    process
+    view
+    start
+    link
 
-Try 'rex <subcommand> --help' for details."
+Try 'rex process <subcommand> --help' for details."
 usage() {
     echo "$USAGE"
 }
@@ -20,7 +21,7 @@ main() {
     shift || true
 
     case $SUBCOMMAND in
-        info|process)
+        view|start|link)
             ;;
         -h|--help)
             usage
@@ -32,7 +33,7 @@ main() {
             ;;
     esac
 
-    SUBCOMMAND_FILE="$(which rex-$SUBCOMMAND)"
+    SUBCOMMAND_FILE="$(which rex-process-$SUBCOMMAND)"
     if [ ! -e "$SUBCOMMAND_FILE" ]; then
         usage
     else

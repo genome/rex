@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+
+print "stub for rex-process-link\n";

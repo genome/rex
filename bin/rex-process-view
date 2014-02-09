@@ -1,0 +1,7 @@
+#!/usr/bin/env genome-perl
+
+use strict;
+use warnings FATAL => 'all';
+
+use Rex::CLI::Process::View;
+Rex::CLI::Process::View->execute_with_shell_params_and_exit;
