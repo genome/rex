@@ -1,3 +1,6 @@
 #!/usr/bin/perl
 
-print "stub for rex-process-link\n";
+use Rex::CLI::Process::Link;
+
+my $app = Rex::CLI::Process::Link->new_with_options();
+$app->run();
