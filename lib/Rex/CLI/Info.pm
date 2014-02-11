@@ -89,10 +89,16 @@ sub list {
 sub hash {
     my $self = shift;
     my $hashref = shift;
-    my $max_width = max map {length($_)} keys %{$hashref};
 
+    my @unset_params = grep {!defined($hashref->{$_})} keys %{$hashref};
     my @lines;
-    for my $key (sort keys %{$hashref}) {
+    for my $unset_param (sort @unset_params) {
+        push @lines, $self->colorize_key($unset_param, 'undef');
+    }
+
+    my @set_params = grep {defined($hashref->{$_})} keys %{$hashref};
+    my $max_width = max map {length($_)} @set_params;
+    for my $key (sort @set_params) {
         my $value = $hashref->{$key};
         if (defined($value)) {
             if (!looks_like_number($value)) {
@@ -103,7 +109,7 @@ sub hash {
         }
 
         my $num_spaces = $max_width - length($key);
-        push @lines, sprintf('%s%s => %s', $self->colorize_key($key, $value),
+        push @lines, sprintf('%s%s = %s', $self->colorize_key($key, $value),
             ' 'x$num_spaces, $self->colorize_value($value));
     }
     return join("\n", @lines);
