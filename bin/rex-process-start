@@ -1,6 +1,15 @@
 #!/usr/bin/perl
 
+if (grep {$_ eq '-l'} @ARGV) {
+    use File::Spec qw();
+    unshift @INC, (
+        File::Spec->join($ENV{PARK_HOME}, 'Procera', 'vendor', 'ur', 'lib'),
+        File::Spec->join($ENV{PARK_HOME}, 'Procera', 'vendor', 'workflow', 'lib'),
+    );
+}
+
 use Rex::CLI::Process::Start;
+
 
 my $app = Rex::CLI::Process::Start->new_with_options();
 $app->run();
