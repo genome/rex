@@ -71,9 +71,9 @@ sub run {
     my $outputs = $self->get_outputs();
     $self->make_symlinks($outputs);
     if ($self->_symlinked_anything) {
-        printf "\nResults for process (%s) are symlinked to (%s).", $self->process, $self->target;
+        printf "\nResults for process (%s) are symlinked to (%s).\n", $self->process, $self->target;
     } else {
-        printf "\nNo results for process (%s) were found matching your options.", $self->process, $self->target;
+        printf "\nNo results for process (%s) were found matching your options.\n", $self->process, $self->target;
     }
 }
 
@@ -162,7 +162,7 @@ sub process_steps_iterator {
 
     my $process_info = eval {$self->_persistence->get_process($self->process)};
     unless(defined $process_info) {
-        die sprintf("Couldn't find process (%s) in persistence (%s)",
+        die sprintf("Couldn't find process (%s) in persistence (%s)\n",
             $self->process, $self->_persistence->base_url);
     }
 

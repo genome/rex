@@ -46,7 +46,7 @@ sub run {
     if (my $actual_path = eval{$curator->actual_path}) {
         $self->print_report($curator);
     } else {
-        printf "%s is not a Tool or Process", $curator->source_path;
+        printf "%s is not a Tool or Process\n", $curator->source_path;
         exit 1;
     }
 }
