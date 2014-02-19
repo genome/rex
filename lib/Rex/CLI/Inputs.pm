@@ -24,16 +24,27 @@ has 'filename' => (
 sub print_report {
     my $self = shift;
 
-    my $source_path = $self->source_path;
+    my $prefix = $self->_prefix;
     my %params = %{$self->curator->params};
     my $handle = $self->_handle;
+
     for my $name (keys %params) {
         unless (defined($params{$name})) {
-            print $handle "$name\t\n";
+            print $handle "$prefix$name\t\n";
         }
     }
     for my $name (@{$self->curator->inputs}) {
         print $handle "$name\t\n";
+    }
+}
+
+sub _prefix {
+    my $self = shift;
+    if ($self->curator->type eq 'Tool') {
+        my @pieces = split(/::/, $self->curator->source_path);
+        return $pieces[-1] . '.';
+    } else {
+        return '';
     }
 }
 
