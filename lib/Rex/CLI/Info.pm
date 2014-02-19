@@ -2,13 +2,12 @@ package Rex::CLI::Info;
 use Moose;
 use warnings FATAL => 'all';
 
-use Data::Dump qw(pp);
-use Procera::Curator;
 use List::Util qw(max);
 use Scalar::Util qw(looks_like_number);
 
 with 'MooseX::Getopt';
 with 'Rex::CLI::Color';
+with 'Rex::CLI::Reporter';
 
 has 'inputs' => (
     traits => ['Getopt'],
@@ -38,22 +37,10 @@ has 'outputs' => (
     documentation => 'display outputs',
 );
 
-sub run {
+sub print_report {
     my $self = shift;
 
-    my $curator = Procera::Curator->new(source_path => $self->source_path);
-
-    if (my $actual_path = eval{$curator->actual_path}) {
-        $self->print_report($curator);
-    } else {
-        printf "%s is not a Tool or Process\n", $curator->source_path;
-        exit 1;
-    }
-}
-
-sub print_report {
-    my ($self, $curator) = @_;
-
+    my $curator = $self->curator;
     printf "\n%s\n", $self->color_heading($curator->source_path);
     printf "%s\n", $self->color_pair('Location', $curator->actual_path);
     printf "%s\n", $self->color_pair('Type', $curator->type);
@@ -142,32 +129,6 @@ sub colorize_key {
     } else {
         return $suffix;
     }
-}
-
-sub source_path {
-    my $self = shift;
-
-    my @extra_argv = (@{$self->extra_argv});
-    my $path = shift @extra_argv;
-    if (!defined($path) || scalar(@extra_argv)) {
-        $self->print_actual_usage;
-        exit 1;
-    }
-    return $path;
-}
-
-sub print_actual_usage {
-    my $self = shift;
-    print $self->actual_usage . "\n";
-}
-
-sub actual_usage {
-    my $self = shift;
-
-    my $search = '\[long options...\]';
-    my $replace = 'TOOL::OR::PROCESS';
-    (my $usage = $self->usage) =~ s/$search/$replace/;
-    return $usage;
 }
 
 
