@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+
+use Rex::CLI::Inputs;
+
+my $app = Rex::CLI::Inputs->new_with_options();
+$app->run();
