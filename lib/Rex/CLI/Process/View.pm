@@ -78,15 +78,19 @@ sub _display_process_info {
 
     my $format_str = <<EOS;
 %s
+%s%s
+%s%s
 %s
-%s
-
 
 EOS
     print $handle sprintf($format_str,
         $self->_color_heading('Process'),
-        $self->_color_pair('ID',
-            $self->_pad_right($process_info->{id}, $self->COLUMN_WIDTH)),
+        map {$self->_pad_right($_, $self->COLUMN_WIDTH)} (
+            $self->_color_pair('Run By', $process_info->{username}),
+            $self->_color_pair('Status', $self->_status_color($process_info->{status})),
+            $self->_color_pair('Date Started', $process_info->{date_started}),
+            $self->_color_pair('Last Updated', $process_info->{date_ended}),
+        ),
         $self->_color_pair('MetaData Directory', $allocation->absolute_path),
     );
 }
