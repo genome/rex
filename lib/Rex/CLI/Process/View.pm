@@ -18,12 +18,6 @@ class Rex::CLI::Process::View {
             shell_args_position => 1,
             doc => 'Process you want to view',
         },
-        workflow => {
-            is => 'Boolean',
-            is_optional => 1,
-            default_value => 1,
-            doc => 'Display workflow.',
-        },
     ],
 };
 
@@ -49,10 +43,9 @@ sub write_report {
 
     $self->_display_process_info($handle, $process_info);
 
-    if($self->workflow) {
-        my $workflow = _workflow_instance($process_info->{workflow_name});
-        $self->_display_workflow($handle, $workflow);
-    }
+    my $workflow = _workflow_instance($process_info->{workflow_name});
+    $self->_display_workflow($handle, $workflow);
+    $self->_display_logs($handle, $workflow);
 
     1;
 }
