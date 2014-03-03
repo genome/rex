@@ -8,6 +8,7 @@ Usage: rex process <subcommand>
 
 Available subcommands are:
     view
+    list
     start
     link
 
@@ -21,7 +22,7 @@ main() {
     shift || true
 
     case $SUBCOMMAND in
-        view|start|link)
+        view|start|link|list)
             ;;
         -h|--help)
             usage

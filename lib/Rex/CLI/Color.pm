@@ -41,5 +41,16 @@ sub color_dim {
     return $self->color($text, 'white');
 }
 
+my %STATUS_COLORS = (
+    'running' => 'cyan',
+    'succeeded' => 'green',
+    'crashed' => 'red',
+);
+
+sub color_status {
+    my ($self, $status) = @_;
+    return $self->color($status, $STATUS_COLORS{$status});
+}
+
 
 1;
