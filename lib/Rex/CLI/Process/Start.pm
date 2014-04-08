@@ -8,6 +8,9 @@ use Procera::Runner;
 use Procera::SourceFile qw(file_path);
 use Procera::Factory::Storage;
 use Procera::Factory::Persistence;
+use Log::Log4perl qw();
+
+Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
 
 use File::Spec qw();
 use File::Temp qw(tempdir);

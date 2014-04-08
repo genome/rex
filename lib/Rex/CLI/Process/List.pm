@@ -5,6 +5,9 @@ use warnings FATAL => 'all';
 
 use Params::Validate qw(validate_pos :types);
 use Procera::Factory::Persistence;
+use Log::Log4perl qw();
+
+Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
 
 with 'MooseX::Getopt';
 with 'Rex::CLI::Color';

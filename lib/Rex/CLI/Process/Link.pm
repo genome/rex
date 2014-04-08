@@ -7,6 +7,9 @@ use Procera::Translator;
 use Procera::Factory::Storage;
 use Procera::Factory::Persistence;
 use Params::Validate qw(validate_pos :types);
+use Log::Log4perl qw();
+
+Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
 
 with 'MooseX::Getopt';
 

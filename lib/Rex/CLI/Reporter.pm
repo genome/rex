@@ -4,6 +4,9 @@ use Moose::Role;
 use warnings FATAL => 'all';
 
 use Procera::Curator;
+use Log::Log4perl qw();
+
+Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
 
 requires 'print_report';
 with 'MooseX::Getopt';
