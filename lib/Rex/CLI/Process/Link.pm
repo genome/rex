@@ -130,12 +130,19 @@ sub get_outputs {
     $| = 1;
     printf "Finding results for process (%s)\n.", $self->process;
     my %outputs;
+    my $to_be_deleted = Set::Scalar->new();
     my $iter = $self->process_steps_iterator;
     while (my $step_info = $iter->next()) {
         print ".";
+
         next unless $self->valid_step($step_info->{label});
 
         my $destination = $self->_get_destination($step_info);
+        if ($self->exclude_parallel_steps and exists $outputs{$destination}) {
+            $to_be_deleted->insert($destination);
+            next;
+        }
+
         my $step_id = $step_info->{id};
         my %step_outputs = %{$self->_get_step_outputs($step_info)};
         for my $orig (values %step_outputs) {
@@ -147,6 +154,10 @@ sub get_outputs {
                 push @{$outputs{$destination}{$step_id}}, $value;
             }
         }
+    }
+
+    for my $destination ($to_be_deleted->members()) {
+        delete $outputs{$destination};
     }
     return \%outputs;
 }
@@ -184,7 +195,6 @@ sub make_symlinks {
 
     for my $destination (sort keys %outputs) {
         if (scalar(keys %{$outputs{$destination}}) > 1) {
-            next if $self->exclude_parallel_steps;
             my $count = 1;
             for my $step_id (sort keys %{$outputs{$destination}}) {
                 for my $value (@{$outputs{$destination}{$step_id}}) {
