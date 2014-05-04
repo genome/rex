@@ -132,14 +132,20 @@ sub get_outputs {
     my %outputs;
     my $iter = $self->process_steps_iterator;
     while (my $step_info = $iter->next()) {
-        my $step_id = $step_info->{id};
         print ".";
         next unless $self->valid_step($step_info->{label});
-        my %step_outputs = %{$self->_get_step_outputs($step_info)};
+
         my $destination = $self->_get_destination($step_info);
-        for my $name (keys %step_outputs) {
-            my $value = $translator->resolve_scalar_or_url($step_outputs{$name});
-            push @{$outputs{$destination}{$step_id}}, $value;
+        my $step_id = $step_info->{id};
+        my %step_outputs = %{$self->_get_step_outputs($step_info)};
+        for my $orig (values %step_outputs) {
+            if (ref $orig eq 'ARRAY') {
+                my @values = map {$translator->resolve_scalar_or_url($_)} @$orig;
+                push @{$outputs{$destination}{$step_id}}, @values;
+            } else {
+                my $value = $translator->resolve_scalar_or_url($orig);
+                push @{$outputs{$destination}{$step_id}}, $value;
+            }
         }
     }
     return \%outputs;
