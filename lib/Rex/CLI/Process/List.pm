@@ -144,6 +144,7 @@ sub query {
         $self->ended_after_query,
         $self->status_query,
         $self->source_path_query,
+        'order_by=id',
     );
     return join(';', @parts);
 }
