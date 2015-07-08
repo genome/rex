@@ -12,6 +12,7 @@ use Log::Log4perl qw();
 
 Log::Log4perl->easy_init($Log::Log4perl::DEBUG);
 
+use Data::Dump qw(pp);
 use File::Spec qw();
 use File::Temp qw(tempdir);
 
@@ -72,8 +73,8 @@ sub run {
     $self->compile();
     $self->run_process();
 
+    $self->announce_outputs();
     if ($self->run_local_and_wait) {
-        $self->announce_outputs();
         print "\nYou've set the flag to wait after processing... press enter to finish (will clean up all temporary files)\n";
         <STDIN>;
     }
@@ -90,8 +91,17 @@ sub announce_outputs {
     );
     for my $output_name (keys %{$self->_outputs}) {
         no warnings;
-        printf "%s is (%s)\n", $output_name,
-            $translator->resolve_scalar_or_url($self->_outputs->{$output_name});
+        my $translated_output;
+        if (ref($self->_outputs->{$output_name}) eq 'ARRAY') {
+            $translated_output = [map {$translator->resolve_scalar_or_url($_)}
+                @{$self->_outputs->{$output_name}}];
+        }
+        else {
+            $translated_output = $translator->resolve_scalar_or_url(
+                $self->_outputs->{$output_name});
+        }
+
+        printf "%s is %s\n", $output_name, pp($translated_output);
     }
     return;
 }
