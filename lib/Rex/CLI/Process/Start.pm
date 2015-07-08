@@ -73,8 +73,8 @@ sub run {
     $self->compile();
     $self->run_process();
 
+    $self->announce_outputs();
     if ($self->run_local_and_wait) {
-        $self->announce_outputs();
         print "\nYou've set the flag to wait after processing... press enter to finish (will clean up all temporary files)\n";
         <STDIN>;
     }
